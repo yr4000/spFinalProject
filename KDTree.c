@@ -18,12 +18,13 @@
 void destroyKDTree(KDTreeNode tree){
 	if(isLeaf(tree)){
 		spPointDestroy(tree->data);
-		free(tree);
 		return;
 	}
 	destroyKDTree(tree->left);
+//	free(tree->left);		//TODO why is it no good??
 	destroyKDTree(tree->right);
-	free(tree);
+//	free(tree->right);
+//	free(tree);
 }
 
 KDTreeNode createKDTree(KDArray arr, spKDTreeSplitMethod method,int coor){
