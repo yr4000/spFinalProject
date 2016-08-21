@@ -16,14 +16,14 @@
 int COOR = 0;
 
 
-void printPointsOfKDTree(KDTreeNode tree,int* counter, int* pointsIndexesLestToRight){
+void printPointsOfKDTreeToArray(KDTreeNode tree,int* counter, int* pointsIndexesLestToRight){
 	if(isLeaf(tree)){
 		pointsIndexesLestToRight[*counter] = tree->data->index;
 		*counter = *counter+1;
 		return;
 	}
-	printPointsOfKDTree(tree->left,counter,pointsIndexesLestToRight);
-	printPointsOfKDTree(tree->right,counter,pointsIndexesLestToRight);
+	printPointsOfKDTreeToArray(tree->left,counter,pointsIndexesLestToRight);
+	printPointsOfKDTreeToArray(tree->right,counter,pointsIndexesLestToRight);
 }
 
 bool compareArrays(int* A, int* B, int size){
@@ -31,6 +31,27 @@ bool compareArrays(int* A, int* B, int size){
 	for(i=0;i<size;i++){
 		if(A[i]!=B[i]) return false;
 	}
+	return true;
+}
+
+bool compareSPBPQToIntArray(SPBPQueue q, int* expected){
+	int i;
+	for(i=0;i<3;i++){
+		SPListElement e = spBPQueuePeek(q);
+		ASSERT_TRUE(e->index==expected[i]);
+		spBPQueueDequeue(q);
+		spListElementDestroy(e);
+	}
+	spBPQueueDestroy(q);
+	return true;
+}
+
+bool checkSearchByMethod(KDArray arr, spKDTreeSplitMethod method,SPPoint p, int* expected){
+	SPBPQueue q = spBPQueueCreate(3);
+	KDTreeNode tree = createKDTree(arr,method,COOR);
+	KNNSearch(q,tree,p);
+	ASSERT_TRUE(compareSPBPQToIntArray(q,expected));
+	destroyKDTree(tree);
 	return true;
 }
 //----------------------------------------------------------------
@@ -42,49 +63,66 @@ bool testCreateKDTree(){
 	KDArray arr = buildKDArray();
 	int* indexesArray[arr->arrSize];
 	KDTreeNode tree = createKDTree(arr,MAX_SPREAD,COOR); //Manually checked, works.
-	printPointsOfKDTree(tree,&counter,indexesArray);
+	printPointsOfKDTreeToArray(tree,&counter,indexesArray);
 	ASSERT_TRUE(compareArrays(expectedMax,indexesArray,arr->arrSize));
 	destroyKDTree(tree);
 	tree = createKDTree(arr,RANDOM,COOR);
 	destroyKDTree(tree);
 	tree = createKDTree(arr,INCREMENTAL,COOR);
 	counter = 0;
-	printPointsOfKDTree(tree,&counter,indexesArray);
+	printPointsOfKDTreeToArray(tree,&counter,indexesArray);
 	ASSERT_TRUE(compareArrays(expectedInc,indexesArray,arr->arrSize));
 	destroyKDTree(tree);
 	return true;
 
 }
-
-bool testCreateLeaf(){
-
-}
-
-bool testFindMax(){
-
-}
-
-bool testFindMin(){
-
-}
-
-bool testCreateSpreadArr(){
-
-}
-
-bool testCallCreateKDTreeRecursively(){
-
-}
+//
+//bool testCreateLeaf(){
+//
+//}
+//
+//bool testFindMax(){
+//
+//}
+//
+//bool testFindMin(){
+//
+//}
+//
+//bool testCreateSpreadArr(){
+//
+//}
+//
+//bool testCallCreateKDTreeRecursively(){
+//
+//}
 
 bool testKNNSearch(){
-
+	int expectedP1[] = {2,1,4};
+	int expectedP2[] = {5,4,1};
+	KDArray arr = buildKDArray();
+	double data1[] = {1,1};
+	double data2[] = {-1,2};
+	SPPoint p1 = spPointCreate(data1,2,1);
+	SPPoint p2 = spPointCreate(data2,2,2);
+	ASSERT_TRUE(checkSearchByMethod(arr,INCREMENTAL,p1,expectedP1));
+	ASSERT_TRUE(checkSearchByMethod(arr,RANDOM,p1,expectedP1));
+	ASSERT_TRUE(checkSearchByMethod(arr,MAX_SPREAD,p1,expectedP1));
+	ASSERT_TRUE(checkSearchByMethod(arr,INCREMENTAL,p2,expectedP2));
+	ASSERT_TRUE(checkSearchByMethod(arr,RANDOM,p2,expectedP2));
+	ASSERT_TRUE(checkSearchByMethod(arr,MAX_SPREAD,p2,expectedP2));
+	destroyKDArray(arr);
+	spPointDestroy(p1);
+	spPointDestroy(p2);
+	return true;
 }
 
-bool testIsLeaf(){
-
-}
+//bool testIsLeaf(){
+//
+//}
 
 int main(){
 	RUN_TEST(testCreateKDTree);
+	RUN_TEST(testKNNSearch);
 	return 0;
 }

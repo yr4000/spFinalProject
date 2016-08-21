@@ -138,7 +138,7 @@ void KNNSearch(SPBPQueue q, KDTreeNode tree, SPPoint p){
 	RorL pathTaken;
 
 	if(isLeaf(tree)){
-		spBPQueueEnqueue(q,spListElementCreate(p->index,spPointL2SquaredDistance(p,tree->data)));
+		spBPQueueEnqueue(q,spListElementCreate(tree->data->index,spPointL2SquaredDistance(p,tree->data)));
 		return;
 	}
 

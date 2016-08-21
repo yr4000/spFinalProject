@@ -9,6 +9,7 @@
 #define KD_ARRAY_H_
 
 #include "SPPoint.h"
+#include <stdbool.h>
 
 
 typedef struct sp_kd_array{
@@ -52,10 +53,10 @@ int** initialise2KDArraysReturnData(KDArray* arr, int sizeL, int sizeR,KDArray m
 int* initialiseMap(KDArray arr, int coor);
 
 //copy the relevant SPPoints to the new KDArrays, according to the map
-void splitSPPointArrayAcordingToMap(KDArray mother,int* map, KDArray* res);
+bool splitSPPointArrayAcordingToMap(KDArray mother,int* map, KDArray* res);
 
 //fixes the indexes of the points
-void fixKDArrayIndexesAfterSplit(KDArray arr, int motherSize,int side, int* map);
+bool fixKDArrayIndexesAfterSplit(KDArray arr, int motherSize,int side, int* map);
 
 // gets median value of specific coor
 double getMedianOfCoor(KDArray arr, int coor);

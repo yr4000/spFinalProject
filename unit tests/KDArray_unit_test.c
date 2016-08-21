@@ -20,7 +20,7 @@ SPPoint* createSPPointArray(double** data,int size,int dim){
 	SPPoint* res = (SPPoint*)malloc(sizeof(SPPoint)*size);
 	int i;
 	for(i=0;i<size;i++){
-		res[i] = spPointCreate(data[size-i-1],dim,size-i); //TODO should consider update the function
+		res[i] = spPointCreate(data[size-i-1],dim,size-i);
 	}
 	return res;
 }
@@ -232,10 +232,10 @@ bool testSplitSPPointArrayAcordingToMap(){
 		int* map = initialiseMap(mother,coor);
 		splitSPPointArrayAcordingToMap(mother,map,arr);
 		for(i=0;i<sizeL;i++){
-			ASSERT_TRUE(map[arr[0]->PArr[i]->index]==1);
+			ASSERT_TRUE(map[arr[0]->PArr[i]->index-1]==1);
 		}
 		for(i=0;i<sizeR;i++){
-			ASSERT_TRUE(map[arr[1]->PArr[i]->index]==0);
+			ASSERT_TRUE(map[arr[1]->PArr[i]->index-1]==0);
 		}
 		free(map);
 	}

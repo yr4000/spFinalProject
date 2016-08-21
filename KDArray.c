@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <stdbool.h>
 #include "KDArray.h"
 #include "SPPoint.h"
 
@@ -27,23 +28,28 @@ void destroyKDArray(KDArray arr){
 
 }
 
-//TODO add memory allocation failure checks
+
 KDArray init(SPPoint * PointsArray, int arraySize){
 	if(PointsArray == NULL || arraySize <= 0) return NULL;
 	int i,j;
 	int dim = PointsArray[0]->dim;
 	KDArray res = (KDArray) malloc(sizeof(*res));
+	if(res==NULL) return NULL;
 
 	//copying the points array to KDArray and sorting them by index (n*logn)
 	initialiseSPPointArrayForKDArray(res,PointsArray,arraySize);
+	if(res->PArr==NULL) return NULL;
 	qsort(res->PArr,arraySize,sizeof(SPPoint),compareSPPointByIndex);
 	res->arrSize = arraySize;
 
 	// IMPORTANT - the indexes in the matrix are not the indexes of the points,
 	// but their indexes in the points array of KDArray
 	res->sortedIndexesMatrix = (int**)malloc(sizeof(int*)*dim);
+	if(res->sortedIndexesMatrix==NULL) return NULL;
 	int* data = (int*)malloc(sizeof(int*)*dim*arraySize); //data of the index matrix
+	if(data ==NULL) return NULL;
 	double** SArr = createSorting2DArray(arraySize);
+	if(SArr==NULL) return NULL;
 
 	//creating the matrix.
 	for(i=0;i<dim;i++){
@@ -60,23 +66,23 @@ KDArray init(SPPoint * PointsArray, int arraySize){
 	return res;
 }
 
-//TODO add memory allocation failure checks
 void initialiseSPPointArrayForKDArray(KDArray arr, SPPoint* PArr, int arraySize){
 	if(arr==NULL || PArr==NULL || arraySize<=0) return;
 	int i;
-	arr->PArr = (SPPoint*) malloc(sizeof(SPPoint)*arraySize); // is it fine?
+	arr->PArr = (SPPoint*) malloc(sizeof(SPPoint)*arraySize);
+	if(arr->PArr==NULL) return;
 	//initialising res->PArr.
 	for(i=0; i<arraySize; i++){
 		arr->PArr[i] = spPointCopy(PArr[i]);
 	}
 }
 
-//TODO add memory allocation failure checks
 double** createSorting2DArray(int n){
 	if(n<=0) return NULL;
 	int i;
 	double **res = (double**)malloc(sizeof(double)*n);
 	double *data = (double*)malloc(sizeof(double)*n*2);
+	if(res==NULL || data==NULL) return NULL;
 	for(i=0;i<n;i++){
 		res[i] = data+i*2;
 	}
@@ -115,17 +121,20 @@ int compareSPPointByIndex(const void* A,const void* B){
 KDArray* split(KDArray arr, int coor){
 	int i,j,lc=0,rc = 0,LEFT = 1, RIGHT = 0;
 	KDArray* res = (KDArray*)malloc(sizeof(KDArray*)*2);
+	if(res==NULL) return NULL;
 	res[0] = (KDArray)malloc(sizeof(KDArray));
 	res[1] = (KDArray)malloc(sizeof(KDArray));
+	if(res[0]==NULL || res[1]==NULL) return NULL;
 	int sizeL = ceil(((double)arr->arrSize)/2); //sizes of the left and right KDArrays;
 	int sizeR = floor(((double)arr->arrSize)/2);
 
 	//initialising res[0] and res[1] and initialise the data arrays for their matrixes
 	int** KDArrMatrixesData = initialise2KDArraysReturnData(res,sizeL,sizeR,arr);
 	int* map = initialiseMap(arr,coor);
+	if(KDArrMatrixesData==NULL || map==NULL) return NULL;
 
 	// here we copy the relevant SPPoints to the new KDArrays, according to the map.
-	splitSPPointArrayAcordingToMap(arr,map,res);
+	if(!splitSPPointArrayAcordingToMap(arr,map,res)) return NULL;
 
 	for(i=0;i<arr->PArr[0]->dim;i++){ //for each coordinate of the points
 		//first we assign the relevant pointers in the matrixes arrays to their data arrays.
@@ -149,16 +158,16 @@ KDArray* split(KDArray arr, int coor){
 	}
 
 	// here we fix the indexes of the matrixes, for later splits
-	fixKDArrayIndexesAfterSplit(res[0],arr->arrSize,LEFT,map);
-	fixKDArrayIndexesAfterSplit(res[1],arr->arrSize,RIGHT,map);
+	if(!fixKDArrayIndexesAfterSplit(res[0],arr->arrSize,LEFT,map)) return NULL;
+	if(!fixKDArrayIndexesAfterSplit(res[1],arr->arrSize,RIGHT,map)) return NULL;
 	free(map);
 	return res;
 }
 
-//TODO: add memory allocation failure checks
 int** initialise2KDArraysReturnData(KDArray* arr, int sizeL, int sizeR,KDArray mother){
 	int dim = mother->PArr[0]->dim; // this is the dimension of every point
 	int **res = (int**)malloc(sizeof(int*)*2);
+	if(res==NULL) return NULL;
 	//Here we allocating everything needed for KDArr-left
 	arr[0]->PArr = (SPPoint*)malloc(sizeof(SPPoint)*sizeL);
 	arr[0]->arrSize = sizeL;
@@ -170,12 +179,14 @@ int** initialise2KDArraysReturnData(KDArray* arr, int sizeL, int sizeR,KDArray m
 	arr[1]->arrSize = sizeR;
 	arr[1]->sortedIndexesMatrix = (int**)malloc(sizeof(int*)*dim);
 	res[1] = (int*)malloc(sizeof(int)*sizeR*dim);
+	if(arr[0]->PArr==NULL || arr[0]->sortedIndexesMatrix==NULL || res[0]==NULL
+			|| arr[1]->PArr==NULL || arr[1]->sortedIndexesMatrix==NULL || res[1]==NULL){
+		return NULL;
+	}
 
 	return res;
 }
 
-//TODO: add memory allocation failure checks.
-//TODO: this implementation won't work the second time. fixed?
 // this map is initalised based only on sortedIndexesMatrix.
 // sortedIndexesMatrix is based on that that all the point in the KDArray
 // are sorted by index. if they are not, it wont work.
@@ -184,14 +195,16 @@ int* initialiseMap(KDArray arr, int coor){
 	int i;
 	int sizeL = ceil(((double)arr->arrSize)/2);
 	int* map = (int*)calloc(arr->arrSize,sizeof(int));
+	if(map==NULL) return NULL;
 	for(i=0;i<sizeL;i++){
-		map[arr->sortedIndexesMatrix[coor][i]] = 1; //for this to work i need to change the points indexes.
+		map[arr->sortedIndexesMatrix[coor][i]] = 1;
 	}
 	return map;
 }
 
-//TODO add if NULL then return false..
-void splitSPPointArrayAcordingToMap(KDArray mother,int* map, KDArray* res){
+
+bool splitSPPointArrayAcordingToMap(KDArray mother,int* map, KDArray* res){
+	if(mother==NULL || map==NULL || res==NULL) return false;
 	int i,lc=0,rc = 0;
 	for(i=0;i<mother->arrSize;i++){
 		if(map[i]==1){
@@ -203,11 +216,12 @@ void splitSPPointArrayAcordingToMap(KDArray mother,int* map, KDArray* res){
 			rc++;
 		}
 	}
+	return true;
 }
 
-//TODO add memory allocation failure
-void fixKDArrayIndexesAfterSplit(KDArray arr, int motherSize,int side, int* map){
+bool fixKDArrayIndexesAfterSplit(KDArray arr, int motherSize,int side, int* map){
 	int* mapI = (int*)malloc(sizeof(int)*motherSize);
+	if(mapI==NULL) return false;
 	int i,j,c=0;
 	int dim = arr->PArr[0]->dim;
 	for(i=0;i<motherSize;i++){mapI[i]=-1;}
@@ -224,6 +238,7 @@ void fixKDArrayIndexesAfterSplit(KDArray arr, int motherSize,int side, int* map)
 		}
 	}
 	free(mapI);
+	return true;
 }
 
 double getMedianOfCoor(KDArray arr, int coor){
