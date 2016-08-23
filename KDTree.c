@@ -13,7 +13,7 @@
 //Read me: to implement the initialiser of KDTree i need to implement also searchMin
 // and max point[coor] value.
 // the initialisation is recursive.
-
+//TODO: add Loggers messages?
 
 void destroyKDTree(KDTreeNode tree){
 	if(isLeaf(tree)){

@@ -14,6 +14,7 @@
 #include "KDArray.h"
 #include "SPPoint.h"
 
+//TODO: add Loggers messages?
 
 void destroyKDArray(KDArray arr){
 	if(arr == NULL) return;

@@ -121,8 +121,15 @@ bool testKNNSearch(){
 //
 //}
 
-int main(){
-	RUN_TEST(testCreateKDTree);
-	RUN_TEST(testKNNSearch);
-	return 0;
-}
+//int main(){
+//	RUN_TEST(testCreateKDTree);
+//	RUN_TEST(testKNNSearch);
+////	FILE *fp = fopen("C:/Users/Yair/workspaceC/file.txt","w");
+////	if(fp==NULL) printf("zoobi");
+////	else{
+////		fprintf(fp,"%d",5);
+////		fprintf(fp,"%d",5);
+////	}
+////	fclose(fp);
+//	return 0;
+//}

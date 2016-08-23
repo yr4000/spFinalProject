@@ -36,16 +36,6 @@ void destroySPPointArray(SPPoint* arr, int size){
 
 // this function will create data for all the tests
 double** createData(int* dim, int* size){
-	// a spare code:
-	//	double a[2] = {0,0}; double b[2] = {1,0}; double c[2] = {2,5};
-	//	double d[2] = {0,3}; double e[2] = {-1,2}; double f[2] = {-1,-1}; double g[2] = {5,-2};
-	//	SPPoint A = spPointCreate(a,2,0);
-	//	SPPoint B = spPointCreate(b,2,1);
-	//	SPPoint C = spPointCreate(c,2,2);
-	//	SPPoint D = spPointCreate(d,2,3);
-	//	SPPoint E = spPointCreate(e,2,4);
-	//	SPPoint F = spPointCreate(f,2,5);
-	//	SPPoint G = spPointCreate(g,2,0);
 	double funcdata[] = {0,0,1,0,2,5,0,3,-1,2,-1,-1,5,-2};
 	int sizeFD = 14;
 	int i;
