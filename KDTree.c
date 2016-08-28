@@ -6,6 +6,7 @@
  */
 
 #include "KDTree.h"
+#include "SPBPriorityQueue.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
@@ -15,7 +16,9 @@
 // the initialisation is recursive.
 //TODO: add Loggers messages?
 
+//TODO: test on valgrind, NULL
 void destroyKDTree(KDTreeNode tree){
+	if(tree==NULL) return;
 	if(isLeaf(tree)){
 		spPointDestroy(tree->data);
 		return;

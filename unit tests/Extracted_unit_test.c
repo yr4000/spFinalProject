@@ -11,7 +11,7 @@
 
 int NUM_OF_FEATURES = 7;
 
-//TODO did not check any nulls
+//TODO did not check any nulls + need to recheck when have a normal config file
 bool testGetFeatsFileName(){
 	SPConfig config;
 	ASSERT_FALSE(getFeatsFileName(NULL,3));
@@ -39,14 +39,15 @@ bool testInitExtractionMode(){
 
 bool testInitNonExtractionMode(){
 	SPConfig config;
-	int dim,size,i;
-	SPPoint* arr = (SPPoint*)malloc(sizeof(SPPoint)*NUM_OF_FEATURES); //TODO: why when i malloced it in the function it didn't work?
+	int dim,size,i,numOfFeatures;
+	SPPoint* arr;
+//	= (SPPoint*)malloc(sizeof(SPPoint)*NUM_OF_FEATURES); //TODO: why when i malloced it in the function it didn't work?
 	double** data = createData(&dim,&size);
-	ASSERT_TRUE(initNonExtractionMode(NULL,2,config)==SP_EXTRACT_INVALID_ARGUMENT);
-	ASSERT_TRUE(initNonExtractionMode(arr,-1,config)==SP_EXTRACT_INVALID_ARGUMENT);
-	ASSERT_TRUE(initNonExtractionMode(arr,2,NULL)==SP_EXTRACT_INVALID_ARGUMENT);
-	ASSERT_TRUE(initNonExtractionMode(arr,2,config)==SP_EXTRACT_FAILED_TO_OPEN_FILE);
-	ASSERT_TRUE(initNonExtractionMode(arr,1,config)==SP_EXTRACT_SUCCESS);
+	ASSERT_TRUE(initNonExtractionMode(NULL,2,config,&numOfFeatures)==SP_EXTRACT_INVALID_ARGUMENT);
+	ASSERT_TRUE(initNonExtractionMode(&arr,-1,config,&numOfFeatures)==SP_EXTRACT_INVALID_ARGUMENT);
+	ASSERT_TRUE(initNonExtractionMode(&arr,2,NULL,&numOfFeatures)==SP_EXTRACT_INVALID_ARGUMENT);
+	ASSERT_TRUE(initNonExtractionMode(&arr,2,config,&numOfFeatures)==SP_EXTRACT_FAILED_TO_OPEN_FILE);
+	ASSERT_TRUE(initNonExtractionMode(&arr,1,config,&numOfFeatures)==SP_EXTRACT_SUCCESS);
 	for(i=0;i<14;i++){
 		ASSERT_TRUE(arr[i/2]->data[i%2]==data[NUM_OF_FEATURES-1-i/2][i%2]);
 	}
@@ -55,11 +56,11 @@ bool testInitNonExtractionMode(){
 	return true;
 }
 
-int main(){
-	RUN_TEST(testGetFeatsFileName);
-	RUN_TEST(testInitExtractionMode);
-	RUN_TEST(testInitNonExtractionMode);
-	return 0;
-}
+//int main(){
+//	RUN_TEST(testGetFeatsFileName);
+//	RUN_TEST(testInitExtractionMode);
+//	RUN_TEST(testInitNonExtractionMode);
+//	return 0;
+//}
 
 

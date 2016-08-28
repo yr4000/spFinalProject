@@ -25,14 +25,14 @@ SPPoint* createSPPointArray(double** data,int size,int dim){
 	return res;
 }
 
-void destroySPPointArray(SPPoint* arr, int size){
-	if(arr == NULL || size<=0) return;
-	int i;
-	for(i=0;i<size;i++){
-		spPointDestroy(arr[i]);
-	}
-	free(arr);
-}
+//void destroySPPointArray(SPPoint* arr, int size){
+//	if(arr == NULL || size<=0) return;
+//	int i;
+//	for(i=0;i<size;i++){
+//		spPointDestroy(arr[i]);
+//	}
+//	free(arr);
+//}
 
 // this function will create data for all the tests
 double** createData(int* dim, int* size){
@@ -74,30 +74,33 @@ KDArray buildKDArray(){
 	int dim, size;
 	double** data = createData(&dim,&size);
 	SPPoint* PArr = createSPPointArray(data,size,dim);
-	return init(PArr,size);
+	KDArray arr = kdArrayInit(PArr,size);
+	destroyData(data);
+	destroySPPointArray(PArr,size);
+	return arr;
 }
 
 //------------------------------------------------------------------------
-bool testDestroyKDArray(){
-	int dim, size;
-	double** data = createData(&dim,&size);
-	SPPoint* PArr = createSPPointArray(data,size,dim);
-	KDArray arr = init(PArr,size);
-	destroyKDArray(arr);
-	free(arr);
-	destroySPPointArray(PArr,size);
-	destroyData(data);
-	return true;
-}
+//bool testDestroyKDArray(){
+//	int dim, size;
+//	double** data = createData(&dim,&size);
+//	SPPoint* PArr = createSPPointArray(data,size,dim);
+//	KDArray arr = kdArrayInit(PArr,size);
+//	destroyKDArray(arr);
+//	free(arr);
+//	destroySPPointArray(PArr,size);
+//	destroyData(data);
+//	return true;
+//}
 
 bool testInit(){
 int dim, size,i,j;
 int testArr[] = {4,5,0,3,1,2,6,6,5,0,1,4,3,2};
-ASSERT_TRUE(init(NULL,1)==NULL);
+ASSERT_TRUE(kdArrayInit(NULL,1)==NULL);
 double** data = createData(&dim,&size);
 SPPoint* PArr = createSPPointArray(data,size,dim);
-ASSERT_TRUE(init(PArr,0)==NULL);
-KDArray arr = init(PArr,size);
+ASSERT_TRUE(kdArrayInit(PArr,0)==NULL);
+KDArray arr = kdArrayInit(PArr,size);
 for(i=0;i<size;i++){
 	ASSERT_TRUE(spPointCompare(PArr[size-1-i],arr->PArr[i]));
 }
@@ -194,8 +197,10 @@ bool testSplit(){
 			}
 			counter++;
 		}
-		destroyKDArray(res[0]);
+		destroyKDArray(res[0]);//TODO problem here - cant free res1 and res0 same time
 		destroyKDArray(res[1]);
+		free(res[0]); //cant do that without the program to collapse
+		free(res[1]);// this also.
 		free(res);
 	}
 	destroyKDArray(mother);
@@ -205,18 +210,18 @@ bool testSplit(){
 
 bool testSplitSPPointArrayAcordingToMap(){
 	int coor,i;
-//	int expectedFirstLeftKDArray[] = {4,5,0,3};
-//	int expectedFirstRigntKDArray[] = {1,2,6};
-//	int expectedSecondLeftKDArray[] = {6,5,0,1};
-//	int expectedSecondRigntKDArray[] = {4,3,2};
 	KDArray mother = buildKDArray();
 	KDArray* arr = (KDArray*)malloc(sizeof(KDArray)*2);
 //	printf("%d\n",sizeof(KDArray));
 	arr[0] = (KDArray)malloc(sizeof(KDArray));
 	arr[1] = (KDArray)malloc(sizeof(KDArray));
+//	free(arr[0]); // here free work fine.
+//	free(arr[1]);
 	int sizeL = ceil(((double)mother->arrSize)/2);
 	int sizeR = floor(((double)mother->arrSize)/2);
-	int** KDArrMatrixesData = initialise2KDArraysReturnData(arr,sizeL,sizeR,mother);
+	int** KDArrMatrixesData = initialise2KDArraysReturnData(&arr,sizeL,sizeR,mother);
+//	destroyKDArray(arr[1]);
+//	free(arr[1]);
 
 	for(coor = 0;coor<mother->PArr[0]->dim;coor++){
 		int* map = initialiseMap(mother,coor);
@@ -230,15 +235,16 @@ bool testSplitSPPointArrayAcordingToMap(){
 		free(map);
 	}
 	destroyKDArray(mother);
-	destroyKDArray(arr[0]);
+	free(mother);
+//	destroyKDArray(arr[0]); //TODO same problem here
 	destroyKDArray(arr[1]);
-	//	free(arr[0]);
-	//	free(arr[1]);
-	free(arr); //TODO there is some kind of a problem here - i can't do free(arr[0])
+//		free(arr[0]);
+//		free(arr[1]);
+//	free(arr); //TODO there is some kind of a problem here - i can't do free(arr[0])
 	//send Moab email...
 	//https://www.google.co.il/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=No+source+available+for+%22__mingw_CRTStartup()+at
 	free(*KDArrMatrixesData);
-	free(KDArrMatrixesData);
+//	free(KDArrMatrixesData); //TODO problem here
 	return true;
 }
 // TODO right now i think i might delete it.
@@ -270,16 +276,27 @@ bool testInitialiseMap(){
 	return true;
 }
 
+bool testDestroyKDArray(){
+	KDArray mother = buildKDArray();
+	KDArray* children = split(mother,0);
+	destroyKDArray(children[0]);
+	destroyKDArray(children[1]);
+	free(children);
+	destroyKDArray(mother);
+	return true;
+}
+
 //int main(){
 //	RUN_TEST(testInitialiseSPPointArrayForKDArray);
 //	RUN_TEST(testCreateSorting2DArray);
 //	RUN_TEST(testInitialize2DArrayByCoor);
 //	RUN_TEST(testCompare2DArray);
 //	RUN_TEST(testInit);
-//	RUN_TEST(testDestroyKDArray);
+////	RUN_TEST(testDestroyKDArray);
 //	RUN_TEST(testInitialiseMap);
 ////	RUN_TEST(testSplitSPPointArrayAcordingToMap);
 //	RUN_TEST(testSplit);
+//	RUN_TEST(testDestroyKDArray);
 //	return 0;
 //}
 

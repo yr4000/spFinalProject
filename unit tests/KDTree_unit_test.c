@@ -121,6 +121,8 @@ bool testKNNSearch(){
 //
 //}
 
+
+//TODO: fix
 //int main(){
 //	RUN_TEST(testCreateKDTree);
 //	RUN_TEST(testKNNSearch);

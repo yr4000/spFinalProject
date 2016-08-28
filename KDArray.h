@@ -22,12 +22,12 @@ typedef struct sp_kd_array{
 void destroyKDArray(KDArray arr);
 
 //creates a new KDArray
-KDArray init(SPPoint * PointsArray, int arraySize);
+KDArray kdArrayInit(SPPoint * PointsArray, int arraySize);
 
 //initialise the SPPoints array of the KDArray.
 void initialiseSPPointArrayForKDArray(KDArray arr, SPPoint* PArr, int arraySize);
 
-// creates 2D array in size 2Xn
+// creates 2D array in size 2Xn to sort the relevant indexes.
 double** createSorting2DArray(int n);
 
 // Receives 2D array where arr[i][0] is a SPPoint index.
@@ -37,7 +37,7 @@ void initialize2DArrayByCoor(double **arr, int coor,SPPoint *PArr, int sizeOfPAr
 // comparation function for qsort
 int compare2DArray(const void* A,const void* B);
 
-// to sory points by index
+// to sort points by index
 int compareSPPointByIndex(const void* A,const void* B);
 
 // this function gets a KDArray and returns a *KDArray with KDArray left
@@ -47,7 +47,7 @@ KDArray* split(KDArray arr, int coor);
 //this function initialise the left and right sub-KDArrays of arr,
 //and also returns two data arrays for their matrixes, uninitialised.
 //this is a sub function for split.
-int** initialise2KDArraysReturnData(KDArray* arr, int sizeL, int sizeR,KDArray mother);
+int** initialise2KDArraysReturnData(KDArray** arr, int sizeL, int sizeR,KDArray mother);
 
 // initialise the map needed for the function split
 int* initialiseMap(KDArray arr, int coor);
@@ -55,7 +55,9 @@ int* initialiseMap(KDArray arr, int coor);
 //copy the relevant SPPoints to the new KDArrays, according to the map
 bool splitSPPointArrayAcordingToMap(KDArray mother,int* map, KDArray* res);
 
-//fixes the indexes of the points
+//fixes the indexes of the points, means makes the indexes in the
+//new matrix be similiar to the points index of their place(!) in the sub
+//KDArray. check the instruction or ask me if you dont understand.
 bool fixKDArrayIndexesAfterSplit(KDArray arr, int motherSize,int side, int* map);
 
 // gets median value of specific coor
@@ -63,5 +65,8 @@ double getMedianOfCoor(KDArray arr, int coor);
 
 // destroy 2D KDArray
 void destroy2DKDArray(KDArray* arr);
+
+// destroys SSPoints array
+void destroySPPointArray(SPPoint* arr, int size);
 
 #endif /* KD_ARRAY_H_ */

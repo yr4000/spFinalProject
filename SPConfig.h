@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include "SPLogger.h"
 
+#define LENGTH_OF_LINE 1024
+
 /**
  * A data-structure which is used for configuring the system.
  */
@@ -22,6 +24,31 @@ typedef enum sp_config_msg_t {
 	SP_CONFIG_INDEX_OUT_OF_RANGE,
 	SP_CONFIG_SUCCESS
 } SP_CONFIG_MSG;
+
+typedef enum kd_tree {
+	RANDOM,
+	MAX_SPREAD,
+	INCREMENTAL
+}spKDTreeSplitMethod;
+
+
+struct sp_config_t {
+
+	char spImagesDirectory[LENGTH_OF_LINE];//TODO is it fine?
+	char spImagesPrefix[LENGTH_OF_LINE];
+	char spImagesSuffix[LENGTH_OF_LINE];
+	int spNumOfImages;
+	int spPCADimension;
+	char spPCAFilename[LENGTH_OF_LINE];
+	int spNumOfFeatures;
+	bool spExtractionMode;
+	int spNumOfSimilarImages;
+	enum kd_tree spKDTreeSplitMethod;
+	int spKNN;
+	bool spMinimalGUI;
+	int spLoggerLevel;
+	char spLoggerFilename[LENGTH_OF_LINE];
+};
 
 typedef struct sp_config_t* SPConfig;
 
@@ -169,5 +196,22 @@ SP_CONFIG_MSG spConfigGetPCAPath(char* pcaPath, const SPConfig config);
  * If config == NULL nothig is done.
  */
 void spConfigDestroy(SPConfig config);
+
+// This function returns a pointer to a substring of the original string.
+// If the given string was allocated dynamically, the caller must not overwrite
+// that pointer with the returned value, since the original pointer must be
+// deallocated using the same allocator with which it was allocated.  The return
+// value must NOT be deallocated using free() etc.
+char *trim(char *str);
+
+void massageCreater(const char* filename, int typeOfError, const int lineNum, const char*
+parameterName, char* line, char* destination, char* name, char* value);
+
+// spAtoi function checks If the given string contains
+// any invalid character, then this function returns 0, otherwise returns its numeric value.
+int spAtoi(char *str);
+
+// An utility function to check whether x is numeric.
+bool isNumericChar(char x);
 
 #endif /* SPCONFIG_H_ */

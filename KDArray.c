@@ -30,7 +30,7 @@ void destroyKDArray(KDArray arr){
 }
 
 
-KDArray init(SPPoint * PointsArray, int arraySize){
+KDArray kdArrayInit(SPPoint * PointsArray, int arraySize){
 	if(PointsArray == NULL || arraySize <= 0) return NULL;
 	int i,j;
 	int dim = PointsArray[0]->dim;
@@ -130,7 +130,7 @@ KDArray* split(KDArray arr, int coor){
 	int sizeR = floor(((double)arr->arrSize)/2);
 
 	//initialising res[0] and res[1] and initialise the data arrays for their matrixes
-	int** KDArrMatrixesData = initialise2KDArraysReturnData(res,sizeL,sizeR,arr);
+	int** KDArrMatrixesData = initialise2KDArraysReturnData(&res,sizeL,sizeR,arr);
 	int* map = initialiseMap(arr,coor);
 	if(KDArrMatrixesData==NULL || map==NULL) return NULL;
 
@@ -165,23 +165,25 @@ KDArray* split(KDArray arr, int coor){
 	return res;
 }
 
-int** initialise2KDArraysReturnData(KDArray* arr, int sizeL, int sizeR,KDArray mother){
+int** initialise2KDArraysReturnData(KDArray** arr, int sizeL, int sizeR,KDArray mother){
 	int dim = mother->PArr[0]->dim; // this is the dimension of every point
-	int **res = (int**)malloc(sizeof(int*)*2);
+	int **res = (int**)malloc(sizeof(int*)*2);//each array in res will contain the relevant data (to arr[0] or arr[1])
 	if(res==NULL) return NULL;
 	//Here we allocating everything needed for KDArr-left
-	arr[0]->PArr = (SPPoint*)malloc(sizeof(SPPoint)*sizeL);
-	arr[0]->arrSize = sizeL;
-	arr[0]->sortedIndexesMatrix = (int**)malloc(sizeof(int*)*dim);
+//	arr[0] = (KDArray)malloc(sizeof(KDArray));
+	(*arr)[0]->PArr = (SPPoint*)malloc(sizeof(SPPoint)*sizeL);
+	(*arr)[0]->arrSize = sizeL;
+	(*arr)[0]->sortedIndexesMatrix = (int**)malloc(sizeof(int*)*dim);
 	res[0] = (int*)malloc(sizeof(int)*sizeL*dim);
 
 	//Here we allocating everything needed for KDArr-right
-	arr[1]->PArr = (SPPoint*)malloc(sizeof(SPPoint)*sizeR);
-	arr[1]->arrSize = sizeR;
-	arr[1]->sortedIndexesMatrix = (int**)malloc(sizeof(int*)*dim);
+//	arr[1] = (KDArray)malloc(sizeof(KDArray));
+	(*arr)[1]->PArr = (SPPoint*)malloc(sizeof(SPPoint)*sizeR);
+	(*arr)[1]->arrSize = sizeR;
+	(*arr)[1]->sortedIndexesMatrix = (int**)malloc(sizeof(int*)*dim);
 	res[1] = (int*)malloc(sizeof(int)*sizeR*dim);
-	if(arr[0]->PArr==NULL || arr[0]->sortedIndexesMatrix==NULL || res[0]==NULL
-			|| arr[1]->PArr==NULL || arr[1]->sortedIndexesMatrix==NULL || res[1]==NULL){
+	if((*arr)[0]->PArr==NULL || (*arr)[0]->sortedIndexesMatrix==NULL || res[0]==NULL
+			|| (*arr)[1]->PArr==NULL || (*arr)[1]->sortedIndexesMatrix==NULL || res[1]==NULL){
 		return NULL;
 	}
 
@@ -251,5 +253,14 @@ double getMedianOfCoor(KDArray arr, int coor){
 void destroy2DKDArray(KDArray* arr){
 	destroyKDArray(arr[0]);
 	destroyKDArray(arr[1]);
+	free(arr);
+}
+
+void destroySPPointArray(SPPoint* arr, int size){
+	if(arr == NULL || size<=0) return;
+	int i;
+	for(i=0;i<size;i++){
+		spPointDestroy(arr[i]);
+	}
 	free(arr);
 }
