@@ -23,15 +23,14 @@ int compareIntBigToSmall(const void *a,const void* b){
 }
 
 int* getAppreanceOfImagesFeatures(SPConfig config,SP_CONFIG_MSG* msg,SPPoint* queryImageFeatures,int queryImageFeaturesNum,SPPoint* arr){
-	int i,j,k,numOfFeatures,spNumOfSimilarImages,ZERO=0;
-	spKDTreeSplitMethod method;
+	int i,j,k,numOfFeatures,ZERO=0;
 	int* appreanceOfImagesFeatures = (int*)malloc(sizeof(int)*spConfigGetNumOfImages(config,msg));
 	if(appreanceOfImagesFeatures==NULL || *msg!=SP_CONFIG_SUCCESS){
 		//TODO
 	}
 
 	for(i=0;i<queryImageFeaturesNum;i++){
-		SPBPQueue q = spBPQueueCreate(spNumOfSimilarImages); //TODO need to change spNumOfSimilarImages
+		SPBPQueue q = spBPQueueCreate(config->spNumOfSimilarImages);
 
 		//for each image we will create a KDTree and search for the nearest
 		//features. after the search we will destroy it immediately.
@@ -40,7 +39,7 @@ int* getAppreanceOfImagesFeatures(SPConfig config,SP_CONFIG_MSG* msg,SPPoint* qu
 		for(j=0;j<spConfigGetNumOfImages(config,msg);j++){
 			if(initNonExtractionMode(&arr,j,config,&numOfFeatures)!=SP_EXTRACT_SUCCESS){};
 			KDArray kdarr = kdArrayInit(arr,numOfFeatures);
-			KDTreeNode tree= createKDTree(kdarr,method,ZERO);//TODO chage method to the realevent config thing
+			KDTreeNode tree= createKDTree(kdarr,config->spKDTreeSplitMethod,ZERO);
 			KNNSearch(q,tree,queryImageFeatures[i]);
 			destroyKDTree(tree);
 			destroyKDArray(kdarr);
@@ -50,7 +49,7 @@ int* getAppreanceOfImagesFeatures(SPConfig config,SP_CONFIG_MSG* msg,SPPoint* qu
 		//after we finished searching for the closest features, we will
 		//count all the indexes of images appeared in q.
 		SPListElement e;
-		for(k=0;k<spNumOfSimilarImages;k++){ //TODO change spNumOfSimilarImages
+		for(k=0;k<config->spNumOfSimilarImages;k++){
 			e = spBPQueuePeek(q);
 			appreanceOfImagesFeatures[e->index]++;
 			spBPQueueDequeue(q);

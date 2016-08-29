@@ -199,8 +199,8 @@ bool testSplit(){
 		}
 		destroyKDArray(res[0]);//TODO problem here - cant free res1 and res0 same time
 		destroyKDArray(res[1]);
-		free(res[0]); //cant do that without the program to collapse
-		free(res[1]);// this also.
+		free(res[0]); //cant do that without the program to collapse. claims that i got out of the borders of the heap?!
+//		free(res[1]);// this also.
 		free(res);
 	}
 	destroyKDArray(mother);
@@ -217,6 +217,7 @@ bool testSplitSPPointArrayAcordingToMap(){
 	arr[1] = (KDArray)malloc(sizeof(KDArray));
 //	free(arr[0]); // here free work fine.
 //	free(arr[1]);
+//	free(arr);
 	int sizeL = ceil(((double)mother->arrSize)/2);
 	int sizeR = floor(((double)mother->arrSize)/2);
 	int** KDArrMatrixesData = initialise2KDArraysReturnData(&arr,sizeL,sizeR,mother);
@@ -236,8 +237,8 @@ bool testSplitSPPointArrayAcordingToMap(){
 	}
 	destroyKDArray(mother);
 	free(mother);
-//	destroyKDArray(arr[0]); //TODO same problem here
-	destroyKDArray(arr[1]);
+	destroyKDArray(arr[0]); //TODO same problem here
+//	destroyKDArray(arr[1]);
 //		free(arr[0]);
 //		free(arr[1]);
 //	free(arr); //TODO there is some kind of a problem here - i can't do free(arr[0])
@@ -281,8 +282,11 @@ bool testDestroyKDArray(){
 	KDArray* children = split(mother,0);
 	destroyKDArray(children[0]);
 	destroyKDArray(children[1]);
+	free(children[0]);
+	free(children[1]);
 	free(children);
 	destroyKDArray(mother);
+	free(mother);
 	return true;
 }
 
@@ -294,9 +298,9 @@ bool testDestroyKDArray(){
 //	RUN_TEST(testInit);
 ////	RUN_TEST(testDestroyKDArray);
 //	RUN_TEST(testInitialiseMap);
-////	RUN_TEST(testSplitSPPointArrayAcordingToMap);
+//	RUN_TEST(testSplitSPPointArrayAcordingToMap);
 //	RUN_TEST(testSplit);
-//	RUN_TEST(testDestroyKDArray);
+////	RUN_TEST(testDestroyKDArray);
 //	return 0;
 //}
 
