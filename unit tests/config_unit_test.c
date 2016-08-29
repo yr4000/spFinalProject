@@ -9,27 +9,27 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../SPConfig.h"
-#include "unit_tests/unit_test_util.h"
+#include "unit_test_util.h"
 #include <string.h>
 #define STRING_END '\0'
 
-#define TEST_MISSING_FILE "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\NoSuchFile"
-#define TEST_DEFAULT_VAL "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new1.txt"
-#define TEST_MISSING_NUM_IMG "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new2.txt"
-#define TEST_MISSING_DIR "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new3.txt"
-#define TEST_MISSING_PREFIX "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new4.txt"
-#define TEST_MISSING_SUFFIX "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new5.txt"
-#define TEST_BLANK_LINE "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new6.txt"
-#define TEST_INVALID_PARAMETER_NAME "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new7.txt"
-#define TEST_SPACE_STRING_VALUE "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new8.txt"
-#define TEST_SPACE_INT_VALUE "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new9.txt"
-#define TEST_REGULAR "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new10.txt"
-#define TEST_ANOTHER_REGULAR "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new11.txt"
-#define TEST_VALUE_LESS_ZERO "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new12.txt"
-#define TEST_VALUE_MORE_28 "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new13.txt"
-#define TEST_NOT_TRUE_FALSE "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new14.txt"
-#define TEST_VALUE_MORE_FOUR "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new15.txt"
-#define TEST_SIGN "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new16.txt"
+#define TEST_MISSING_FILE "C:\\Users\\gal\\workspace\\sp\\NoSuchFile"
+#define TEST_DEFAULT_VAL "C:\\Users\\gal\\workspace\\sp\\new1.txt"
+#define TEST_MISSING_NUM_IMG "C:\\Users\\gal\\workspace\\sp\\new2.txt"
+#define TEST_MISSING_DIR "C:\\Users\\gal\\workspace\\sp\\new3.txt"
+#define TEST_MISSING_PREFIX "C:\\Users\\gal\\workspace\\sp\\new4.txt"
+#define TEST_MISSING_SUFFIX "C:\\Users\\gal\\workspace\\sp\\new5.txt"
+#define TEST_BLANK_LINE "C:\\Users\\gal\\workspace\\sp\\new6.txt"
+#define TEST_INVALID_PARAMETER_NAME "C:\\Users\\gal\\workspace\\sp\\new7.txt"
+#define TEST_SPACE_STRING_VALUE "C:\\Users\\gal\\workspace\\sp\\new8.txt"
+#define TEST_SPACE_INT_VALUE "C:\\Users\\gal\\workspace\\sp\\new9.txt"
+#define TEST_REGULAR "C:\\Users\\gal\\workspace\\sp\\new10.txt"
+#define TEST_ANOTHER_REGULAR "C:\\Users\\gal\\workspace\\sp\\new11.txt"
+#define TEST_VALUE_LESS_ZERO "C:\\Users\\gal\\workspace\\sp\\new12.txt"
+#define TEST_VALUE_MORE_28 "C:\\Users\\gal\\workspace\\sp\\new13.txt"
+#define TEST_NOT_TRUE_FALSE "C:\\Users\\gal\\workspace\\sp\\new14.txt"
+#define TEST_VALUE_MORE_FOUR "C:\\Users\\gal\\workspace\\sp\\new15.txt"
+#define TEST_SIGN "C:\\Users\\gal\\workspace\\sp\\new16.txt"
 
 
 bool testMissingFile(){
@@ -148,10 +148,56 @@ bool testMissingSuffix(){
 
 bool testBlankLine(){
 	char path[1024] = TEST_BLANK_LINE;
-	SP_CONFIG_MSG* msg = (SP_CONFIG_MSG*) malloc(sizeof(char)*1024);
-	SPConfig co =spConfigCreate(path, msg);
+	char imagePath[1024];
+	char pcaPath[1024];
+	char resultGetImagePath[1024] ="./images/img15.png";
+		char resultGetPCAPath[1024] = "./images/pca.yml";
 
-	ASSERT_TRUE(*msg == SP_CONFIG_INVALID_STRING);
+		SP_CONFIG_MSG *msg = (SP_CONFIG_MSG *) malloc(sizeof(char) * 1024);
+		SPConfig co = spConfigCreate(path, msg);
+		ASSERT_TRUE(!strcmp(co->spImagesDirectory,"./images/"));
+		ASSERT_TRUE(!strcmp(co->spImagesPrefix,"img"));
+		ASSERT_TRUE(!strcmp(co->spImagesSuffix,".png"));
+		ASSERT_TRUE(co->spNumOfImages == 17);
+		ASSERT_TRUE(co->spPCADimension == 20);
+		ASSERT_TRUE(!strcmp(co->spPCAFilename,"pca.yml"));
+		ASSERT_TRUE(co->spNumOfFeatures == 100);
+		ASSERT_TRUE(co->spExtractionMode == true);
+		ASSERT_TRUE(co->spMinimalGUI == false);
+		ASSERT_TRUE(co->spNumOfSimilarImages == 5);
+		ASSERT_TRUE(co->spKDTreeSplitMethod == MAX_SPREAD);
+		ASSERT_TRUE(co->spKNN == 1);
+		ASSERT_TRUE(co->spLoggerLevel == 3);
+		ASSERT_TRUE(!strcmp(co->spLoggerFilename,"stdout"));
+
+		ASSERT_TRUE(*msg == SP_CONFIG_SUCCESS);
+
+		ASSERT_TRUE(spConfigIsExtractionMode(co, msg) == true);
+		ASSERT_TRUE(*msg == SP_CONFIG_SUCCESS);
+
+		ASSERT_TRUE(spConfigMinimalGui(co, msg) == false);
+		ASSERT_TRUE(*msg == SP_CONFIG_SUCCESS);
+
+		ASSERT_TRUE(spConfigGetNumOfImages(co, msg) == 17);
+		ASSERT_TRUE(*msg == SP_CONFIG_SUCCESS);
+
+		ASSERT_TRUE(spConfigGetNumOfFeatures(co, msg) == 100);
+		ASSERT_TRUE(*msg == SP_CONFIG_SUCCESS);
+
+		ASSERT_TRUE(spConfigGetPCADim(co, msg) == 20);
+		ASSERT_TRUE(*msg == SP_CONFIG_SUCCESS);
+
+		spConfigGetImagePath(imagePath,co,15);
+		ASSERT_TRUE(!strcmp(imagePath, resultGetImagePath));
+		ASSERT_TRUE(spConfigGetImagePath(imagePath,co,15) == SP_CONFIG_SUCCESS);
+
+
+		ASSERT_TRUE(spConfigGetImagePath(imagePath,co,18) == SP_CONFIG_INDEX_OUT_OF_RANGE);
+
+		spConfigGetPCAPath(pcaPath, co);
+		ASSERT_TRUE(!strcmp(pcaPath, resultGetPCAPath));
+		ASSERT_TRUE(spConfigGetPCAPath(pcaPath, co) == SP_CONFIG_SUCCESS);
+
 	spConfigDestroy (co);
 	free(msg);
 	return true;
@@ -194,7 +240,6 @@ bool testSpaceInsideIntParameterValue(){
 
 }
 
-//TODO: when i add an empty line it does not work. need to fix
 bool testRegularConfigFIle()
 {
 	char imagePath[1024];
