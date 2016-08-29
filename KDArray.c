@@ -16,7 +16,6 @@
 
 //TODO: add Loggers messages?
 // can push?
-//can push???
 void destroyKDArray(KDArray arr){
 	if(arr == NULL) return;
 	int i;
