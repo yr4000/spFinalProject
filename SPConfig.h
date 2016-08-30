@@ -213,4 +213,12 @@ int spAtoi(char *str);
 // An utility function to check whether x is numeric.
 bool isNumericChar(char x);
 
+void extractValuesFromLine(char* source,char* destination, char* value, char* name);
+
+SP_CONFIG_MSG isInvalidStringValue(SP_CONFIG_MSG* msg, char* filename,int numOfLine,char* noParameter,
+		char* line, char* destination, char* value, char* name );
+
+SP_CONFIG_MSG isInvalidIntValue(SP_CONFIG_MSG* msg, int intValue, int min, int max,
+		char* filename,int numOfLine,char* noParameter,char* line, char* destination, char* name, char* value);
+
 #endif /* SPCONFIG_H_ */
