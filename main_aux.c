@@ -24,7 +24,7 @@ int compareIntBigToSmall(const void *a,const void* b){
 
 int* getAppreanceOfImagesFeatures(SPConfig config,SP_CONFIG_MSG* msg,SPPoint* queryImageFeatures,int queryImageFeaturesNum,SPPoint* arr){
 	int i,j,k,numOfFeatures,ZERO=0;
-	int* appreanceOfImagesFeatures = (int*)malloc(sizeof(int)*spConfigGetNumOfImages(config,msg));
+	int* appreanceOfImagesFeatures = (int*)calloc(spConfigGetNumOfImages(config,msg),sizeof(int));
 	if(appreanceOfImagesFeatures==NULL || *msg!=SP_CONFIG_SUCCESS){
 		//TODO
 	}

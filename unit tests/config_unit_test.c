@@ -9,27 +9,27 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../SPConfig.h"
-#include "unit_test_util.h"
+#include "unit_tests/unit_test_util.h"
 #include <string.h>
 #define STRING_END '\0'
 
-#define TEST_MISSING_FILE "C:\\Users\\gal\\workspace\\sp\\NoSuchFile"
-#define TEST_DEFAULT_VAL "C:\\Users\\gal\\workspace\\sp\\new1.txt"
-#define TEST_MISSING_NUM_IMG "C:\\Users\\gal\\workspace\\sp\\new2.txt"
-#define TEST_MISSING_DIR "C:\\Users\\gal\\workspace\\sp\\new3.txt"
-#define TEST_MISSING_PREFIX "C:\\Users\\gal\\workspace\\sp\\new4.txt"
-#define TEST_MISSING_SUFFIX "C:\\Users\\gal\\workspace\\sp\\new5.txt"
-#define TEST_BLANK_LINE "C:\\Users\\gal\\workspace\\sp\\new6.txt"
-#define TEST_INVALID_PARAMETER_NAME "C:\\Users\\gal\\workspace\\sp\\new7.txt"
-#define TEST_SPACE_STRING_VALUE "C:\\Users\\gal\\workspace\\sp\\new8.txt"
-#define TEST_SPACE_INT_VALUE "C:\\Users\\gal\\workspace\\sp\\new9.txt"
-#define TEST_REGULAR "C:\\Users\\gal\\workspace\\sp\\new10.txt"
-#define TEST_ANOTHER_REGULAR "C:\\Users\\gal\\workspace\\sp\\new11.txt"
-#define TEST_VALUE_LESS_ZERO "C:\\Users\\gal\\workspace\\sp\\new12.txt"
-#define TEST_VALUE_MORE_28 "C:\\Users\\gal\\workspace\\sp\\new13.txt"
-#define TEST_NOT_TRUE_FALSE "C:\\Users\\gal\\workspace\\sp\\new14.txt"
-#define TEST_VALUE_MORE_FOUR "C:\\Users\\gal\\workspace\\sp\\new15.txt"
-#define TEST_SIGN "C:\\Users\\gal\\workspace\\sp\\new16.txt"
+#define TEST_MISSING_FILE "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\NoSuchFile"
+#define TEST_DEFAULT_VAL "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new1.txt"
+#define TEST_MISSING_NUM_IMG "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new2.txt"
+#define TEST_MISSING_DIR "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new3.txt"
+#define TEST_MISSING_PREFIX "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new4.txt"
+#define TEST_MISSING_SUFFIX "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new5.txt"
+#define TEST_BLANK_LINE "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new6.txt"
+#define TEST_INVALID_PARAMETER_NAME "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new7.txt"
+#define TEST_SPACE_STRING_VALUE "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new8.txt"
+#define TEST_SPACE_INT_VALUE "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new9.txt"
+#define TEST_REGULAR "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new10.txt"
+#define TEST_ANOTHER_REGULAR "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new11.txt"
+#define TEST_VALUE_LESS_ZERO "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new12.txt"
+#define TEST_VALUE_MORE_28 "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new13.txt"
+#define TEST_NOT_TRUE_FALSE "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new14.txt"
+#define TEST_VALUE_MORE_FOUR "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new15.txt"
+#define TEST_SIGN "C:\\Users\\Yair\\workspaceC\\spFinalProject\\config files\\new16.txt"
 
 
 bool testMissingFile(){
@@ -417,25 +417,25 @@ bool testSignInsideIntParameterValue(){
 
 
 
-int main()
-{
-	RUN_TEST(testMissingFile);
-	RUN_TEST(testDefaultValues);
-	RUN_TEST(testMissingNumImages);
-	RUN_TEST(testMissingDirectory);
-	RUN_TEST(testMissingPrefix);
-	RUN_TEST(testMissingSuffix);
-	RUN_TEST(testBlankLine);
-	RUN_TEST(testLineWithInvalidParameterName);
-	RUN_TEST(testSpaceInsideStringParameterValue);
-	RUN_TEST(testSpaceInsideIntParameterValue);
-	RUN_TEST(testRegularConfigFIle);
-	RUN_TEST(testAnotherRegularConfigFIle);
-	RUN_TEST(testInvalidParameterValueLessThan0);
-	RUN_TEST(testInvalidParameterValueMoreThan28);
-	RUN_TEST(testInvalidParameterValueNotTrueFalse);
-	RUN_TEST(testInvalidParameterValueMoreThan4);
-	RUN_TEST(testSignInsideIntParameterValue);
-	return 0;
-}
+//int main()
+//{
+//	RUN_TEST(testMissingFile);
+//	RUN_TEST(testDefaultValues);
+//	RUN_TEST(testMissingNumImages);
+//	RUN_TEST(testMissingDirectory);
+//	RUN_TEST(testMissingPrefix);
+//	RUN_TEST(testMissingSuffix);
+//	RUN_TEST(testBlankLine);
+//	RUN_TEST(testLineWithInvalidParameterName);
+//	RUN_TEST(testSpaceInsideStringParameterValue);
+//	RUN_TEST(testSpaceInsideIntParameterValue);
+//	RUN_TEST(testRegularConfigFIle);
+//	RUN_TEST(testAnotherRegularConfigFIle);
+//	RUN_TEST(testInvalidParameterValueLessThan0);
+//	RUN_TEST(testInvalidParameterValueMoreThan28);
+//	RUN_TEST(testInvalidParameterValueNotTrueFalse);
+//	RUN_TEST(testInvalidParameterValueMoreThan4);
+//	RUN_TEST(testSignInsideIntParameterValue);
+//	return 0;
+//}
 

@@ -29,7 +29,7 @@ typedef enum kd_tree {
 	RANDOM,
 	MAX_SPREAD,
 	INCREMENTAL
-} KDTREECUT;
+} spKDTreeSplitMethod;
 
 
 struct sp_config_t {
