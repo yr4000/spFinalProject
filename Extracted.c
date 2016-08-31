@@ -32,7 +32,7 @@ SP_EXTRACTED_MSG initExtractionMode(SPPoint* arr, int index, SPConfig config,int
 	for(i=0;i<numOfFeatues;i++){ //for test lets insert a constant. TODO
 		fprintf(f,"%d ",arr[i]->dim);
 		for(j=0;j<arr[i]->dim;j++){
-			fprintf(f,"%f ",arr[i]->data[j]);
+			fprintf(f,"%f ",arr[i]->data[j]);//TODO getter
 		}
 	}
 	fclose(f);

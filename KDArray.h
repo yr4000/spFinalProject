@@ -18,7 +18,7 @@ typedef struct sp_kd_array {
 	SPPoint *PArr;
 	int arrSize;
 	int **sortedIndexesMatrix;
-}*KDArray;
+}* KDArray;
 
 /**
  * Frees all memory resources associate with KDArray. 

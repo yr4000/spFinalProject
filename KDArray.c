@@ -121,10 +121,10 @@ int compareSPPointByIndex(const void* A,const void* B){
 
 KDArray* split(KDArray arr, int coor){
 	int i,j,lc=0,rc = 0,LEFT = 1, RIGHT = 0;
-	KDArray* res = (KDArray*)malloc(sizeof(KDArray*)*2);
+	KDArray* res = (KDArray*)malloc(sizeof(KDArray)*2);
 	if(res==NULL) return NULL;
-	res[0] = (KDArray)malloc(sizeof(KDArray));
-	res[1] = (KDArray)malloc(sizeof(KDArray));
+	res[0] = (KDArray)malloc(sizeof(struct sp_kd_array));
+	res[1] = (KDArray)malloc(sizeof(struct sp_kd_array));
 	if(res[0]==NULL || res[1]==NULL) return NULL;
 	int sizeL = ceil(((double)arr->arrSize)/2); //sizes of the left and right KDArrays;
 	int sizeR = floor(((double)arr->arrSize)/2);

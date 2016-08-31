@@ -52,6 +52,23 @@ double** createData(int* dim, int* size){
 	return data;
 }
 
+double** createData2(int* dim, int* size){
+	double funcdata[] = {1,2,123,70,2,7,9,11,3,4};
+	int sizeFD = 10;
+	int i;
+	*size = 5;
+	*dim = 2;
+	double** data = (double**)malloc(sizeof(double*)*(*size));
+	double* datadata = (double*)malloc(sizeof(double)*sizeFD);
+	for(i=0; i<sizeFD; i++){
+		datadata[i] = funcdata[i];
+	}
+	for(i=0; i<(*size); i++){
+		data[i] = datadata + i*(*dim);
+	}
+	return data;
+}
+
 void destroyData(double** data){
 	if(data!=NULL){
 	free(*data);
@@ -73,6 +90,16 @@ bool spPointCompare(SPPoint A, SPPoint B){
 KDArray buildKDArray(){
 	int dim, size;
 	double** data = createData(&dim,&size);
+	SPPoint* PArr = createSPPointArray(data,size,dim);
+	KDArray arr = kdArrayInit(PArr,size);
+	destroyData(data);
+	destroySPPointArray(PArr,size);
+	return arr;
+}
+
+KDArray buildKDArray2(){
+	int dim, size;
+	double** data = createData2(&dim,&size);
 	SPPoint* PArr = createSPPointArray(data,size,dim);
 	KDArray arr = kdArrayInit(PArr,size);
 	destroyData(data);
@@ -181,13 +208,24 @@ bool testCompare2DArray(){
 }
 
 bool testSplit(){
-	int i,j,k,coor,counter = 0;
-	KDArray mother = buildKDArray();
+	int i,j,k,coor=0,counter = 0;
+	KDArray* res;
 //	int expected[][8] = {{4,5,0,3,5,0,4,3},{1,2,6,6,1,2},{5,0,1,6,6,5,0,1},{4,3,2,4,3,2}};
 	int expected[][8] = {{2,3,0,1,3,0,2,1},{0,1,2,2,0,1},{2,0,1,3,3,2,0,1},{2,1,0,2,1,0}};
 
+	//this is the array from their example
+	KDArray mother = buildKDArray2();
+	res = split(mother,coor);
+	destroyKDArray(res[0]);
+	destroyKDArray(res[1]);
+	free(res[0]);
+	free(res[1]);
+	destroyKDArray(mother);
+	free(mother);
+
+	mother = buildKDArray();
 	for(coor=0;coor<mother->PArr[0]->dim;coor++){
-		KDArray* res = split(mother,coor);
+		res = split(mother,coor);
 		for(k=0;k<2;k++){
 			for(j=0;j<mother->PArr[0]->dim;j++){
 				for(i=0;i<res[k]->arrSize;i++){
@@ -200,7 +238,7 @@ bool testSplit(){
 		destroyKDArray(res[0]);//TODO problem here - cant free res1 and res0 same time
 		destroyKDArray(res[1]);
 		free(res[0]); //cant do that without the program to collapse. claims that i got out of the borders of the heap?!
-//		free(res[1]);// this also.
+		free(res[1]);// this also.
 		free(res);
 	}
 	destroyKDArray(mother);
@@ -238,10 +276,10 @@ bool testSplitSPPointArrayAcordingToMap(){
 	destroyKDArray(mother);
 	free(mother);
 	destroyKDArray(arr[0]); //TODO same problem here
-//	destroyKDArray(arr[1]);
-//		free(arr[0]);
-//		free(arr[1]);
-//	free(arr); //TODO there is some kind of a problem here - i can't do free(arr[0])
+	destroyKDArray(arr[1]);
+		free(arr[0]);
+		free(arr[1]);
+	free(arr); //TODO there is some kind of a problem here - i can't do free(arr[0])
 	//send Moab email...
 	//https://www.google.co.il/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=No+source+available+for+%22__mingw_CRTStartup()+at
 	free(*KDArrMatrixesData);
@@ -290,18 +328,18 @@ bool testDestroyKDArray(){
 	return true;
 }
 
-//int main(){
-//	RUN_TEST(testInitialiseSPPointArrayForKDArray);
-//	RUN_TEST(testCreateSorting2DArray);
-//	RUN_TEST(testInitialize2DArrayByCoor);
-//	RUN_TEST(testCompare2DArray);
-//	RUN_TEST(testInit);
-////	RUN_TEST(testDestroyKDArray);
-//	RUN_TEST(testInitialiseMap);
-//	RUN_TEST(testSplitSPPointArrayAcordingToMap);
-//	RUN_TEST(testSplit);
-////	RUN_TEST(testDestroyKDArray);
-//	return 0;
-//}
+int main(){
+	RUN_TEST(testInitialiseSPPointArrayForKDArray);
+	RUN_TEST(testCreateSorting2DArray);
+	RUN_TEST(testInitialize2DArrayByCoor);
+	RUN_TEST(testCompare2DArray);
+	RUN_TEST(testInit);
+//	RUN_TEST(testDestroyKDArray);
+	RUN_TEST(testInitialiseMap);
+	RUN_TEST(testSplitSPPointArrayAcordingToMap);
+	RUN_TEST(testSplit);
+//	RUN_TEST(testDestroyKDArray);
+	return 0;
+}
 
 

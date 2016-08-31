@@ -59,13 +59,14 @@ bool checkSearchByMethod(KDArray arr, spKDTreeSplitMethod method,SPPoint p, int*
 bool testCreateKDTree(){
 	int expectedMax[] = {6,1,2,7,5,4,3};
 	int expectedInc[] = {6,1,5,4,2,7,3};
+	int expectedExample[] = {1,5,3,4,2};
 	int counter = 0;
 	KDArray arr = buildKDArray();
 	int* indexesArray[arr->arrSize];
 	KDTreeNode tree = createKDTree(arr,MAX_SPREAD,COOR); //Manually checked, works.
 	printPointsOfKDTreeToArray(tree,&counter,indexesArray);
 	ASSERT_TRUE(compareArrays(expectedMax,indexesArray,arr->arrSize));
-	destroyKDTree(tree);
+	destroyKDTree(tree); //TODO major problem
 	tree = createKDTree(arr,RANDOM,COOR);
 	destroyKDTree(tree);
 	tree = createKDTree(arr,INCREMENTAL,COOR);
@@ -73,6 +74,24 @@ bool testCreateKDTree(){
 	printPointsOfKDTreeToArray(tree,&counter,indexesArray);
 	ASSERT_TRUE(compareArrays(expectedInc,indexesArray,arr->arrSize));
 	destroyKDTree(tree);
+	destroyKDArray(arr);
+	free(arr);
+
+	//this is for their example
+	counter = 0;
+	arr = buildKDArray2();
+	tree = createKDTree(arr,MAX_SPREAD,COOR);
+	printPointsOfKDTreeToArray(tree,&counter,indexesArray);
+	ASSERT_TRUE(compareArrays(expectedExample,indexesArray,arr->arrSize));
+	destroyKDTree(tree);
+	tree = createKDTree(arr,INCREMENTAL,COOR);
+	counter = 0;
+	printPointsOfKDTreeToArray(tree,&counter,indexesArray);
+	ASSERT_TRUE(compareArrays(expectedExample,indexesArray,arr->arrSize));
+	destroyKDTree(tree);
+	destroyKDArray(arr);
+	free(arr);
+
 	return true;
 
 }
@@ -100,6 +119,8 @@ bool testCreateKDTree(){
 bool testKNNSearch(){
 	int expectedP1[] = {2,1,4};
 	int expectedP2[] = {5,4,1};
+//	int expectedP3[];
+//	int expectedP4[];
 	KDArray arr = buildKDArray();
 	double data1[] = {1,1};
 	double data2[] = {-1,2};

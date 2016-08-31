@@ -141,11 +141,11 @@ void KNNSearch(SPBPQueue q, KDTreeNode tree, SPPoint p){
 	RorL pathTaken;
 
 	if(isLeaf(tree)){
-		spBPQueueEnqueue(q,spListElementCreate(tree->data->index,spPointL2SquaredDistance(p,tree->data)));
+		spBPQueueEnqueue(q,spListElementCreate(tree->data->index,spPointL2SquaredDistance(p,tree->data)));//TODO DIFAT ZIKARON
 		return;
 	}
 
-	if(p->data[tree->dim] <= tree->val){
+	if(p->data[tree->dim] <= tree->val){ //TODO consider using getters.
 		KNNSearch(q,tree->left,p);
 		pathTaken = leftTree;
 	}
@@ -155,7 +155,7 @@ void KNNSearch(SPBPQueue q, KDTreeNode tree, SPPoint p){
 	}
 
 	if(!spBPQueueIsFull(q) ||
-			(pow(tree->val-p->data[tree->dim],2))<spBPQueueMaxValue(q)){
+			(pow((tree->val)-(p->data[tree->dim]),2))<spBPQueueMaxValue(q)){
 		if(pathTaken == leftTree) KNNSearch(q,tree->right,p);
 		if(pathTaken == rightTree) KNNSearch(q,tree->left,p);
 	}

@@ -22,6 +22,7 @@ bool testGetFeatsFileName(){
 	return true;
 }
 
+//TODO won't work anymore for there is no config file, need to be created.
 bool testInitExtractionMode(){
 	SPConfig config;
 	int dim,size;
@@ -37,17 +38,17 @@ bool testInitExtractionMode(){
 
 }
 
+//TODO not correct anymore... maybe
 bool testInitNonExtractionMode(){
 	SPConfig config;
-	int dim,size,i,numOfFeatures;
-	SPPoint* arr;
-//	= (SPPoint*)malloc(sizeof(SPPoint)*NUM_OF_FEATURES); //TODO: why when i malloced it in the function it didn't work?
+	int dim,size,i,startIndex=0;
+	SPPoint* arr = (SPPoint*)malloc(sizeof(SPPoint)*NUM_OF_FEATURES); //TODO: why when i malloced it in the function it didn't work?
 	double** data = createData(&dim,&size);
-	ASSERT_TRUE(initNonExtractionMode(NULL,2,config,&numOfFeatures)==SP_EXTRACT_INVALID_ARGUMENT);
-	ASSERT_TRUE(initNonExtractionMode(&arr,-1,config,&numOfFeatures)==SP_EXTRACT_INVALID_ARGUMENT);
-	ASSERT_TRUE(initNonExtractionMode(&arr,2,NULL,&numOfFeatures)==SP_EXTRACT_INVALID_ARGUMENT);
-	ASSERT_TRUE(initNonExtractionMode(&arr,2,config,&numOfFeatures)==SP_EXTRACT_FAILED_TO_OPEN_FILE);
-	ASSERT_TRUE(initNonExtractionMode(&arr,1,config,&numOfFeatures)==SP_EXTRACT_SUCCESS);
+	ASSERT_TRUE(initNonExtractionMode(NULL,2,config,&startIndex)==SP_EXTRACT_INVALID_ARGUMENT);
+	ASSERT_TRUE(initNonExtractionMode(&arr,-1,config,&startIndex)==SP_EXTRACT_INVALID_ARGUMENT);
+	ASSERT_TRUE(initNonExtractionMode(&arr,2,NULL,&startIndex)==SP_EXTRACT_INVALID_ARGUMENT);
+	ASSERT_TRUE(initNonExtractionMode(&arr,2,config,&startIndex)==SP_EXTRACT_FAILED_TO_OPEN_FILE);
+	ASSERT_TRUE(initNonExtractionMode(&arr,1,config,&startIndex)==SP_EXTRACT_SUCCESS);
 	for(i=0;i<14;i++){
 		ASSERT_TRUE(arr[i/2]->data[i%2]==data[NUM_OF_FEATURES-1-i/2][i%2]);
 	}
