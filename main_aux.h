@@ -10,7 +10,9 @@
 
 int compareIntBigToSmall(const void *a,const void* b);
 
-int* getAppreanceOfImagesFeatures(SPConfig config,SP_CONFIG_MSG* msg,SPPoint* queryImageFeatures,int queryImageFeaturesNum,SPPoint* arr);
+KDTreeNode createTreeFromAllFeatures(SPConfig config,int numberOfImages);
+
+int* getAppreanceOfImagesFeatures(SPConfig config,KDTreeNode tree,SPPoint* queryImageFeatures,int queryImageFeaturesNum,int numberOfImages);
 
 
 

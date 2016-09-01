@@ -22,11 +22,17 @@ int compareIntBigToSmall(const void *a,const void* b){
 	return B-A;
 }
 
+//this function, using the feats files of the images, extracts all their features into a huge
+//SPPoints array, which is arr.
 void createWholePointsArray(int numberOfImages,int*sumNumOfFeatures,SPPoint** arr, SPConfig config){
 	int i,j,numberOfFeatures;
+	//for each image we extract all its features from its file.feats, and store it in temp.
+	//then we realloc arr and stores them there.
 	for(i=0;i<numberOfImages;i++){
 		SPPoint* temp;
-		if(initNonExtractionMode(&temp,i,config,&numberOfFeatures)!=SP_EXTRACT_SUCCESS){};
+		if(initNonExtractionMode(&temp,i,config,&numberOfFeatures)!=SP_EXTRACT_SUCCESS){
+			//TODO
+		};
 		*arr = realloc(*arr,(*sumNumOfFeatures+numberOfFeatures)*sizeof(SPPoint));
 		for(j=0;j<numberOfFeatures;j++){
 			(*arr)[*sumNumOfFeatures+j] = spPointCopy(temp[j]);
@@ -35,39 +41,29 @@ void createWholePointsArray(int numberOfImages,int*sumNumOfFeatures,SPPoint** ar
 		destroySPPointArray(temp,numberOfFeatures);
 	}
 }
-//TODO take this code out of the loop
-int* getAppreanceOfImagesFeatures(SPConfig config,SP_CONFIG_MSG* msg,SPPoint* queryImageFeatures,int queryImageFeaturesNum,SPPoint* arr){
-	int i,j,k,sumNumOfFeatures=0,ZERO=0;
-	int numberOfImages = spConfigGetNumOfImages(config,msg);
-	if(msg!=SP_CONFIG_SUCCESS){
-		//TODO
-	}
 
-	int* appreanceOfImagesFeatures = (int*)calloc(numberOfImages,sizeof(int));
-	if(appreanceOfImagesFeatures==NULL || *msg!=SP_CONFIG_SUCCESS){
-		//TODO
-	}
-	arr = (SPPoint*)malloc(sizeof(SPPoint)); //TODO why is it necessary?
-//	arr = (SPPoint*)malloc(basicPArrSize*spConfigGetNumOfFeatures(config,msg)); //TODO maybe remove
+KDTreeNode createTreeFromAllFeatures(SPConfig config,int numberOfImages){
+	int sumNumOfFeatures=0,ZERO=0;
+	SPPoint* arr = NULL;
 	//we will create one huge tree since the search in it will be faster.
-	//TODO: we always work on the same q for the same image feature. is that a problem?
 	createWholePointsArray(numberOfImages,&sumNumOfFeatures,&arr,config);
-//	for(i=0;i<numberOfImages;i++){
-//		SPPoint* temp;
-//		if(initNonExtractionMode(&temp,i,config,&numberOfFeatures)!=SP_EXTRACT_SUCCESS){};
-//		for(j=0;j<numberOfFeatures;j++){
-//			arr[sumNumOfFeatures+j] = spPointCopy(temp[j]);
-//		}
-//		sumNumOfFeatures+=numberOfFeatures;
-//		destroySPPointArray(temp,numberOfFeatures);
-//	}
 
-	//making the array smaller if need to
-//	arr = realloc(arr,basicPArrSize*sumNumOfFeatures);//TODO maybe remove
 	//here we create and search the tree.
+	//TODO checks if kdarr or tree creations failed
 	KDArray kdarr = kdArrayInit(arr,sumNumOfFeatures);
 	KDTreeNode tree= createKDTree(kdarr,config->spKDTreeSplitMethod,ZERO);//TODO create getMethod
+	destroyKDArray(kdarr);
+	destroySPPointArray(arr,sumNumOfFeatures);
+	return tree;
+}
+//TODO take this code out of the loop
+int* getAppreanceOfImagesFeatures(SPConfig config,KDTreeNode tree,SPPoint* queryImageFeatures,int queryImageFeaturesNum,int numberOfImages){
+	int i,k;
 
+	int* appreanceOfImagesFeatures = (int*)calloc(numberOfImages,sizeof(int));
+	if(appreanceOfImagesFeatures==NULL){
+		//TODO
+	}
 	//TODO create a new function for this code
 	//for each feature we search the big tree.
 	for(i=0;i<queryImageFeaturesNum;i++){
@@ -85,8 +81,5 @@ int* getAppreanceOfImagesFeatures(SPConfig config,SP_CONFIG_MSG* msg,SPPoint* qu
 		}
 		spBPQueueDestroy(q);
 	}
-	destroyKDTree(tree);
-	destroyKDArray(kdarr);
-	destroySPPointArray(arr,sumNumOfFeatures);
 	return appreanceOfImagesFeatures;
 }

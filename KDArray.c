@@ -248,7 +248,7 @@ bool fixKDArrayIndexesAfterSplit(KDArray arr, int motherSize,int side, int* map)
 double getMedianOfCoor(KDArray arr, int coor){
 	int med = ceil((double)arr->arrSize/2)-1;
 	int pointIndex = arr->sortedIndexesMatrix[coor][med];
-	return arr->PArr[pointIndex]->data[coor];
+	return spPointGetAxisCoor(arr->PArr[pointIndex],coor);
 }
 
 void destroy2DKDArray(KDArray* arr){

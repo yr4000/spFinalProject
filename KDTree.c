@@ -143,7 +143,7 @@ void KNNSearch(SPBPQueue q, KDTreeNode tree, SPPoint p){
 		return;
 	}
 
-	if(p->data[tree->dim] <= tree->val){ //TODO consider using getters.
+	if(spPointGetAxisCoor(p,tree->dim)<= tree->val){ //TODO consider using getters for points.
 		KNNSearch(q,tree->left,p);
 		pathTaken = leftTree;
 	}
