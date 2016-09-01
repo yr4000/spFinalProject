@@ -34,7 +34,7 @@ void destroyKDArray(KDArray arr){
 KDArray kdArrayInit(SPPoint * PointsArray, int arraySize){
 	if(PointsArray == NULL || arraySize <= 0) return NULL;
 	int i,j;
-	int dim = PointsArray[0]->dim;
+	int dim = spPointGetDimension(PointsArray[0]);
 	KDArray res = (KDArray) malloc(sizeof(*res));
 	if(res==NULL) return NULL;
 

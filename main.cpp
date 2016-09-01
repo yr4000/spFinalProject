@@ -46,6 +46,7 @@ void showResults(ImageProc proc, SPConfig config, int* appreanceOfImagesFeatures
 	if(!config->spMinimalGUI){printf("Best candidates for - %s - are:\n",queryImagePath);}
 	for(i=0;i<config->spNumOfSimilarImages;i++){ //TODO getter
 		int max = 0,index = 0;
+		//finding the index with maximum appearances
 		for(j=0;j<numberOfImages;j++){
 			if(max<appreanceOfImagesFeatures[j]){
 				max = appreanceOfImagesFeatures[j];

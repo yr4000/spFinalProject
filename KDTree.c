@@ -137,13 +137,13 @@ void KNNSearch(SPBPQueue q, KDTreeNode tree, SPPoint p){
 	RorL pathTaken;
 
 	if(isLeaf(tree)){
-		SPListElement e = spListElementCreate(tree->data->index,spPointL2SquaredDistance(p,tree->data));
+		SPListElement e = spListElementCreate(spPointGetIndex(tree->data),spPointL2SquaredDistance(p,tree->data));
 		spBPQueueEnqueue(q,e);
 		spListElementDestroy(e);
 		return;
 	}
 
-	if(spPointGetAxisCoor(p,tree->dim)<= tree->val){ //TODO consider using getters for points.
+	if(spPointGetAxisCoor(p,tree->dim)<= tree->val){
 		KNNSearch(q,tree->left,p);
 		pathTaken = leftTree;
 	}
@@ -153,9 +153,9 @@ void KNNSearch(SPBPQueue q, KDTreeNode tree, SPPoint p){
 	}
 
 	if(!spBPQueueIsFull(q) ||
-			(pow((tree->val)-(p->data[tree->dim]),2))<spBPQueueMaxValue(q)){
+			(pow((tree->val)-spPointGetAxisCoor(p,tree->dim),2))<spBPQueueMaxValue(q)){
 		if(pathTaken == leftTree) KNNSearch(q,tree->right,p);
-		if(pathTaken == rightTree) KNNSearch(q,tree->left,p);
+		else KNNSearch(q,tree->left,p);
 	}
 }
 

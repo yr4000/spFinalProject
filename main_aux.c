@@ -16,12 +16,6 @@
 #include "KDArray.h"
 #include "KDTree.h"
 
-int compareIntBigToSmall(const void *a,const void* b){
-	int A = *(int*)a;
-	int B = *(int*)b;
-	return B-A;
-}
-
 //this function, using the feats files of the images, extracts all their features into a huge
 //SPPoints array, which is arr.
 void createWholePointsArray(int numberOfImages,int*sumNumOfFeatures,SPPoint** arr, SPConfig config){
@@ -49,14 +43,14 @@ KDTreeNode createTreeFromAllFeatures(SPConfig config,int numberOfImages){
 	createWholePointsArray(numberOfImages,&sumNumOfFeatures,&arr,config);
 
 	//here we create and search the tree.
-	//TODO checks if kdarr or tree creations failed
+	//TODO add checks if kdarr or tree creations failed
 	KDArray kdarr = kdArrayInit(arr,sumNumOfFeatures);
 	KDTreeNode tree= createKDTree(kdarr,config->spKDTreeSplitMethod,ZERO);//TODO create getMethod
 	destroyKDArray(kdarr);
 	destroySPPointArray(arr,sumNumOfFeatures);
 	return tree;
 }
-//TODO take this code out of the loop
+
 int* getAppreanceOfImagesFeatures(SPConfig config,KDTreeNode tree,SPPoint* queryImageFeatures,int queryImageFeaturesNum,int numberOfImages){
 	int i,k;
 
@@ -67,15 +61,15 @@ int* getAppreanceOfImagesFeatures(SPConfig config,KDTreeNode tree,SPPoint* query
 	//TODO create a new function for this code
 	//for each feature we search the big tree.
 	for(i=0;i<queryImageFeaturesNum;i++){
-		SPBPQueue q = spBPQueueCreate(config->spNumOfSimilarImages);//TODO create getSPN
+		SPBPQueue q = spBPQueueCreate(config->spKNN);//TODO create getSPKNN
 		KNNSearch(q,tree,queryImageFeatures[i]);
 
 		//after we finished searching for the closest features, we will
 		//count all the indexes of images appeared in q.
 		SPListElement e;
-		for(k=0;k<config->spNumOfSimilarImages;k++){
+		for(k=0;k<config->spKNN;k++){
 			e = spBPQueuePeek(q);
-			appreanceOfImagesFeatures[e->index]++;
+			appreanceOfImagesFeatures[spListElementGetIndex(e)]++;
 			spBPQueueDequeue(q);
 			spListElementDestroy(e);
 		}
