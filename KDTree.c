@@ -11,12 +11,9 @@
 #include <stdio.h>
 #include <math.h>
 
-//Read me: to implement the initialiser of KDTree i need to implement also searchMin
-// and max point[coor] value.
-// the initialisation is recursive.
 //TODO: add Loggers messages?
 
-//TODO: test on valgrind, NULL
+//TODO: test on valgrind,
 void destroyKDTree(KDTreeNode tree){
 	if(tree==NULL) return;
 	if(isLeaf(tree)){
@@ -24,16 +21,16 @@ void destroyKDTree(KDTreeNode tree){
 		return;
 	}
 	destroyKDTree(tree->left);
-//	free(tree->left);		//TODO why is it no good??
+	free(tree->left);
 	destroyKDTree(tree->right);
-//	free(tree->right);
-//	free(tree);
+	free(tree->right);
+	free(tree);
 }
 
 KDTreeNode createKDTree(KDArray arr, spKDTreeSplitMethod method,int coor){
 		int dim = arr->PArr[0]->dim;
 		int i;
-		KDTreeNode res = (KDTreeNode)malloc(sizeof(KDTreeNode));
+		KDTreeNode res = (KDTreeNode)malloc(sizeof(struct sp_kd_treeNode));
 		if(res == NULL) return NULL;
 
 		if(arr->arrSize==1){
@@ -135,13 +132,14 @@ void callCreateKDTreeRecursively(KDTreeNode res, KDArray arr, int coor, spKDTree
 	//for i copy everything in this function... except create leaf
 }
 
-//TODO the indexes are not saved on the split, it will cause problems here and need to be fixed
 void KNNSearch(SPBPQueue q, KDTreeNode tree, SPPoint p){
 	if(q==NULL || tree==NULL || p==NULL) return;
 	RorL pathTaken;
 
 	if(isLeaf(tree)){
-		spBPQueueEnqueue(q,spListElementCreate(tree->data->index,spPointL2SquaredDistance(p,tree->data)));//TODO DIFAT ZIKARON
+		SPListElement e = spListElementCreate(tree->data->index,spPointL2SquaredDistance(p,tree->data));
+		spBPQueueEnqueue(q,e);
+		spListElementDestroy(e);
 		return;
 	}
 

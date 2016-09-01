@@ -42,7 +42,6 @@ bool compareSPBPQToIntArray(SPBPQueue q, int* expected){
 		spBPQueueDequeue(q);
 		spListElementDestroy(e);
 	}
-	spBPQueueDestroy(q);
 	return true;
 }
 
@@ -51,6 +50,7 @@ bool checkSearchByMethod(KDArray arr, spKDTreeSplitMethod method,SPPoint p, int*
 	KDTreeNode tree = createKDTree(arr,method,COOR);
 	KNNSearch(q,tree,p);
 	ASSERT_TRUE(compareSPBPQToIntArray(q,expected));
+	spBPQueueDestroy(q);
 	destroyKDTree(tree);
 	return true;
 }
@@ -62,11 +62,11 @@ bool testCreateKDTree(){
 	int expectedExample[] = {1,5,3,4,2};
 	int counter = 0;
 	KDArray arr = buildKDArray();
-	int* indexesArray[arr->arrSize];
+	int indexesArray[arr->arrSize];
 	KDTreeNode tree = createKDTree(arr,MAX_SPREAD,COOR); //Manually checked, works.
 	printPointsOfKDTreeToArray(tree,&counter,indexesArray);
 	ASSERT_TRUE(compareArrays(expectedMax,indexesArray,arr->arrSize));
-	destroyKDTree(tree); //TODO major problem
+	destroyKDTree(tree);
 	tree = createKDTree(arr,RANDOM,COOR);
 	destroyKDTree(tree);
 	tree = createKDTree(arr,INCREMENTAL,COOR);
@@ -75,7 +75,6 @@ bool testCreateKDTree(){
 	ASSERT_TRUE(compareArrays(expectedInc,indexesArray,arr->arrSize));
 	destroyKDTree(tree);
 	destroyKDArray(arr);
-	free(arr);
 
 	//this is for their example
 	counter = 0;
@@ -90,37 +89,14 @@ bool testCreateKDTree(){
 	ASSERT_TRUE(compareArrays(expectedExample,indexesArray,arr->arrSize));
 	destroyKDTree(tree);
 	destroyKDArray(arr);
-	free(arr);
 
 	return true;
 
 }
-//
-//bool testCreateLeaf(){
-//
-//}
-//
-//bool testFindMax(){
-//
-//}
-//
-//bool testFindMin(){
-//
-//}
-//
-//bool testCreateSpreadArr(){
-//
-//}
-//
-//bool testCallCreateKDTreeRecursively(){
-//
-//}
 
 bool testKNNSearch(){
 	int expectedP1[] = {2,1,4};
 	int expectedP2[] = {5,4,1};
-//	int expectedP3[];
-//	int expectedP4[];
 	KDArray arr = buildKDArray();
 	double data1[] = {1,1};
 	double data2[] = {-1,2};
@@ -138,21 +114,9 @@ bool testKNNSearch(){
 	return true;
 }
 
-//bool testIsLeaf(){
-//
-//}
 
-
-//TODO: fix
 //int main(){
 //	RUN_TEST(testCreateKDTree);
 //	RUN_TEST(testKNNSearch);
-////	FILE *fp = fopen("C:/Users/Yair/workspaceC/file.txt","w");
-////	if(fp==NULL) printf("zoobi");
-////	else{
-////		fprintf(fp,"%d",5);
-////		fprintf(fp,"%d",5);
-////	}
-////	fclose(fp);
 //	return 0;
 //}

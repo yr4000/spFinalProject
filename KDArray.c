@@ -23,9 +23,10 @@ void destroyKDArray(KDArray arr){
 		spPointDestroy(arr->PArr[i]);
 	}
 	free(arr->PArr);
+	//TODO need to change after
 	free(*(arr->sortedIndexesMatrix));
 	free(arr->sortedIndexesMatrix);
-//	free(arr); //TODO why is it wrong?
+	free(arr);
 
 }
 
@@ -47,6 +48,7 @@ KDArray kdArrayInit(SPPoint * PointsArray, int arraySize){
 	// but their indexes in the points array of KDArray
 	res->sortedIndexesMatrix = (int**)malloc(sizeof(int*)*dim);
 	if(res->sortedIndexesMatrix==NULL) return NULL;
+	//TODO change it to many allocs, then change the destroy
 	int* data = (int*)malloc(sizeof(int*)*dim*arraySize); //data of the index matrix
 	if(data ==NULL) return NULL;
 	double** SArr = createSorting2DArray(arraySize);
@@ -132,30 +134,6 @@ KDArray* split(KDArray arr, int coor){
 	//initialising res[0] and res[1] and initialise the data arrays for their matrixes
 	int** KDArrMatrixesData = initialise2KDArraysReturnData(&res,sizeL,sizeR,arr);
 
-
-//	int dim = arr->PArr[0]->dim; // this is the dimension of every point
-//	int **KDArrMatrixesData = (int**)malloc(sizeof(int*)*2);//each array in res will contain the relevant data (to arr[0] or arr[1])
-//	if(KDArrMatrixesData==NULL) return NULL;
-//	//Here we allocating everything needed for KDArr-left
-////	(*arr)[0] = (KDArray)malloc(sizeof(KDArray)); //TODO when i alloc here its not good. why?
-////	if((*arr)[0]==NULL) return NULL;
-//	res[0]->PArr = (SPPoint*)malloc(sizeof(SPPoint)*sizeL);
-//	res[0]->arrSize = sizeL;
-//	res[0]->sortedIndexesMatrix = (int**)malloc(sizeof(int*)*dim);
-//	KDArrMatrixesData[0] = (int*)malloc(sizeof(int)*sizeL*dim);
-//
-//	//Here we allocating everything needed for KDArr-right
-////	(*arr)[1] = (KDArray)malloc(sizeof(KDArray));
-////	if((*arr)[0]==NULL) return NULL;
-//	res[1]->PArr = (SPPoint*)malloc(sizeof(SPPoint)*sizeR);
-//	res[1]->arrSize = sizeR;
-//	res[1]->sortedIndexesMatrix = (int**)malloc(sizeof(int*)*dim);
-//	KDArrMatrixesData[1] = (int*)malloc(sizeof(int)*sizeR*dim);
-//	if(res[0]->PArr==NULL || res[0]->sortedIndexesMatrix==NULL || KDArrMatrixesData[0]==NULL
-//			||res[1]->PArr==NULL || res[1]->sortedIndexesMatrix==NULL || KDArrMatrixesData[1]==NULL){
-//		return NULL;
-//	}
-
 	int* map = initialiseMap(arr,coor);
 	if(KDArrMatrixesData==NULL || map==NULL) return NULL;
 
@@ -195,16 +173,12 @@ int** initialise2KDArraysReturnData(KDArray** arr, int sizeL, int sizeR,KDArray 
 	int **res = (int**)malloc(sizeof(int*)*2);//each array in res will contain the relevant data (to arr[0] or arr[1])
 	if(res==NULL) return NULL;
 	//Here we allocating everything needed for KDArr-left
-//	(*arr)[0] = (KDArray)malloc(sizeof(KDArray)); //TODO when i alloc here its not good. why?
-//	if((*arr)[0]==NULL) return NULL;
 	(*arr)[0]->PArr = (SPPoint*)malloc(sizeof(SPPoint)*sizeL);
 	(*arr)[0]->arrSize = sizeL;
 	(*arr)[0]->sortedIndexesMatrix = (int**)malloc(sizeof(int*)*dim);
 	res[0] = (int*)malloc(sizeof(int)*sizeL*dim);
 
 	//Here we allocating everything needed for KDArr-right
-//	(*arr)[1] = (KDArray)malloc(sizeof(KDArray));
-//	if((*arr)[0]==NULL) return NULL;
 	(*arr)[1]->PArr = (SPPoint*)malloc(sizeof(SPPoint)*sizeR);
 	(*arr)[1]->arrSize = sizeR;
 	(*arr)[1]->sortedIndexesMatrix = (int**)malloc(sizeof(int*)*dim);

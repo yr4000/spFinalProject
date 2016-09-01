@@ -29,7 +29,7 @@ SP_EXTRACTED_MSG initExtractionMode(SPPoint* arr, int index, SPConfig config,int
 	// at the start of the file we will save the number of features in it
 	fprintf(f,"%d ", numOfFeatues);
 	//for each feature, we save its dimention and then its data in order.
-	for(i=0;i<numOfFeatues;i++){ //for test lets insert a constant. TODO
+	for(i=0;i<numOfFeatues;i++){
 		fprintf(f,"%d ",arr[i]->dim);
 		for(j=0;j<arr[i]->dim;j++){
 			fprintf(f,"%f ",arr[i]->data[j]);//TODO getter
@@ -67,22 +67,23 @@ SP_EXTRACTED_MSG initNonExtractionMode(SPPoint** arr,int index, SPConfig config,
 		(*arr)[i] = spPointCreate(data,dim,index);
 		free(data);
 	}
+	free(filePath);
 	fclose(f);
 	return SP_EXTRACT_SUCCESS;
 }
 
-//TODO: change all this to the relevent fields of config. they are mentiones
-// next to each line
 char* getFeatsFileName(SPConfig config,int index){
 	if(config==NULL || index<0) return NULL;
-	char* filePath = (char*)calloc(MAX_FILE_NAME_LENGTH,sizeof(char)); //thats intersting. why calloc solved it?
+	char* filePath = (char*)calloc(MAX_FILE_NAME_LENGTH,sizeof(char));
 	if(filePath==NULL) return NULL;
+	char strIndex[MAX_FILE_NAME_LENGTH];
 	strcat(filePath,config->spImagesDirectory); //spImagesDirectory
 	strcat(filePath,config->spImagesPrefix);//spImagesPrefix
-	strcat(filePath,"%d");
-	sprintf(filePath,filePath,index);//add index
+	itoa(index,strIndex,10);
+	strcat(filePath,strIndex);
+//	strcat(filePath,"%d");
+//	sprintf(filePath,filePath,index);//add index TODO problem here
 	strcat(filePath,".feats\0");
-	//TODO: add in the end "\0"?
 	//printf("%s",filePath); //for test
 	return filePath;
 

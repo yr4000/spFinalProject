@@ -218,10 +218,9 @@ bool testSplit(){
 	res = split(mother,coor);
 	destroyKDArray(res[0]);
 	destroyKDArray(res[1]);
-	free(res[0]);
-	free(res[1]);
+	free(res);
 	destroyKDArray(mother);
-	free(mother);
+
 
 	mother = buildKDArray();
 	for(coor=0;coor<mother->PArr[0]->dim;coor++){
@@ -235,14 +234,11 @@ bool testSplit(){
 			}
 			counter++;
 		}
-		destroyKDArray(res[0]);//TODO problem here - cant free res1 and res0 same time
+		destroyKDArray(res[0]);
 		destroyKDArray(res[1]);
-		free(res[0]); //cant do that without the program to collapse. claims that i got out of the borders of the heap?!
-		free(res[1]);// this also.
 		free(res);
 	}
 	destroyKDArray(mother);
-	free(mother);
 	return true;
 }
 
@@ -250,17 +246,11 @@ bool testSplitSPPointArrayAcordingToMap(){
 	int coor,i;
 	KDArray mother = buildKDArray();
 	KDArray* arr = (KDArray*)malloc(sizeof(KDArray)*2);
-//	printf("%d\n",sizeof(KDArray));
-	arr[0] = (KDArray)malloc(sizeof(KDArray));
-	arr[1] = (KDArray)malloc(sizeof(KDArray));
-//	free(arr[0]); // here free work fine.
-//	free(arr[1]);
-//	free(arr);
+	arr[0] = (KDArray)malloc(sizeof(struct sp_kd_array));
+	arr[1] = (KDArray)malloc(sizeof(struct sp_kd_array));
 	int sizeL = ceil(((double)mother->arrSize)/2);
 	int sizeR = floor(((double)mother->arrSize)/2);
 	int** KDArrMatrixesData = initialise2KDArraysReturnData(&arr,sizeL,sizeR,mother);
-//	destroyKDArray(arr[1]);
-//	free(arr[1]);
 
 	for(coor = 0;coor<mother->PArr[0]->dim;coor++){
 		int* map = initialiseMap(mother,coor);
@@ -274,22 +264,14 @@ bool testSplitSPPointArrayAcordingToMap(){
 		free(map);
 	}
 	destroyKDArray(mother);
-	free(mother);
-	destroyKDArray(arr[0]); //TODO same problem here
+	destroyKDArray(arr[0]);
 	destroyKDArray(arr[1]);
-		free(arr[0]);
-		free(arr[1]);
-	free(arr); //TODO there is some kind of a problem here - i can't do free(arr[0])
-	//send Moab email...
-	//https://www.google.co.il/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=No+source+available+for+%22__mingw_CRTStartup()+at
+	free(arr);
 	free(*KDArrMatrixesData);
-//	free(KDArrMatrixesData); //TODO problem here
+	free(KDArrMatrixesData);
 	return true;
 }
-// TODO right now i think i might delete it.
-//bool testInitialise2KDArraysReturnData(){
-//
-//}
+
 
 bool testInitialiseMap(){
 	int i,j;
@@ -320,26 +302,22 @@ bool testDestroyKDArray(){
 	KDArray* children = split(mother,0);
 	destroyKDArray(children[0]);
 	destroyKDArray(children[1]);
-	free(children[0]);
-	free(children[1]);
 	free(children);
 	destroyKDArray(mother);
-	free(mother);
 	return true;
 }
 
-int main(){
-	RUN_TEST(testInitialiseSPPointArrayForKDArray);
-	RUN_TEST(testCreateSorting2DArray);
-	RUN_TEST(testInitialize2DArrayByCoor);
-	RUN_TEST(testCompare2DArray);
-	RUN_TEST(testInit);
+//int main(){
+//	RUN_TEST(testInitialiseSPPointArrayForKDArray);
+//	RUN_TEST(testCreateSorting2DArray);
+//	RUN_TEST(testInitialize2DArrayByCoor);
+//	RUN_TEST(testCompare2DArray);
+//	RUN_TEST(testInit);
+//	RUN_TEST(testInitialiseMap);
+//	RUN_TEST(testSplitSPPointArrayAcordingToMap);
+//	RUN_TEST(testSplit);
 //	RUN_TEST(testDestroyKDArray);
-	RUN_TEST(testInitialiseMap);
-	RUN_TEST(testSplitSPPointArrayAcordingToMap);
-	RUN_TEST(testSplit);
-//	RUN_TEST(testDestroyKDArray);
-	return 0;
-}
+//	return 0;
+//}
 
 
