@@ -6,7 +6,7 @@
  */
 
 #include "../Extracted.h"
-#include "unit_tests/unit_test_util.h"
+#include "unit_test_util.h"
 #include <string.h>
 
 int NUM_OF_FEATURES = 7;

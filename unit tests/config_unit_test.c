@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../SPConfig.h"
-#include "unit_tests/unit_test_util.h"
+#include "unit_test_util.h"
 #include <string.h>
 #define STRING_END '\0'
 

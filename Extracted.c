@@ -48,7 +48,7 @@ SP_EXTRACTED_MSG initExtractionMode(SPPoint* arr, int index, SPConfig config,int
 		}
 	}
 	fclose(f);
-	spLoggerPrintInfo("ExtractionMode: The extraction of all images features succeed",__FILE__,__func__,__LINE__);
+//	spLoggerPrintInfo("ExtractionMode: The extraction of all images features succeed",__FILE__,__func__,__LINE__);
 	return SP_EXTRACT_SUCCESS;
 }
 
@@ -102,7 +102,7 @@ SP_EXTRACTED_MSG initNonExtractionMode(SPPoint** arr,int index, SPConfig config,
 	}
 	free(filePath);
 	fclose(f);
-	spLoggerPrintInfo("NonExtractionMode: The extraction of all images features succeed",__FILE__,__func__,__LINE__);
+//	spLoggerPrintInfo("NonExtractionMode: The extraction of all images features succeed",__FILE__,__func__,__LINE__);
 	return SP_EXTRACT_SUCCESS;
 }
 

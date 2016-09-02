@@ -18,12 +18,11 @@ void destroyKDTree(KDTreeNode tree){
 	if(tree==NULL) return;
 	if(isLeaf(tree)){
 		spPointDestroy(tree->data);
+		free(tree);
 		return;
 	}
 	destroyKDTree(tree->left);
-	free(tree->left);
 	destroyKDTree(tree->right);
-	free(tree->right);
 	free(tree);
 }
 

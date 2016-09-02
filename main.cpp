@@ -71,14 +71,14 @@ void showResults(ImageProc proc, SPConfig config, int* appreanceOfImagesFeatures
 int main(int argc, char* argv[]){
 	setbuf(stdout, NULL);
 	int i,j,k;
-	char* configFileName;
+	char configFileName[1024]; //TODO
 	SP_CONFIG_MSG msg;
 
 	//TODO: need to add some error messages to cases here
-	if(strcmp(argv[0],"-c")){//TODO what is going on?
-		configFileName = argv[2];
+	if(!strcmp(argv[1],"-c")){//TODO what is going on?
+		strcpy(configFileName,argv[2]);
 	}
-	else configFileName = "spcbir.config";
+	else strcpy(configFileName,"spcbir.config");
 
 	SPConfig config = spConfigCreate(configFileName,&msg); //the data in this object will define the function future behaver
 	if(msg!=SP_CONFIG_SUCCESS){
@@ -96,18 +96,6 @@ int main(int argc, char* argv[]){
 		//and store them in a file
 		if(config->spExtractionMode){
 			extractFeatures(config,msg,proc);
-//			for(i=0;i<spConfigGetNumOfImages(config,&msg);i++){
-//				imagePath = (char*)calloc(LENGTH_OF_LINE,sizeof(char)); //TODO: temporary
-//				int numOfFeatures = spConfigGetNumOfFeatures(config,&msg);
-//				spConfigGetImagePath(imagePath,config,i);
-//				arr = proc.getImageFeatures(imagePath,i,&numOfFeatures);
-//				if(arr==NULL || initExtractionMode(arr,i,config,numOfFeatures)!=SP_EXTRACT_SUCCESS){
-//				//TODO logger?
-//				//out
-//			}
-//			destroySPPointArray(arr,numOfFeatures);
-//			free(imagePath);
-//		}
 	}
 		KDTreeNode tree = createTreeFromAllFeatures(config,numberOfImages);
 
