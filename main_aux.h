@@ -1,7 +1,7 @@
 /*
  * main_aux.h
  *
- *  Created on: 25 пїЅпїЅпїЅпїЅ 2016
+ *  Created on: 25 баев 2016
  *      Author: Yair
  */
 
