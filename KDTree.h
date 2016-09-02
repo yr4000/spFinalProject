@@ -50,7 +50,7 @@ void destroyKDTree(KDTreeNode tree);
  * @return a KDTree which have been made out of the kd-array items.
  *
  */
-KDTreeNode createKDTree(KDArray arr,spKDTreeSplitMethod method, int coor);
+KDTreeNode createKDTree(KDArray arr,spKDTreeSplitMethodEnum method, int coor);
 
 //pre: p!=NULL,res!=NULL
 KDTreeNode createLeaf(KDTreeNode res,SPPoint p);
@@ -66,7 +66,7 @@ double findMin(SPPoint* arr, int arrSize, int coor);
 double* createSpreadArr(KDArray arr);
 
 //FFS only, for easier debugging.
-void callCreateKDTreeRecursively(KDTreeNode res,KDArray arr, int coor, spKDTreeSplitMethod method);
+void callCreateKDTreeRecursively(KDTreeNode res,KDArray arr, int coor, spKDTreeSplitMethodEnum method);
 
 /**
  * * A function which searches the X closest points to the sp-point which is a feature from the

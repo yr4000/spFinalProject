@@ -11,27 +11,30 @@
 #include <stdio.h>
 #include <math.h>
 
-//TODO: add Loggers messages?
+
 
 //TODO: test on valgrind,
 void destroyKDTree(KDTreeNode tree){
 	if(tree==NULL) return;
 	if(isLeaf(tree)){
 		spPointDestroy(tree->data);
+		free(tree);
 		return;
 	}
 	destroyKDTree(tree->left);
-	free(tree->left);
 	destroyKDTree(tree->right);
-	free(tree->right);
 	free(tree);
 }
 
-KDTreeNode createKDTree(KDArray arr, spKDTreeSplitMethod method,int coor){
+KDTreeNode createKDTree(KDArray arr, spKDTreeSplitMethodEnum method,int coor){
 		int dim = arr->PArr[0]->dim;
 		int i;
 		KDTreeNode res = (KDTreeNode)malloc(sizeof(struct sp_kd_treeNode));
-		if(res == NULL) return NULL;
+		if(res == NULL){
+			spLoggerPrintError("Allocation failure",__FILE__,__func__,__LINE__);
+							spLoggerDestroy();
+			return NULL;
+		}
 
 		if(arr->arrSize==1){
 			//TODO later in the func to check if leaf returned NULL
@@ -69,6 +72,8 @@ KDTreeNode createKDTree(KDArray arr, spKDTreeSplitMethod method,int coor){
 			return res;
 		}
 
+		spLoggerPrintError("spKDTreeSplitMethod method is not MAX_SPREAD, INCREMENTAL, RANDOM ",__FILE__,__func__,__LINE__);
+						spLoggerDestroy();
 		return NULL; //should never reach here
 }
 
@@ -118,8 +123,10 @@ double* createSpreadArr(KDArray arr){
 	return coordinateSpread;
 }
 
-void callCreateKDTreeRecursively(KDTreeNode res, KDArray arr, int coor, spKDTreeSplitMethod method){
-	if(res == NULL || arr == NULL || coor<0 || method > 2 || method < 0) return;
+void callCreateKDTreeRecursively(KDTreeNode res, KDArray arr, int coor, spKDTreeSplitMethodEnum method){
+	if(res == NULL || arr == NULL || coor<0 || method > 2 || method < 0){
+		return;
+	}
 	res->dim = coor;
 	res->val = getMedianOfCoor(arr,coor);
 	res->data = NULL;
@@ -133,7 +140,9 @@ void callCreateKDTreeRecursively(KDTreeNode res, KDArray arr, int coor, spKDTree
 }
 
 void KNNSearch(SPBPQueue q, KDTreeNode tree, SPPoint p){
-	if(q==NULL || tree==NULL || p==NULL) return;
+	if(q==NULL || tree==NULL || p==NULL){
+		return;
+	}
 	RorL pathTaken;
 
 	if(isLeaf(tree)){

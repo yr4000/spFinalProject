@@ -1,7 +1,7 @@
 /*
  * main_aux.h
  *
- *  Created on: 25 баев 2016
+ *  Created on: 25 пїЅпїЅпїЅпїЅ 2016
  *      Author: Yair
  */
 
@@ -13,7 +13,6 @@ int compareIntBigToSmall(const void *a,const void* b);
 KDTreeNode createTreeFromAllFeatures(SPConfig config,int numberOfImages);
 
 int* getAppreanceOfImagesFeatures(SPConfig config,KDTreeNode tree,SPPoint* queryImageFeatures,int queryImageFeaturesNum,int numberOfImages);
-
 
 
 #endif /* MAIN_AUX_H_ */

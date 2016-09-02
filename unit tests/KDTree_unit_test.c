@@ -6,19 +6,27 @@
  */
 
 #include "../KDTree.h"
-#include "unit_tests/unit_test_util.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
 #include <stdbool.h>
 #include <math.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include "../SPConfig.h"
+#include "unit_test_util.h"
+#include <string.h>
+#define STRING_END '\0'
+
 
 int COOR = 0;
 
 
 void printPointsOfKDTreeToArray(KDTreeNode tree,int* counter, int* pointsIndexesLestToRight){
 	if(isLeaf(tree)){
-		pointsIndexesLestToRight[*counter] = tree->data->index;
+		pointsIndexesLestToRight[*counter] = spPointGetIndex(tree->data);
 		*counter = *counter+1;
 		return;
 	}
@@ -45,7 +53,7 @@ bool compareSPBPQToIntArray(SPBPQueue q, int* expected){
 	return true;
 }
 
-bool checkSearchByMethod(KDArray arr, spKDTreeSplitMethod method,SPPoint p, int* expected){
+bool checkSearchByMethod(KDArray arr, spKDTreeSplitMethodEnum method,SPPoint p, int* expected){
 	SPBPQueue q = spBPQueueCreate(3);
 	KDTreeNode tree = createKDTree(arr,method,COOR);
 	KNNSearch(q,tree,p);

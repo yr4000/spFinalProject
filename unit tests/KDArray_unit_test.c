@@ -7,8 +7,8 @@
 
 
 #include "../KDArray.h"
-#include "unit_tests/unit_test_util.h"
-#include "SPPoint.h"
+#include "unit_test_util.h"
+#include "../SPPoint.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>

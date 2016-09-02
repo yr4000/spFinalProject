@@ -76,6 +76,7 @@ SP_CONFIG_MSG isInvalidIntValue(SP_CONFIG_MSG* msg, int intValue, int min, int m
 SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 {
 
+	//SPLogger logger = NULL;
 	char noParameter[LENGTH_OF_LINE] = "x"; //used when there is thirdTypeOfError.
 
 	*msg = SP_CONFIG_SUCCESS; //initial value of massage.
@@ -103,8 +104,8 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 	}
 
 
-	char line[LENGTH_OF_LINE], *destination, *source;
-	char name[LENGTH_OF_LINE] = { STRING_END } , value[LENGTH_OF_LINE] = { STRING_END };
+	char line[LENGTH_OF_LINE + 1], *destination, *source;
+	char name[LENGTH_OF_LINE + 1] = { STRING_END } , value[LENGTH_OF_LINE + 1] = { STRING_END };
 	int numOfLine = 0;
 	int intValue;
 
@@ -119,15 +120,15 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 	config->spKDTreeSplitMethod = MAX_SPREAD;
 	config->spLoggerLevel = 3;
 	strcpy(config->spLoggerFilename, "stdout");
-	memset(config->spImagesDirectory, STRING_END, LENGTH_OF_LINE);
-	memset(config->spImagesPrefix, STRING_END, LENGTH_OF_LINE);
-	memset(config->spImagesSuffix, STRING_END, LENGTH_OF_LINE);
+	memset(config->spImagesDirectory, STRING_END, LENGTH_OF_LINE +1);
+	memset(config->spImagesPrefix, STRING_END, LENGTH_OF_LINE + 1);
+	memset(config->spImagesSuffix, STRING_END, LENGTH_OF_LINE + 1);
 
 	// flag which checks if spNumOfImages was initialized in the config file.
 	bool exist_spNumOfImages = false;
 
 	// looping the lines of the config file.
-	while (fgets(line, LENGTH_OF_LINE, file) != STRING_END)
+	while (fgets(line, LENGTH_OF_LINE + 1, file) != STRING_END)
 	{
 		strcpy(line, trim(line));
 		numOfLine++;
@@ -147,7 +148,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 			extractValuesFromLine(source,destination,value,name);
 
 			//zero the line for continuing the loop correctly
-			memset(line, STRING_END, LENGTH_OF_LINE);
+			memset(line, STRING_END, LENGTH_OF_LINE +1);
 
 			//checking each name if fits one of the parameters
 
@@ -174,11 +175,11 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 			{
 
 				if (strcmp(value, ".jpg") && strcmp(value, ".png") && strcmp(value, ".bmp") && strcmp(value, ".gif"))
-					{
-						*msg = SP_CONFIG_INVALID_STRING;
-						massageCreater(filename, secondTypeOfError, numOfLine, noParameter, line,
-								destination, name, value);
-					}
+				{
+					*msg = SP_CONFIG_INVALID_STRING;
+					massageCreater(filename, secondTypeOfError, numOfLine, noParameter, line,
+							destination, name, value);
+				}
 
 				strcpy(config->spImagesSuffix, value);
 
@@ -203,9 +204,9 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 			{
 				intValue = spAtoi(value);
 				if(isInvalidIntValue(msg,intValue,9,29,filename,numOfLine
-										,noParameter,line,destination,name, value)==SP_CONFIG_INVALID_INTEGER){
-									return NULL;
-								}
+						,noParameter,line,destination,name, value)==SP_CONFIG_INVALID_INTEGER){
+					return NULL;
+				}
 				config->spPCADimension = intValue;
 			}
 
@@ -222,9 +223,9 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 			{
 				intValue = spAtoi(value);
 				if(isInvalidIntValue(msg,intValue,0,INT_MAX,filename,numOfLine
-										,noParameter,line,destination,name, value)==SP_CONFIG_INVALID_INTEGER){
-									return NULL;
-								}
+						,noParameter,line,destination,name, value)==SP_CONFIG_INVALID_INTEGER){
+					return NULL;
+				}
 				config->spNumOfFeatures = intValue;
 
 			}
@@ -254,9 +255,9 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 			{
 				intValue = spAtoi(value);
 				if(isInvalidIntValue(msg,intValue,0,INT_MAX,filename,numOfLine
-										,noParameter,line,destination,name, value)==SP_CONFIG_INVALID_INTEGER){
-									return NULL;
-								}
+						,noParameter,line,destination,name, value)==SP_CONFIG_INVALID_INTEGER){
+					return NULL;
+				}
 
 				config->spNumOfSimilarImages = intValue;
 
@@ -291,9 +292,9 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 			{
 				intValue = spAtoi(value);
 				if(isInvalidIntValue(msg,intValue,0,INT_MAX,filename,numOfLine
-										,noParameter,line,destination,name, value)==SP_CONFIG_INVALID_INTEGER){
-									return NULL;
-								}
+						,noParameter,line,destination,name, value)==SP_CONFIG_INVALID_INTEGER){
+					return NULL;
+				}
 				config->spKNN = intValue;
 			}
 
@@ -322,9 +323,9 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 			{
 				intValue = spAtoi(value);
 				if(isInvalidIntValue(msg,intValue,0,5,filename,numOfLine
-										,noParameter,line,destination,name, value)==SP_CONFIG_INVALID_INTEGER){
-									return NULL;
-								}
+						,noParameter,line,destination,name, value)==SP_CONFIG_INVALID_INTEGER){
+					return NULL;
+				}
 				config->spLoggerLevel = intValue;
 
 			}
@@ -392,6 +393,14 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 		return NULL;
 	}
 
+	spLoggerDestroy();
+	if(spLoggerCreate(config->spLoggerFilename, config->spLoggerLevel) != SP_LOGGER_SUCCESS)
+	{
+		printf("ERROR! There was a problem with initializing the logger.");
+		spLoggerDestroy();
+		spConfigDestroy(config);
+		return NULL;
+	}
 
 	return config;
 
@@ -442,8 +451,8 @@ int spAtoi(char *str)
 	for (; str[i] != '\0'; ++i)
 	{
 		if (isNumericChar(str[i]) == false)
-			return 0; // You may add some lines to write error message
-		// to error stream
+			return 0;
+
 		res = res*10 + str[i] - '0';
 	}
 
@@ -600,9 +609,37 @@ SP_CONFIG_MSG getSpImagesPrefix(char* spImagesPrefix, const SPConfig config){
 
 }
 
+int getSpNumOfSimilarImages (const SPConfig config,  SP_CONFIG_MSG* msg){
+	if ( config == NULL){
+		*msg = SP_CONFIG_INVALID_ARGUMENT;
+		return -1;
+	}
+
+	*msg = SP_CONFIG_SUCCESS;
+	return config->spNumOfSimilarImages;
+}
+
+spKDTreeSplitMethodEnum getSpKDTreeSplitMethod(const SPConfig config, SP_CONFIG_MSG* msg){
+
+	if ( config == NULL){
+		*msg = SP_CONFIG_INVALID_ARGUMENT;
+	}
+
+	*msg = SP_CONFIG_SUCCESS;
+	return config->spKDTreeSplitMethod;
+
+}
 
 
+int getSpKNN (const SPConfig config,  SP_CONFIG_MSG* msg){
+	if ( config == NULL){
+			*msg = SP_CONFIG_INVALID_ARGUMENT;
+			return -1;
+		}
 
+		*msg = SP_CONFIG_SUCCESS;
+		return config->spKNN;
+}
 
 
 

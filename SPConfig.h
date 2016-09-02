@@ -25,11 +25,11 @@ typedef enum sp_config_msg_t {
 	SP_CONFIG_SUCCESS
 } SP_CONFIG_MSG;
 
-typedef enum kd_tree {
+typedef enum {
 	RANDOM,
 	MAX_SPREAD,
 	INCREMENTAL
-} spKDTreeSplitMethod;
+} spKDTreeSplitMethodEnum;
 
 
 struct sp_config_t {
@@ -43,7 +43,7 @@ struct sp_config_t {
 	int spNumOfFeatures;
 	bool spExtractionMode;
 	int spNumOfSimilarImages;
-	enum kd_tree spKDTreeSplitMethod;
+	spKDTreeSplitMethodEnum spKDTreeSplitMethod;
 	int spKNN;
 	bool spMinimalGUI;
 	int spLoggerLevel;
@@ -220,5 +220,20 @@ SP_CONFIG_MSG isInvalidStringValue(SP_CONFIG_MSG* msg, char* filename,int numOfL
 
 SP_CONFIG_MSG isInvalidIntValue(SP_CONFIG_MSG* msg, int intValue, int min, int max,
 		char* filename,int numOfLine,char* noParameter,char* line, char* destination, char* name, char* value);
+
+// imagesDirectory getter
+SP_CONFIG_MSG getSpImagesDirectory(char* spImagesDirectory, const SPConfig config);
+
+// imagesPrefix getter
+SP_CONFIG_MSG getSpImagesPrefix(char* spImagesPrefix, const SPConfig config);
+
+// SPnumOfSimilarImages getter
+int getSpNumOfSimilarImages (const SPConfig config,  SP_CONFIG_MSG* msg);
+
+//spKDTreeSplitMethod getter.
+spKDTreeSplitMethodEnum getSpKDTreeSplitMethod(const SPConfig config, SP_CONFIG_MSG* msg);
+
+//Spknn getter.
+int getSpKNN (const SPConfig config,  SP_CONFIG_MSG* msg);
 
 #endif /* SPCONFIG_H_ */

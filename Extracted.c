@@ -21,8 +21,7 @@ int MAX_FILE_NAME_LENGTH = 1024;
 //pro: sends success message and create feat file.
 SP_EXTRACTED_MSG initExtractionMode(SPPoint* arr, int index, SPConfig config,int numOfFeatues){
 	if(arr==NULL || index<0 || config==NULL || numOfFeatues<0){
-		spLoggerPrintError("SP_EXTRACT_INVALID_ARGUMENT",__FILE__,__func__,__LINE__);
-				spLoggerDestroy();
+		spLoggerPrintError("Extraction mode is invalid",__FILE__,__func__,__LINE__);
 		return SP_EXTRACT_INVALID_ARGUMENT;
 	}
 	int i,j;
@@ -48,7 +47,7 @@ SP_EXTRACTED_MSG initExtractionMode(SPPoint* arr, int index, SPConfig config,int
 		}
 	}
 	fclose(f);
-	spLoggerPrintInfo("ExtractionMode: The extraction of all images features succeed",__FILE__,__func__,__LINE__);
+	spLoggerPrintInfo("ExtractionMode: The extraction of all images features succeed");
 	return SP_EXTRACT_SUCCESS;
 }
 
@@ -84,7 +83,6 @@ SP_EXTRACTED_MSG initNonExtractionMode(SPPoint** arr,int index, SPConfig config,
 	for(i=0;i<*numberOfFeatures;i++){
 		if(ftell(f)==EOF){
 			spLoggerPrintError("SP_EXTRACT_FILE_CONTENT_DOESNT_MATCH_THE_FORMAT",__FILE__,__func__,__LINE__);
-											spLoggerDestroy();
 			return SP_EXTRACT_FILE_CONTENT_DOESNT_MATCH_THE_FORMAT;
 		}
 		fscanf(f,"%d",&dim); //initialise dim
@@ -92,7 +90,6 @@ SP_EXTRACTED_MSG initNonExtractionMode(SPPoint** arr,int index, SPConfig config,
 		for(j=0;j<dim;j++){ //initialise data
 			if(ftell(f)==EOF){
 				spLoggerPrintError("SP_EXTRACT_FILE_CONTENT_DOESNT_MATCH_THE_FORMAT",__FILE__,__func__,__LINE__);
-															spLoggerDestroy();
 				return SP_EXTRACT_FILE_CONTENT_DOESNT_MATCH_THE_FORMAT;
 			}
 			fscanf(f,"%lf",&data[j]);
@@ -102,7 +99,7 @@ SP_EXTRACTED_MSG initNonExtractionMode(SPPoint** arr,int index, SPConfig config,
 	}
 	free(filePath);
 	fclose(f);
-	spLoggerPrintInfo("NonExtractionMode: The extraction of all images features succeed",__FILE__,__func__,__LINE__);
+	spLoggerPrintInfo("NonExtractionMode: The extraction of all images features succeed");
 	return SP_EXTRACT_SUCCESS;
 }
 
@@ -113,18 +110,15 @@ char* getFeatsFileName(SPConfig config,int index){
 	char* filePath = (char*)calloc(MAX_FILE_NAME_LENGTH,sizeof(char));
 	if(filePath==NULL){
 		spLoggerPrintError("The filePath is NULL, allocation failure",__FILE__,__func__,__LINE__);
-		spLoggerDestroy();
 		return NULL;
 	}
 	char strIndex[MAX_FILE_NAME_LENGTH + 1];
 	if(getSpImagesDirectory(spImagesDirectory, config) != SP_CONFIG_SUCCESS){
 		spLoggerPrintError("The config file is NULL, allocation failure",__FILE__,__func__,__LINE__);
-		spLoggerDestroy();
 				return NULL;
 	}
 	if(getSpImagesPrefix(spImagesPrefix,config) != SP_CONFIG_SUCCESS){
 		spLoggerPrintError("The config file is NULL, allocation failure",__FILE__,__func__,__LINE__);
-		spLoggerDestroy();
 						return NULL;
 	}
 	strcat(filePath, spImagesDirectory); //spImagesDirectory

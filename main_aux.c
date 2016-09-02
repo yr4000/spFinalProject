@@ -1,14 +1,14 @@
 /*
  * main_aux.c
  *
- *  Created on: 25 баев 2016
+ *  Created on: 25 пїЅпїЅпїЅпїЅ 2016
  *      Author: Yair
  */
 
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
-
+#include <stdbool.h>
 #include "SPPoint.h"
 #include "SPBPriorityQueue.h"
 #include "SPConfig.h"
@@ -18,14 +18,15 @@
 
 //this function, using the feats files of the images, extracts all their features into a huge
 //SPPoints array, which is arr.
-void createWholePointsArray(int numberOfImages,int*sumNumOfFeatures,SPPoint** arr, SPConfig config){
+bool createWholePointsArray(int numberOfImages,int*sumNumOfFeatures,SPPoint** arr, SPConfig config){
 	int i,j,numberOfFeatures;
 	//for each image we extract all its features from its file.feats, and store it in temp.
 	//then we realloc arr and stores them there.
 	for(i=0;i<numberOfImages;i++){
 		SPPoint* temp;
 		if(initNonExtractionMode(&temp,i,config,&numberOfFeatures)!=SP_EXTRACT_SUCCESS){
-			//TODO
+			spLoggerPrintError("Extraction failed",__FILE__,__func__,__LINE__);
+			return false;
 		};
 		*arr = realloc(*arr,(*sumNumOfFeatures+numberOfFeatures)*sizeof(SPPoint));
 		for(j=0;j<numberOfFeatures;j++){
@@ -34,18 +35,34 @@ void createWholePointsArray(int numberOfImages,int*sumNumOfFeatures,SPPoint** ar
 		*sumNumOfFeatures+=numberOfFeatures;
 		destroySPPointArray(temp,numberOfFeatures);
 	}
+	return true; //nothing went wrong.
 }
 
 KDTreeNode createTreeFromAllFeatures(SPConfig config,int numberOfImages){
+	bool succeedcreateWholePointsArray;
 	int sumNumOfFeatures=0,ZERO=0;
 	SPPoint* arr = NULL;
+	SP_CONFIG_MSG msg;
+	spKDTreeSplitMethodEnum spKDTreeSplitMethod = getSpKDTreeSplitMethod(config, &msg);
+	if(msg != SP_CONFIG_SUCCESS){
+		spLoggerPrintError("The config is null.",__FILE__,__func__,__LINE__);
+	}
 	//we will create one huge tree since the search in it will be faster.
-	createWholePointsArray(numberOfImages,&sumNumOfFeatures,&arr,config);
-
+	succeedcreateWholePointsArray = createWholePointsArray(numberOfImages,&sumNumOfFeatures,&arr,config);
+	if(succeedcreateWholePointsArray == false){
+		return NULL;
+	}
 	//here we create and search the tree.
-	//TODO add checks if kdarr or tree creations failed
 	KDArray kdarr = kdArrayInit(arr,sumNumOfFeatures);
-	KDTreeNode tree= createKDTree(kdarr,config->spKDTreeSplitMethod,ZERO);//TODO create getMethod
+	if (kdarr == NULL){
+		spLoggerPrintError("kd-array creation failed.",__FILE__,__func__,__LINE__);
+		return NULL;
+	}
+	KDTreeNode tree= createKDTree(kdarr,spKDTreeSplitMethod,ZERO);
+	if (tree == NULL){
+		spLoggerPrintError("kd-tree creation failed.",__FILE__,__func__,__LINE__);
+		return NULL;
+	}
 	destroyKDArray(kdarr);
 	destroySPPointArray(arr,sumNumOfFeatures);
 	return tree;
@@ -53,7 +70,9 @@ KDTreeNode createTreeFromAllFeatures(SPConfig config,int numberOfImages){
 
 int* getAppreanceOfImagesFeatures(SPConfig config,KDTreeNode tree,SPPoint* queryImageFeatures,int queryImageFeaturesNum,int numberOfImages){
 	int i,k;
-
+	int KNN;
+	SP_CONFIG_MSG msg;
+	SPBPQueue q;
 	int* appreanceOfImagesFeatures = (int*)calloc(numberOfImages,sizeof(int));
 	if(appreanceOfImagesFeatures==NULL){
 		//TODO
@@ -61,13 +80,18 @@ int* getAppreanceOfImagesFeatures(SPConfig config,KDTreeNode tree,SPPoint* query
 	//TODO create a new function for this code
 	//for each feature we search the big tree.
 	for(i=0;i<queryImageFeaturesNum;i++){
-		SPBPQueue q = spBPQueueCreate(config->spKNN);//TODO create getSPKNN
+		KNN = getSpKNN (config, &msg);
+		if(KNN < 0){
+			spLoggerPrintError("The config is null.",__FILE__,__func__,__LINE__);
+			return NULL;
+		}
+		q = spBPQueueCreate(KNN);
 		KNNSearch(q,tree,queryImageFeatures[i]);
 
 		//after we finished searching for the closest features, we will
 		//count all the indexes of images appeared in q.
 		SPListElement e;
-		for(k=0;k<config->spKNN;k++){
+		for(k=0;k<KNN;k++){
 			e = spBPQueuePeek(q);
 			appreanceOfImagesFeatures[spListElementGetIndex(e)]++;
 			spBPQueueDequeue(q);
@@ -77,3 +101,5 @@ int* getAppreanceOfImagesFeatures(SPConfig config,KDTreeNode tree,SPPoint* query
 	}
 	return appreanceOfImagesFeatures;
 }
+
+
