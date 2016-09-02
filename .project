@@ -25,11 +25,4 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>Hw3</name>
-			<type>2</type>
-			<location>C:/Users/Yair/workspaceC/Hw3</location>
-		</link>
-	</linkedResources>
 </projectDescription>

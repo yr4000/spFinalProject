@@ -108,8 +108,14 @@ int main(int argc, char* argv[]){
 	char configFileName[1024]; //TODO
 	SP_CONFIG_MSG msg;
 
+<<<<<<< HEAD
+	if(strcmp(argv[0],"-c")){//TODO what is going on?
+		configFileName = argv[2];
+=======
+	//TODO: need to add some error messages to cases here
 	if(!strcmp(argv[1],"-c")){//TODO what is going on?
 		strcpy(configFileName,argv[2]);
+>>>>>>> 609bffae3d5df892ad9d75f17160378d55d6ecc4
 	}
 	else strcpy(configFileName,"spcbir.config");
 
@@ -132,6 +138,7 @@ int main(int argc, char* argv[]){
 	//do i need to check failure here?
 	ImageProc proc(config);
 	//now i need to check spExtractionMode and continue in the path needed.
+<<<<<<< HEAD
 	//if spExtractionMode==true, run over each picture, extract it features
 	//and store them in a file
 	if(spConfigIsExtractionMode(config, &msg)){
@@ -160,6 +167,12 @@ int main(int argc, char* argv[]){
 		spLoggerDestroy();
 		spConfigDestroy(config);
 		return 1;
+=======
+		//if spExtractionMode==true, run over each picture, extract it features
+		//and store them in a file
+		if(config->spExtractionMode){
+			extractFeatures(config,msg,proc);
+>>>>>>> 609bffae3d5df892ad9d75f17160378d55d6ecc4
 	}
 
 	while(true){

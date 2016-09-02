@@ -6,7 +6,10 @@
  */
 
 #include "../KDTree.h"
+<<<<<<< HEAD
+=======
 #include "unit_test_util.h"
+>>>>>>> 609bffae3d5df892ad9d75f17160378d55d6ecc4
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
