@@ -142,17 +142,7 @@ int main(int argc, char* argv[]){
 			spConfigDestroy(config);
 			return 1;
 		}
-		//			for(i=0;i<spConfigGetNumOfImages(config,&msg);i++){
-		//				imagePath = (char*)calloc(LENGTH_OF_LINE,sizeof(char)); //TODO: temporary
-		//				int numOfFeatures = spConfigGetNumOfFeatures(config,&msg);
-		//				spConfigGetImagePath(imagePath,config,i);
-		//				arr = proc.getImageFeatures(imagePath,i,&numOfFeatures);
-		//				if(arr==NULL || initExtractionMode(arr,i,config,numOfFeatures)!=SP_EXTRACT_SUCCESS){
-		//				//out
-		//			}
-		//			destroySPPointArray(arr,numOfFeatures);
-		//			free(imagePath);
-		//		}
+
 	}
 	KDTreeNode tree = createTreeFromAllFeatures(config,numberOfImages);
 	if (tree == NULL){
