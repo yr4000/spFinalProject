@@ -578,6 +578,28 @@ void spConfigDestroy(SPConfig config){
 
 }
 
+SP_CONFIG_MSG getSpImagesDirectory(char* spImagesDirectory, const SPConfig config){
+
+	if ( spImagesDirectory == NULL || config == NULL){
+		return SP_CONFIG_INVALID_ARGUMENT;
+	}
+
+	snprintf(spImagesDirectory, LENGTH_OF_LINE+1, "%s",  config->spImagesDirectory);
+	return SP_CONFIG_SUCCESS;
+
+}
+
+SP_CONFIG_MSG getSpImagesPrefix(char* spImagesPrefix, const SPConfig config){
+
+	if ( spImagesPrefix == NULL || config == NULL){
+		return SP_CONFIG_INVALID_ARGUMENT;
+	}
+
+	snprintf(spImagesPrefix, LENGTH_OF_LINE+1, "%s",  config->spImagesPrefix);
+	return SP_CONFIG_SUCCESS;
+
+}
+
 
 
 

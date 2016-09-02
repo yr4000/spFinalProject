@@ -116,8 +116,8 @@ int* initialiseMap(KDArray arr, int coor);
 bool splitSPPointArrayAcordingToMap(KDArray mother, int* map, KDArray* res);
 
 //fixes the indexes of the points, means makes the indexes in the
-//new matrix be similiar to the points index of their place(!) in the sub
-//KDArray. check the instruction or ask me if you dont understand.
+//new matrix be similiar to the points index of their place in the sub
+//KDArray.
 bool fixKDArrayIndexesAfterSplit(KDArray arr, int motherSize, int side,
 		int* map);
 

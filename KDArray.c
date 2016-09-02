@@ -16,6 +16,8 @@
 
 //TODO: add Loggers messages?
 
+
+
 void destroyKDArray(KDArray arr){
 	if(arr == NULL) return;
 	int i;
@@ -32,11 +34,19 @@ void destroyKDArray(KDArray arr){
 
 
 KDArray kdArrayInit(SPPoint * PointsArray, int arraySize){
-	if(PointsArray == NULL || arraySize <= 0) return NULL;
+	if(PointsArray == NULL || arraySize <= 0){
+		spLoggerPrintError("INVALID_ARGUMENT: Points array is null or that array size is negative",__FILE__,__func__,__LINE__);
+		spLoggerDestroy();
+		return NULL;
+	}
 	int i,j;
 	int dim = spPointGetDimension(PointsArray[0]);
 	KDArray res = (KDArray) malloc(sizeof(*res));
-	if(res==NULL) return NULL;
+	if(res==NULL){
+		spLoggerPrintError("Allocation failure",__FILE__,__func__,__LINE__);
+		spLoggerDestroy();
+		return NULL;
+	}
 
 	//copying the points array to KDArray and sorting them by index (n*logn)
 	initialiseSPPointArrayForKDArray(res,PointsArray,arraySize);
@@ -50,9 +60,17 @@ KDArray kdArrayInit(SPPoint * PointsArray, int arraySize){
 	if(res->sortedIndexesMatrix==NULL) return NULL;
 	//TODO change it to many allocs, then change the destroy
 	int* data = (int*)malloc(sizeof(int*)*dim*arraySize); //data of the index matrix
-	if(data ==NULL) return NULL;
+	if(data ==NULL){
+		spLoggerPrintError("Allocation failure",__FILE__,__func__,__LINE__);
+		spLoggerDestroy();
+		return NULL;
+	}
 	double** SArr = createSorting2DArray(arraySize);
-	if(SArr==NULL) return NULL;
+	if(SArr==NULL){
+		spLoggerPrintError("The creationSortion2DArray failed",__FILE__,__func__,__LINE__);
+		spLoggerDestroy();
+		return NULL;
+	}
 
 	//creating the matrix.
 	for(i=0;i<dim;i++){
@@ -73,7 +91,11 @@ void initialiseSPPointArrayForKDArray(KDArray arr, SPPoint* PArr, int arraySize)
 	if(arr==NULL || PArr==NULL || arraySize<=0) return;
 	int i;
 	arr->PArr = (SPPoint*) malloc(sizeof(SPPoint)*arraySize);
-	if(arr->PArr==NULL) return;
+	if(arr->PArr==NULL){
+		spLoggerPrintError("Allocation failure",__FILE__,__func__,__LINE__);
+		spLoggerDestroy();
+		return;
+	}
 	//initialising res->PArr.
 	for(i=0; i<arraySize; i++){
 		arr->PArr[i] = spPointCopy(PArr[i]);
@@ -85,7 +107,11 @@ double** createSorting2DArray(int n){
 	int i;
 	double **res = (double**)malloc(sizeof(double)*n);
 	double *data = (double*)malloc(sizeof(double)*n*2);
-	if(res==NULL || data==NULL) return NULL;
+	if(res==NULL || data==NULL){
+		spLoggerPrintError("Allocation failure",__FILE__,__func__,__LINE__);
+		spLoggerDestroy();
+		return NULL;
+	}
 	for(i=0;i<n;i++){
 		res[i] = data+i*2;
 	}
@@ -94,7 +120,11 @@ double** createSorting2DArray(int n){
 
 
 void initialize2DArrayByCoor(double **arr, int coor,SPPoint *PArr,int sizeOfPArr){
-	if(arr == NULL || coor<0 || PArr == NULL || sizeOfPArr <= 0) return;
+	if(arr == NULL || coor<0 || PArr == NULL || sizeOfPArr <= 0){
+		spLoggerPrintError("INVALID_ARGUMENT",__FILE__,__func__,__LINE__);
+				spLoggerDestroy();
+		return;
+	}
 	int i;
 	for(i=0;i<sizeOfPArr;i++){
 		arr[i][0] = i;
@@ -124,7 +154,11 @@ int compareSPPointByIndex(const void* A,const void* B){
 KDArray* split(KDArray arr, int coor){
 	int i,j,lc=0,rc = 0,LEFT = 1, RIGHT = 0;
 	KDArray* res = (KDArray*)malloc(sizeof(KDArray)*2);
-	if(res==NULL) return NULL;
+	if(res==NULL){
+		spLoggerPrintError("Allocation failure",__FILE__,__func__,__LINE__);
+				spLoggerDestroy();
+		return NULL;
+	}
 	res[0] = (KDArray)malloc(sizeof(struct sp_kd_array));
 	res[1] = (KDArray)malloc(sizeof(struct sp_kd_array));
 	if(res[0]==NULL || res[1]==NULL) return NULL;
@@ -238,7 +272,7 @@ bool fixKDArrayIndexesAfterSplit(KDArray arr, int motherSize,int side, int* map)
 	}
 	for(j=0;j<dim;j++){
 		for(i=0;i<arr->arrSize;i++){
-				arr->sortedIndexesMatrix[j][i] = mapI[arr->sortedIndexesMatrix[j][i]];
+			arr->sortedIndexesMatrix[j][i] = mapI[arr->sortedIndexesMatrix[j][i]];
 		}
 	}
 	free(mapI);
