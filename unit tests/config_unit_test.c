@@ -282,7 +282,7 @@ bool testRegularConfigFIle()
 	ASSERT_TRUE(spConfigGetPCADim(co, msg) == 20);
 	ASSERT_TRUE(*msg == SP_CONFIG_SUCCESS);
 
-	spConfigGetImagePath(imagePath,co,16);
+
 	ASSERT_TRUE(!strcmp(imagePath, resultGetImagePath));
 	ASSERT_TRUE(spConfigGetImagePath(imagePath,co,16) == SP_CONFIG_SUCCESS);
 

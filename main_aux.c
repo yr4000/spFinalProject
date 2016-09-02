@@ -1,7 +1,7 @@
 /*
  * main_aux.c
  *
- *  Created on: 25 баев 2016
+ *  Created on: 25 пїЅпїЅпїЅпїЅ 2016
  *      Author: Yair
  */
 
@@ -15,6 +15,12 @@
 #include "Extracted.h"
 #include "KDArray.h"
 #include "KDTree.h"
+
+int compareIntBigToSmall(const void *a,const void* b){
+	int A = *(int*)a;
+	int B = *(int*)b;
+	return B-A;
+}
 
 //this function, using the feats files of the images, extracts all their features into a huge
 //SPPoints array, which is arr.
@@ -43,14 +49,14 @@ KDTreeNode createTreeFromAllFeatures(SPConfig config,int numberOfImages){
 	createWholePointsArray(numberOfImages,&sumNumOfFeatures,&arr,config);
 
 	//here we create and search the tree.
-	//TODO add checks if kdarr or tree creations failed
+	//TODO checks if kdarr or tree creations failed
 	KDArray kdarr = kdArrayInit(arr,sumNumOfFeatures);
 	KDTreeNode tree= createKDTree(kdarr,config->spKDTreeSplitMethod,ZERO);//TODO create getMethod
 	destroyKDArray(kdarr);
 	destroySPPointArray(arr,sumNumOfFeatures);
 	return tree;
 }
-
+//TODO take this code out of the loop
 int* getAppreanceOfImagesFeatures(SPConfig config,KDTreeNode tree,SPPoint* queryImageFeatures,int queryImageFeaturesNum,int numberOfImages){
 	int i,k;
 
@@ -61,15 +67,15 @@ int* getAppreanceOfImagesFeatures(SPConfig config,KDTreeNode tree,SPPoint* query
 	//TODO create a new function for this code
 	//for each feature we search the big tree.
 	for(i=0;i<queryImageFeaturesNum;i++){
-		SPBPQueue q = spBPQueueCreate(config->spKNN);//TODO create getSPKNN
+		SPBPQueue q = spBPQueueCreate(config->spNumOfSimilarImages);//TODO create getSPN
 		KNNSearch(q,tree,queryImageFeatures[i]);
 
 		//after we finished searching for the closest features, we will
 		//count all the indexes of images appeared in q.
 		SPListElement e;
-		for(k=0;k<config->spKNN;k++){
+		for(k=0;k<config->spNumOfSimilarImages;k++){
 			e = spBPQueuePeek(q);
-			appreanceOfImagesFeatures[spListElementGetIndex(e)]++;
+			appreanceOfImagesFeatures[e->index]++;
 			spBPQueueDequeue(q);
 			spListElementDestroy(e);
 		}
