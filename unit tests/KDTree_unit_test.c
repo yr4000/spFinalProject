@@ -6,28 +6,19 @@
  */
 
 #include "../KDTree.h"
-#include "unit_test_util.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
 #include <stdbool.h>
 #include <math.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include "../SPConfig.h"
 #include "unit_test_util.h"
-#include <string.h>
-#define STRING_END '\0'
-
 
 int COOR = 0;
 
 
 void printPointsOfKDTreeToArray(KDTreeNode tree,int* counter, int* pointsIndexesLestToRight){
 	if(isLeaf(tree)){
-		pointsIndexesLestToRight[*counter] = spPointGetIndex(tree->data);
+		pointsIndexesLestToRight[*counter] = tree->data->index;
 		*counter = *counter+1;
 		return;
 	}

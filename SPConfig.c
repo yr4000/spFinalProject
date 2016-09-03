@@ -393,14 +393,14 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 		return NULL;
 	}
 
-	spLoggerDestroy();
+	spLoggerDestroy(); //TODO !!!
 	if(spLoggerCreate(config->spLoggerFilename, config->spLoggerLevel) != SP_LOGGER_SUCCESS)
 	{
 		printf("ERROR! There was a problem with initializing the logger.");
-		spLoggerDestroy();
-		spConfigDestroy(config);
+		*msg = SP_CONFIG_INVALID_ARGUMENT;
 		return NULL;
 	}
+
 
 	return config;
 
@@ -587,7 +587,7 @@ void spConfigDestroy(SPConfig config){
 
 }
 
-SP_CONFIG_MSG getSpImagesDirectory(char* spImagesDirectory, const SPConfig config){
+SP_CONFIG_MSG getSpImagesDirectory(char* spImagesDirectory, const SPConfig config){ //TODO !!!
 
 	if ( spImagesDirectory == NULL || config == NULL){
 		return SP_CONFIG_INVALID_ARGUMENT;
@@ -598,7 +598,7 @@ SP_CONFIG_MSG getSpImagesDirectory(char* spImagesDirectory, const SPConfig confi
 
 }
 
-SP_CONFIG_MSG getSpImagesPrefix(char* spImagesPrefix, const SPConfig config){
+SP_CONFIG_MSG getSpImagesPrefix(char* spImagesPrefix, const SPConfig config){ //TODO !!!
 
 	if ( spImagesPrefix == NULL || config == NULL){
 		return SP_CONFIG_INVALID_ARGUMENT;
@@ -609,7 +609,7 @@ SP_CONFIG_MSG getSpImagesPrefix(char* spImagesPrefix, const SPConfig config){
 
 }
 
-int getSpNumOfSimilarImages (const SPConfig config,  SP_CONFIG_MSG* msg){
+int getSpNumOfSimilarImages (const SPConfig config,  SP_CONFIG_MSG* msg){ //TODO !!!
 	if ( config == NULL){
 		*msg = SP_CONFIG_INVALID_ARGUMENT;
 		return -1;
@@ -619,7 +619,7 @@ int getSpNumOfSimilarImages (const SPConfig config,  SP_CONFIG_MSG* msg){
 	return config->spNumOfSimilarImages;
 }
 
-spKDTreeSplitMethodEnum getSpKDTreeSplitMethod(const SPConfig config, SP_CONFIG_MSG* msg){
+spKDTreeSplitMethodEnum getSpKDTreeSplitMethod(const SPConfig config, SP_CONFIG_MSG* msg){ //TODO !!!
 
 	if ( config == NULL){
 		*msg = SP_CONFIG_INVALID_ARGUMENT;
@@ -631,7 +631,7 @@ spKDTreeSplitMethodEnum getSpKDTreeSplitMethod(const SPConfig config, SP_CONFIG_
 }
 
 
-int getSpKNN (const SPConfig config,  SP_CONFIG_MSG* msg){
+int getSpKNN (const SPConfig config,  SP_CONFIG_MSG* msg){ //TODO !!!
 	if ( config == NULL){
 			*msg = SP_CONFIG_INVALID_ARGUMENT;
 			return -1;

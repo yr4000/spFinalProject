@@ -18,11 +18,11 @@ extern "C"{
 #include "KDArray.h"
 #include "KDTree.h"
 #include "main_aux.h"
-#define LENGTH_OF_LINE 1024
+#define LENGTH_OF_LINE 1024 //TODO !!!
 }
 
 using namespace sp;
-
+//TODO this is a push test
 
 
 int extractFeatures(SPConfig config,SP_CONFIG_MSG msg,ImageProc proc){
@@ -31,16 +31,24 @@ int extractFeatures(SPConfig config,SP_CONFIG_MSG msg,ImageProc proc){
 	SPPoint* arr;
 	for(i=0;i<spConfigGetNumOfImages(config,&msg);i++){
 		//		imagePath = (char*)calloc(LENGTH_OF_LINE,sizeof(char)); //TODO: temporary
-		int numOfFeatures = spConfigGetNumOfFeatures(config,&msg);
+
+		int numOfFeatures = spConfigGetNumOfFeatures(config,&msg); //TODO !!!
+		if (numOfFeatures < 0){
+			spLoggerPrintError("The config given is NULL.",__FILE__,__func__,__LINE__);
+			return 1; //out
+		}
+
+
+
 		spConfigGetImagePath(imagePath,config,i);
 		arr = proc.getImageFeatures(imagePath,i,&numOfFeatures);
-		if(arr==NULL || initExtractionMode(arr,i,config,numOfFeatures)!=SP_EXTRACT_SUCCESS){
-			spLoggerPrintError("SP_EXTRACT didn't succeed, cannot get image features",__FILE__,__func__,__LINE__);
-			spLoggerDestroy();
-			spConfigDestroy(config);
-			return 1; //out
 
+
+		if(arr==NULL || initExtractionMode(arr,i,config,numOfFeatures)!=SP_EXTRACT_SUCCESS){//TODO !!!
+			spLoggerPrintError("SP_EXTRACT didn't succeed, cannot get image features",__FILE__,__func__,__LINE__);
+			return 1; //out
 		}
+
 		destroySPPointArray(arr,numOfFeatures);
 		//	free(imagePath);
 	}
@@ -53,8 +61,6 @@ int showResults(ImageProc proc, SPConfig config, int* appreanceOfImagesFeatures,
 	int SpNumOfSimilarImages = getSpNumOfSimilarImages(config, &msg);
 	if (SpNumOfSimilarImages < 0){
 		spLoggerPrintError("The config given is NULL.",__FILE__,__func__,__LINE__);
-		spLoggerDestroy();
-		spConfigDestroy(config);
 		return 1; //out
 	}
 	if(!spConfigMinimalGui(config, &msg)){printf("Best candidates for - %s - are:\n",queryImagePath);}
@@ -71,8 +77,6 @@ int showResults(ImageProc proc, SPConfig config, int* appreanceOfImagesFeatures,
 		char* imagePath = (char*)calloc(LENGTH_OF_LINE,sizeof(char)); //TODO temporary?
 		if(imagePath == NULL){
 			spLoggerPrintError("Allocation failure",__FILE__,__func__,__LINE__);
-			spLoggerDestroy();
-			spConfigDestroy(config);
 			return 1; //out
 		}
 		msg = spConfigGetImagePath(imagePath,config,index);
@@ -84,8 +88,6 @@ int showResults(ImageProc proc, SPConfig config, int* appreanceOfImagesFeatures,
 				spLoggerPrintError("The index given is bigger than the number of images."
 						" Index out of range." ,__FILE__,__func__,__LINE__);
 			}
-			spLoggerDestroy();
-			spConfigDestroy(config);
 			return 1; //out
 		}
 		if(spConfigMinimalGui(config,&msg)){
@@ -104,17 +106,16 @@ int showResults(ImageProc proc, SPConfig config, int* appreanceOfImagesFeatures,
 
 int main(int argc, char* argv[]){
 	setbuf(stdout, NULL);
-	int i,j,k;
-	char configFileName[1024]; //TODO
+	char configFileName[LENGTH_OF_LINE];
 	SP_CONFIG_MSG msg;
 
-	if(!strcmp(argv[1],"-c")){//TODO what is going on?
+	if(!strcmp(argv[1],"-c")){
 		strcpy(configFileName,argv[2]);
 	}
 	else strcpy(configFileName,"spcbir.config");
 
 	SPConfig config = spConfigCreate(configFileName,&msg); //the data in this object will define the function future behaver
-	if(msg!=SP_CONFIG_SUCCESS){
+	if(msg!=SP_CONFIG_SUCCESS || config == NULL){
 		spLoggerPrintError("Did not succeed creating the config",__FILE__,__func__,__LINE__);
 		spLoggerDestroy();
 		spConfigDestroy(config);
@@ -177,7 +178,11 @@ int main(int argc, char* argv[]){
 		}
 		//here we will show our results.
 		spLoggerPrintInfo("Started showing the results.");
-		showResults(proc,config,appreanceOfImagesFeatures,queryImagePath,numberOfImages);
+		if (showResults(proc,config,appreanceOfImagesFeatures,queryImagePath,numberOfImages) == 1){
+			spLoggerDestroy();
+			spConfigDestroy(config);
+			return 1;
+		}
 	}
 	destroyKDTree(tree); //TODO a problem here!
 	spLoggerDestroy();
