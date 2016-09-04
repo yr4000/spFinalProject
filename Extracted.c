@@ -46,7 +46,6 @@ SP_EXTRACTED_MSG initExtractionMode(SPPoint* arr, int index, SPConfig config,int
 		}
 	}
 	fclose(f);
-	spLoggerPrintInfo("ExtractionMode: The extraction of all images features succeed");
 	return SP_EXTRACT_SUCCESS;
 }
 

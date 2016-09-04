@@ -22,7 +22,7 @@ extern "C"{
 #define LENGTH_OF_LINE 1024
 
 using namespace sp;
-//TODO this is a push test
+
 
 
 int extractFeatures(SPConfig config,SP_CONFIG_MSG msg,ImageProc proc){
@@ -43,6 +43,7 @@ int extractFeatures(SPConfig config,SP_CONFIG_MSG msg,ImageProc proc){
 		}
 		destroySPPointArray(arr,numOfFeatures);
 	}
+	spLoggerPrintInfo("ExtractionMode: The extraction of all images features succeed");
 	return 0;
 }
 
@@ -64,7 +65,7 @@ int showResults(ImageProc proc, SPConfig config, int* appreanceOfImagesFeatures,
 				index = j;
 			}
 		}
-		char* imagePath = (char*)calloc(LENGTH_OF_LINE,sizeof(char)); //TODO temporary?
+		char* imagePath = (char*)calloc(LENGTH_OF_LINE,sizeof(char));
 		if(imagePath == NULL){
 			spLoggerPrintError("Show results images failed. Allocation failure",__FILE__,__func__,__LINE__);
 			return 1; //out
@@ -107,6 +108,7 @@ int main(int argc, char* argv[]){
 	if(msg!=SP_CONFIG_SUCCESS || config == NULL){
 		spLoggerPrintError("Did not succeed creating the config",__FILE__,__func__,__LINE__);
 		spConfigDestroy(config);
+		printf("Exiting…\n");
 		return 1;
 	}
 
@@ -114,18 +116,19 @@ int main(int argc, char* argv[]){
 	if(msg!=SP_CONFIG_SUCCESS){
 		spLoggerPrintError("Did not succeed getting the number of images from the config",__FILE__,__func__,__LINE__);
 		spConfigDestroy(config);
+		printf("Exiting…\n");
 		return 1;
 	}
-	//TODO: check later how to initialise this object most correctly
-	//do i need to check failure here?
+
 	ImageProc proc(config);
 	//now need to check spExtractionMode and continue in the path needed.
 	//if spExtractionMode==true, run over each picture, extract it features
 	//and store them in a file
 	if(spConfigIsExtractionMode(config, &msg)){
 		spLoggerPrintInfo("The extraction of all images features begins.");
-		if (extractFeatures(config,msg,proc) == 1){
+		if (extractFeatures(config,msg,proc) == 1){ //TODO should change to boolean or enum
 			spConfigDestroy(config);
+			printf("Exiting…\n");
 			return 1;
 		}
 
@@ -133,13 +136,14 @@ int main(int argc, char* argv[]){
 	KDTreeNode tree = createTreeFromAllFeatures(config,numberOfImages);
 	if (tree == NULL){
 		spConfigDestroy(config);
+		printf("Exiting…\n");
 		return 1;
 	}
 	spLoggerPrintInfo("Getting started receiving query images from the user.");
 	while(true){
 		//receive an image to search from the use. if the string "<>" has been
 		//received, we break the loop and finishing the program.
-		char queryImagePath[LENGTH_OF_LINE +1];//TODO check if this makes no problems.
+		char queryImagePath[LENGTH_OF_LINE +1];
 		printf("Please enter an image path:\n");
 		scanf("%s",queryImagePath);
 		if(strcmp(queryImagePath,"<>")==0){
@@ -158,16 +162,19 @@ int main(int argc, char* argv[]){
 		int* appreanceOfImagesFeatures = getAppreanceOfImagesFeatures(config,tree,queryImageFeatures,queryImageFeaturesNum,numberOfImages);
 		if(appreanceOfImagesFeatures == NULL){
 			spConfigDestroy(config);
+			printf("Exiting…\n");
 			return 1;
 		}
 		//here we will show our results.
 		spLoggerPrintInfo("Started showing the images results.");
 		if (showResults(proc,config,appreanceOfImagesFeatures,queryImagePath,numberOfImages) == 1){
 			spConfigDestroy(config);
+			printf("Exiting…\n");
 			return 1;
 		}
 	}
-	destroyKDTree(tree); //TODO a problem here!
+	printf("Exiting…\n");
+	destroyKDTree(tree);
 	spConfigDestroy(config);
 	return 0;
 
