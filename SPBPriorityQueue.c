@@ -7,9 +7,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "SPBPriorityQueue.h"
+
 #include "SPList.h"
-#include "SPListElement.h"
+#include "SPBPriorityQueue.h"
 
 struct sp_bp_queue_t {
 	int maxSize;

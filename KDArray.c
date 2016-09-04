@@ -1,18 +1,16 @@
 /*
  * KDArray.c
  *
- *  Created on: 17 баев 2016
+ *  Created on: 17 пїЅпїЅпїЅпїЅ 2016
  *      Author: Yair
  */
 
 
 
 #include <stdlib.h>
-#include <stdio.h>
 #include <math.h>
-#include <stdbool.h>
+#include "SPLogger.h"
 #include "KDArray.h"
-#include "SPPoint.h"
 
 
 
@@ -33,14 +31,14 @@ void destroyKDArray(KDArray arr){
 
 KDArray kdArrayInit(SPPoint * PointsArray, int arraySize){
 	if(PointsArray == NULL || arraySize <= 0){
-		spLoggerPrintError("INVALID_ARGUMENT: Points array is null or that array size is negative",__FILE__,__func__,__LINE__);
+		spLoggerPrintError("kd-array creation failed due to invalid argument: Points array is null or that array size is negative",__FILE__,__func__,__LINE__);
 		return NULL;
 	}
 	int i,j;
 	int dim = spPointGetDimension(PointsArray[0]);
 	KDArray res = (KDArray) malloc(sizeof(*res));
 	if(res==NULL){
-		spLoggerPrintError("Allocation failure",__FILE__,__func__,__LINE__);
+		spLoggerPrintError("kd-array creation failed due to Allocation failure",__FILE__,__func__,__LINE__);
 
 		return NULL;
 	}
@@ -58,7 +56,7 @@ KDArray kdArrayInit(SPPoint * PointsArray, int arraySize){
 	//TODO change it to many allocs, then change the destroy
 	int* data = (int*)malloc(sizeof(int*)*dim*arraySize); //data of the index matrix
 	if(data ==NULL){
-		spLoggerPrintError("Allocation failure",__FILE__,__func__,__LINE__);
+		spLoggerPrintError("kd-array creation failed due to Allocation failure",__FILE__,__func__,__LINE__);
 
 		return NULL;
 	}
@@ -118,7 +116,7 @@ double** createSorting2DArray(int n){
 
 void initialize2DArrayByCoor(double **arr, int coor,SPPoint *PArr,int sizeOfPArr){
 	if(arr == NULL || coor<0 || PArr == NULL || sizeOfPArr <= 0){
-		spLoggerPrintError("INVALID_ARGUMENT",__FILE__,__func__,__LINE__);
+		spLoggerPrintError("Invalid argument",__FILE__,__func__,__LINE__);
 
 		return;
 	}

@@ -9,12 +9,12 @@
 #include <assert.h>
 #include <string.h>
 #include <stdbool.h>
-#include "SPPoint.h"
+
+#include "SPLogger.h"
 #include "SPBPriorityQueue.h"
-#include "SPConfig.h"
 #include "Extracted.h"
 #include "KDArray.h"
-#include "KDTree.h"
+#include "main_aux.h"
 
 //this function, using the feats files of the images, extracts all their features into a huge
 //SPPoints array, which is arr.
@@ -35,6 +35,7 @@ bool createWholePointsArray(int numberOfImages,int*sumNumOfFeatures,SPPoint** ar
 		*sumNumOfFeatures+=numberOfFeatures;
 		destroySPPointArray(temp,numberOfFeatures);
 	}
+	spLoggerPrintInfo("NonExtractionMode: The extraction of all images features succeed");
 	return true; //nothing went wrong.
 }
 
@@ -55,7 +56,6 @@ KDTreeNode createTreeFromAllFeatures(SPConfig config,int numberOfImages){
 	//here we create and search the tree.
 	KDArray kdarr = kdArrayInit(arr,sumNumOfFeatures);
 	if (kdarr == NULL){
-		spLoggerPrintError("kd-array creation failed.",__FILE__,__func__,__LINE__);
 		return NULL;
 	}
 	KDTreeNode tree= createKDTree(kdarr,spKDTreeSplitMethod,ZERO);
@@ -77,7 +77,7 @@ int* getAppreanceOfImagesFeatures(SPConfig config,KDTreeNode tree,SPPoint* query
 	if(appreanceOfImagesFeatures==NULL){
 		//TODO
 	}
-	//TODO create a new function for this code
+
 	//for each feature we search the big tree.
 	for(i=0;i<queryImageFeaturesNum;i++){
 		KNN = getSpKNN (config, &msg);

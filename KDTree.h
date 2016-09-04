@@ -8,21 +8,20 @@
 #ifndef KDTREE_H_
 #define KDTREE_H_
 
+#include "SPPoint.h"
 #include "KDArray.h"
 #include "SPConfig.h"
-#include "SPPoint.h"
 #include "SPBPriorityQueue.h"
-
-
-typedef struct sp_kd_treeNode *KDTreeNode;
 
 struct sp_kd_treeNode{
 	int dim;
 	int val;
-	KDTreeNode left;
-	KDTreeNode right;
+	struct sp_kd_treeNode *left;
+	struct sp_kd_treeNode *right;
 	SPPoint data;
 };
+
+typedef struct sp_kd_treeNode *KDTreeNode;
 
 //typedef enum sp_tempi{
 //	MAX_SPREAD,

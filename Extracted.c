@@ -8,9 +8,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include "SPLogger.h"
 #include "Extracted.h"
-#include "SPConfig.h"
-#include "SPPoint.h"
 
 int MAX_FILE_NAME_LENGTH = 1024;
 
@@ -62,7 +61,6 @@ SP_EXTRACTED_MSG initNonExtractionMode(SPPoint** arr,int index, SPConfig config,
 		return SP_EXTRACT_INVALID_ARGUMENT;
 	}
 	int i,j,dim;
-	double d;
 	double* data;
 	char* filePath = getFeatsFileName(config,index);
 	if(filePath==NULL){
@@ -99,7 +97,6 @@ SP_EXTRACTED_MSG initNonExtractionMode(SPPoint** arr,int index, SPConfig config,
 	}
 	free(filePath);
 	fclose(f);
-	spLoggerPrintInfo("NonExtractionMode: The extraction of all images features succeed");
 	return SP_EXTRACT_SUCCESS;
 }
 
@@ -123,7 +120,7 @@ char* getFeatsFileName(SPConfig config,int index){
 	}
 	strcat(filePath, spImagesDirectory); //spImagesDirectory
 	strcat(filePath, spImagesPrefix);//spImagesPrefix
-	itoa(index,strIndex,10);
+	sprintf(strIndex, "%d", index);
 	strcat(filePath,strIndex);
 //	strcat(filePath,"%d");
 //	sprintf(filePath,filePath,index);//add index TODO problem here

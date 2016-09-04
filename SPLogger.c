@@ -1,7 +1,7 @@
-#include "SPLogger.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include "SPLogger.h"
 
 //File open mode
 #define SP_LOGGER_OPEN_MODE "w"
@@ -115,6 +115,7 @@ SP_LOGGER_MSG spLoggerPrintInfo(const char* msg) {
 	else if (logger->level != SP_LOGGER_DEBUG_INFO_WARNING_ERROR_LEVEL
 				&& logger->level != SP_LOGGER_INFO_WARNING_ERROR_LEVEL){
 		// info isn't printed, just error or/and warning are printed.
+		printf("%d/n",logger->level);
 			return SP_LOGGER_SUCCESS;
 }
 

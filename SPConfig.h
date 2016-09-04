@@ -2,8 +2,6 @@
 #define SPCONFIG_H_
 
 #include <stdbool.h>
-#include <stdio.h>
-#include "SPLogger.h"
 
 #define LENGTH_OF_LINE 1024
 
@@ -203,8 +201,7 @@ void spConfigDestroy(SPConfig config);
 // @return - the string after the trim.
 char *trim(char *str);
 
-void massageCreater(const char* filename, int typeOfError, const int lineNum, const char*
-parameterName, char* line, char* destination, char* name, char* value);
+void massageCreater(const char* filename, int typeOfError, const int lineNum, const char* parameterName);
 
 // spAtoi function checks If the given string contains
 // any invalid character, then this function returns 0, otherwise returns its numeric value.
@@ -215,11 +212,9 @@ bool isNumericChar(char x);
 
 void extractValuesFromLine(char* source,char* destination, char* value, char* name);
 
-SP_CONFIG_MSG isInvalidStringValue(SP_CONFIG_MSG* msg, char* filename,int numOfLine,char* noParameter,
-		char* line, char* destination, char* value, char* name );
+SP_CONFIG_MSG isInvalidStringValue(SP_CONFIG_MSG* msg, const char* filename,int numOfLine,char* noParameter, char* value);
 
-SP_CONFIG_MSG isInvalidIntValue(SP_CONFIG_MSG* msg, int intValue, int min, int max,
-		char* filename,int numOfLine,char* noParameter,char* line, char* destination, char* name, char* value);
+SP_CONFIG_MSG isInvalidIntValue(SP_CONFIG_MSG* msg, int intValue, int min, int max, const char* filename,int numOfLine,char* noParameter);
 
 // imagesDirectory getter
 SP_CONFIG_MSG getSpImagesDirectory(char* spImagesDirectory, const SPConfig config);

@@ -154,19 +154,23 @@ static bool debugTest(){
 	return true;
 }
 
+void run_all_tests() {
+	RUN_TEST(errorTest);
+	RUN_TEST(warningTest);
+	RUN_TEST(infoTest);
+	RUN_TEST(debugTest);
+	RUN_TEST(basicLoggerTest);
+	RUN_TEST(basicLoggerErrorTest);
+	RUN_TEST(basicLoggerDebugTest);
+	RUN_TEST(basicLoggerInfoTest);
+	RUN_TEST(basicLoggerWarningTest);
+	RUN_TEST(loggerUndifinedTest);
+}
+
 // checking all the function above
 // (in order to run all the tests, we should make "EXP.log" files those 4 files are incloded in the zip file.
 // for each logger mode:error, warning, info, debug. so each output can be compared to the correct log file.
 //int main() {
-//	RUN_TEST(errorTest);
-//	RUN_TEST(warningTest);
-//	RUN_TEST(infoTest);
-//	RUN_TEST(debugTest);
-//	RUN_TEST(basicLoggerTest);
-//	RUN_TEST(basicLoggerErrorTest);
-//	RUN_TEST(basicLoggerDebugTest);
-//	RUN_TEST(basicLoggerInfoTest);
-//	RUN_TEST(basicLoggerWarningTest);
-//	RUN_TEST(loggerUndifinedTest);
+//	run_all_tests();
 //	return 0;
 //}

@@ -1,12 +1,16 @@
 /*
  * main_aux.h
  *
- *  Created on: 25 баев 2016
+ *  Created on: 25 пїЅпїЅпїЅпїЅ 2016
  *      Author: Yair
  */
 
 #ifndef MAIN_AUX_H_
 #define MAIN_AUX_H_
+
+#include "SPPoint.h"
+#include "SPConfig.h"
+#include "KDTree.h"
 
 int compareIntBigToSmall(const void *a,const void* b);
 

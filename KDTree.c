@@ -1,17 +1,16 @@
 /*
  * KDTree.c
  *
- *  Created on: 17 баев 2016
+ *  Created on: 17 пїЅпїЅпїЅпїЅ 2016
  *      Author: Yair
  */
 
-#include "KDTree.h"
-#include "SPBPriorityQueue.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
 
-
+#include "SPLogger.h"
+#include "KDTree.h"
 
 //TODO: test on valgrind,
 void destroyKDTree(KDTreeNode tree){
@@ -31,7 +30,7 @@ KDTreeNode createKDTree(KDArray arr, spKDTreeSplitMethodEnum method,int coor){
 		int i;
 		KDTreeNode res = (KDTreeNode)malloc(sizeof(struct sp_kd_treeNode));
 		if(res == NULL){
-			spLoggerPrintError("Allocation failure",__FILE__,__func__,__LINE__);
+			spLoggerPrintError("Kd-tree creation failed due to allocation failure",__FILE__,__func__,__LINE__);
 							spLoggerDestroy();
 			return NULL;
 		}

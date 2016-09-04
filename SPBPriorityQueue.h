@@ -1,9 +1,9 @@
 #ifndef SPBPRIORITYQUEUE_H_
 #define SPBPRIORITYQUEUE_H_
-#include "SPListElement.h"
-#include "SPList.h"
-#include "SPListElement.h"
+
 #include <stdbool.h>
+#include "SPListElement.h"
+
 /**
  * SP Bounded Priority Queue summary
  *
