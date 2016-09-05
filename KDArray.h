@@ -9,6 +9,7 @@
 #define KD_ARRAY_H_
 
 #include "SPPoint.h"
+#include <math.h>
 #include <stdbool.h>
 
 // KD array is a data structure which supports the KDTree data structure which is used

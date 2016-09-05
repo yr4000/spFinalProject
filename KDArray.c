@@ -123,7 +123,7 @@ void initialize2DArrayByCoor(double **arr, int coor,SPPoint *PArr,int sizeOfPArr
 	int i;
 	for(i=0;i<sizeOfPArr;i++){
 		arr[i][0] = i;
-		arr[i][1] = PArr[i]->data[coor]; // for each index arr[i][1] contains the value of point i at coordinate coor.
+		arr[i][1] = spPointGetAxisCoor(PArr[i],coor); // for each index arr[i][1] contains the value of point i at coordinate coor.
 	}
 }
 
@@ -142,7 +142,7 @@ int compare2DArray(const void* A,const void* B){
 int compareSPPointByIndex(const void* A,const void* B){
 	SPPoint p1 = *(SPPoint*)A;
 	SPPoint p2 = *(SPPoint*)B;
-	return p1->index - p2->index;
+	return spPointGetIndex(p1) - spPointGetIndex(p2);
 }
 
 
