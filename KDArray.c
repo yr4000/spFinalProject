@@ -148,6 +148,7 @@ int compareSPPointByIndex(const void* A,const void* B){
 
 KDArray* split(KDArray arr, int coor){
 	int i,j,lc=0,rc = 0,LEFT = 1, RIGHT = 0;
+	int dim =0;
 	KDArray* res = (KDArray*)malloc(sizeof(KDArray)*2);
 	if(res==NULL){
 		spLoggerPrintError("Allocation failure",__FILE__,__func__,__LINE__);
@@ -173,7 +174,8 @@ KDArray* split(KDArray arr, int coor){
 	// here we copy the relevant SPPoints to the new KDArrays, according to the map.
 	if(!splitSPPointArrayAcordingToMap(arr,map,res)) return NULL;
 
-	for(i=0;i<arr->PArr[0]->dim;i++){ //for each coordinate of the points
+	dim = spPointGetDimension(arr->PArr[0]);
+	for(i=0;i<dim;i++){ //for each coordinate of the points
 		//first we assign the relevant pointers in the matrixes arrays to their data arrays.
 		res[0]->sortedIndexesMatrix[i] = KDArrMatrixesData[0] +i*sizeL;
 		res[1]->sortedIndexesMatrix[i] = KDArrMatrixesData[1] +i*sizeR;
@@ -202,7 +204,7 @@ KDArray* split(KDArray arr, int coor){
 }
 
 int** initialise2KDArraysReturnData(KDArray** arr, int sizeL, int sizeR,KDArray mother){
-	int dim = mother->PArr[0]->dim; // this is the dimension of every point
+	int dim = spPointGetDimension(mother->PArr[0]); // this is the dimension of every point
 	int **res = (int**)malloc(sizeof(int*)*2);//each array in res will contain the relevant data (to arr[0] or arr[1])
 	if(res==NULL){
 		spLoggerPrintError("Allocation failure",__FILE__,__func__,__LINE__);
@@ -234,7 +236,7 @@ int** initialise2KDArraysReturnData(KDArray** arr, int sizeL, int sizeR,KDArray 
 // sortedIndexesMatrix is based on that that all the point in the KDArray
 // are sorted by index. if they are not, it wont work.
 int* initialiseMap(KDArray arr, int coor){
-	if(arr == NULL || coor<0 || coor>=arr->PArr[0]->dim){
+	if(arr == NULL || coor<0 || coor>=spPointGetDimension(arr->PArr[0])){
 		spLoggerPrintError("Cannot initialize map",__FILE__,__func__,__LINE__);
 
 		return NULL;
@@ -274,7 +276,7 @@ bool fixKDArrayIndexesAfterSplit(KDArray arr, int motherSize,int side, int* map)
 	int* mapI = (int*)malloc(sizeof(int)*motherSize);
 	if(mapI==NULL) return false;
 	int i,j,c=0;
-	int dim = arr->PArr[0]->dim;
+	int dim = spPointGetDimension(arr->PArr[0]);
 	for(i=0;i<motherSize;i++){mapI[i]=-1;}
 	for(i=0;i<motherSize;i++){
 		if(map[i] == side){
