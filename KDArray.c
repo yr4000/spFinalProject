@@ -79,6 +79,7 @@ KDArray kdArrayInit(SPPoint * PointsArray, int arraySize){
 		}
 	}
 
+	free(*SArr); free(SArr);
 	return res;
 }
 
@@ -200,6 +201,7 @@ KDArray* split(KDArray arr, int coor){
 	if(!fixKDArrayIndexesAfterSplit(res[0],arr->arrSize,LEFT,map)) return NULL;
 	if(!fixKDArrayIndexesAfterSplit(res[1],arr->arrSize,RIGHT,map)) return NULL;
 	free(map);
+//	free(*KDArrMatrixesData); free(KDArrMatrixesData); //TODO this is doing problems. probably wrong
 	return res;
 }
 

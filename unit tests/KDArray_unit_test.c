@@ -108,17 +108,6 @@ KDArray buildKDArray2(){
 }
 
 //------------------------------------------------------------------------
-//bool testDestroyKDArray(){
-//	int dim, size;
-//	double** data = createData(&dim,&size);
-//	SPPoint* PArr = createSPPointArray(data,size,dim);
-//	KDArray arr = kdArrayInit(PArr,size);
-//	destroyKDArray(arr);
-//	free(arr);
-//	destroySPPointArray(PArr,size);
-//	destroyData(data);
-//	return true;
-//}
 
 bool testInit(){
 int dim, size,i,j;
@@ -293,7 +282,7 @@ bool testInitialiseMap(){
 		free(map);
 	}
 	destroyKDArray(arr);
-	free(arr);
+//	free(arr);
 	return true;
 }
 
