@@ -21,13 +21,6 @@ typedef struct sp_kd_array {
 	int **sortedIndexesMatrix;
 }* KDArray;
 
-
-/**
- * Creates a new KDArray object.
- * array size is set to zero and all pointers to NULL
- */
-KDArray createKDArray();
-
 /**
  * Frees all memory resources associate with KDArray. 
  * If KDArray == NULL nothing is done.
