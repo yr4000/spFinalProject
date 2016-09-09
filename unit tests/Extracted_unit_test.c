@@ -10,11 +10,12 @@
 #include <string.h>
 
 int NUM_OF_FEATURES = 7;
+char PATH[] = "./myConfig.config";
 
 //TODO did not check any nulls
 bool testGetFeatsFileName(){
 	SP_CONFIG_MSG msg;
-	SPConfig config = spConfigCreate("C:\\Users\\Yair\\workspaceC\\spFinalProject\\myConfig.config",&msg);
+	SPConfig config = spConfigCreate(PATH,&msg);
 	ASSERT_FALSE(getFeatsFileName(NULL,3));
 	ASSERT_FALSE(getFeatsFileName(config,-1));
 	char* filePath = getFeatsFileName(config,404);
@@ -27,7 +28,7 @@ bool testGetFeatsFileName(){
 //TODO won't work anymore for there is no config file, need to be created.
 bool testInitExtractionMode(){
 	SP_CONFIG_MSG msg = SP_CONFIG_SUCCESS;
-	SPConfig config = spConfigCreate("C:\\Users\\Yair\\workspaceC\\spFinalProject\\myConfig.config",&msg);
+	SPConfig config = spConfigCreate(PATH,&msg);
 	int dim,size;
 	double** data = createData(&dim,&size);
 	SPPoint* arr = createSPPointArray(data,size,dim);
@@ -45,7 +46,7 @@ bool testInitExtractionMode(){
 //TODO not correct anymore... maybe
 bool testInitNonExtractionMode(){
 	SP_CONFIG_MSG msg = SP_CONFIG_SUCCESS;
-	SPConfig config = spConfigCreate("C:\\Users\\Yair\\workspaceC\\spFinalProject\\myConfig.config",&msg);
+	SPConfig config = spConfigCreate(PATH,&msg);
 	int dim,size,i,numOfFeatures=0;
 	SPPoint* arr = (SPPoint*)malloc(sizeof(SPPoint)*NUM_OF_FEATURES); //TODO: why when i malloced it in the function it didn't work?
 	double** data = createData(&dim,&size);

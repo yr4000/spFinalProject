@@ -107,7 +107,7 @@ KDArray* split(KDArray arr, int coor);
 //this function initialise the left and right sub-KDArrays of arr,
 //and also returns two data arrays for their matrixes, uninitialised.
 //this is a sub function for split.
-int** initialise2KDArraysReturnData(KDArray** arr, int sizeL, int sizeR,
+void initialise2KDArraysReturnData(KDArray** arr, int sizeL, int sizeR,
 		KDArray mother);
 
 // initialise the map needed for the function split
@@ -130,5 +130,11 @@ void destroy2DKDArray(KDArray* arr);
 
 // destroys SSPoints array
 void destroySPPointArray(SPPoint* arr, int size);
+
+// destroys 2D double array where size is number of rows.
+void destroy2DDoubleArray(double** arr, int size);
+
+// destroys 2D double array where size is number of rows.
+void destroy2DIntArray(int** arr, int size);
 
 #endif /* KD_ARRAY_H_ */

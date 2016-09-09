@@ -42,12 +42,13 @@ double** createData(int* dim, int* size){
 	*size = 7;
 	*dim = 2;
 	double** data = (double**)malloc(sizeof(double*)*(*size));
-	double* datadata = (double*)malloc(sizeof(double)*sizeFD);
-	for(i=0; i<sizeFD; i++){
-		datadata[i] = funcdata[i];
-	}
+//	double* datadata = (double*)malloc(sizeof(double)*sizeFD);
 	for(i=0; i<(*size); i++){
-		data[i] = datadata + i*(*dim);
+		data[i] = (double*)malloc(sizeof(double)*(*dim));
+	}
+
+	for(i=0; i<sizeFD; i++){
+		data[i/(*dim)][i%(*dim)] = funcdata[i];
 	}
 	return data;
 }
@@ -59,12 +60,13 @@ double** createData2(int* dim, int* size){
 	*size = 5;
 	*dim = 2;
 	double** data = (double**)malloc(sizeof(double*)*(*size));
-	double* datadata = (double*)malloc(sizeof(double)*sizeFD);
-	for(i=0; i<sizeFD; i++){
-		datadata[i] = funcdata[i];
-	}
+//	double* datadata = (double*)malloc(sizeof(double)*sizeFD);
 	for(i=0; i<(*size); i++){
-		data[i] = datadata + i*(*dim);
+		data[i] = (double*)malloc(sizeof(double)*(*dim));
+	}
+
+	for(i=0; i<sizeFD; i++){
+		data[i/(*dim)][i%(*dim)] = funcdata[i];
 	}
 	return data;
 }
@@ -92,7 +94,7 @@ KDArray buildKDArray(){
 	double** data = createData(&dim,&size);
 	SPPoint* PArr = createSPPointArray(data,size,dim);
 	KDArray arr = kdArrayInit(PArr,size);
-	destroyData(data);
+	destroy2DDoubleArray(data,size);
 	destroySPPointArray(PArr,size);
 	return arr;
 }
@@ -102,7 +104,7 @@ KDArray buildKDArray2(){
 	double** data = createData2(&dim,&size);
 	SPPoint* PArr = createSPPointArray(data,size,dim);
 	KDArray arr = kdArrayInit(PArr,size);
-	destroyData(data);
+	destroy2DDoubleArray(data,size);
 	destroySPPointArray(PArr,size);
 	return arr;
 }
@@ -126,7 +128,7 @@ for(i=0;i<dim;i++){
 		ASSERT_TRUE(arr->sortedIndexesMatrix[i][j] == testArr[i*size + j]);
 	}
 }
-destroyData(data);
+destroy2DDoubleArray(data,size);
 destroySPPointArray(PArr,size);
 destroyKDArray(arr);
 free(arr);
@@ -147,7 +149,7 @@ bool testInitialiseSPPointArrayForKDArray(){
 			ASSERT_TRUE(arr->PArr[size-i-1]->data[j]==data[i][j]);
 		}
 	}
-	destroyData(data);
+	destroy2DDoubleArray(data,size);
 	destroySPPointArray(ps,size);
 	destroySPPointArray(arr->PArr,size);
 	free(arr);
@@ -163,7 +165,7 @@ bool testCreateSorting2DArray(){
 	}
 	ASSERT_TRUE(arr[1][1]=3);
 	ASSERT_TRUE(arr[4][0]=9);
-	destroyData(arr);
+	destroy2DDoubleArray(arr, 5);
 	return true;
 }
 
@@ -180,8 +182,8 @@ bool testInitialize2DArrayByCoor(){
 		}
 	}
 	destroySPPointArray(PArr,size);
-	destroyData(data);
-	destroyData(SArr);
+	destroy2DDoubleArray(data,size);
+	destroy2DDoubleArray(SArr,size);
 	return true;
 }
 
@@ -191,7 +193,7 @@ bool testCompare2DArray(){
 	ASSERT_TRUE(compare2DArray(&arr[2],&arr[3])== 1);
 	ASSERT_TRUE(compare2DArray(&arr[3],&arr[2])== -1);
 	ASSERT_TRUE(compare2DArray(&arr[2],&arr[2])== 0);
-	destroyData(arr);
+	destroy2DDoubleArray(arr,size);
 	return true;
 
 }
@@ -234,14 +236,14 @@ bool testSplit(){
 bool testSplitSPPointArrayAcordingToMap(){
 	int coor,i;
 	KDArray mother = buildKDArray();
-	KDArray* arr = (KDArray*)malloc(sizeof(KDArray)*2);
-	arr[0] = (KDArray)malloc(sizeof(struct sp_kd_array));
-	arr[1] = (KDArray)malloc(sizeof(struct sp_kd_array));
 	int sizeL = ceil(((double)mother->arrSize)/2);
 	int sizeR = floor(((double)mother->arrSize)/2);
-	int** KDArrMatrixesData = initialise2KDArraysReturnData(&arr,sizeL,sizeR,mother);
 
 	for(coor = 0;coor<mother->PArr[0]->dim;coor++){
+		KDArray* arr = (KDArray*)malloc(sizeof(KDArray)*2);
+		arr[0] = (KDArray)malloc(sizeof(struct sp_kd_array));
+		arr[1] = (KDArray)malloc(sizeof(struct sp_kd_array));
+		initialise2KDArraysReturnData(&arr,sizeL,sizeR,mother);
 		int* map = initialiseMap(mother,coor);
 		splitSPPointArrayAcordingToMap(mother,map,arr);
 		for(i=0;i<sizeL;i++){
@@ -251,13 +253,10 @@ bool testSplitSPPointArrayAcordingToMap(){
 			ASSERT_TRUE(map[arr[1]->PArr[i]->index-1]==0);
 		}
 		free(map);
+		destroy2DKDArray(arr);
 	}
 	destroyKDArray(mother);
-	destroyKDArray(arr[0]);
-	destroyKDArray(arr[1]);
-	free(arr);
-	free(*KDArrMatrixesData);
-	free(KDArrMatrixesData);
+//	destroy2DIntArray(KDArrMatrixesData,2);
 	return true;
 }
 
@@ -282,7 +281,6 @@ bool testInitialiseMap(){
 		free(map);
 	}
 	destroyKDArray(arr);
-//	free(arr);
 	return true;
 }
 
