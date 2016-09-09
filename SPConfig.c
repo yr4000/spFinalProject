@@ -311,7 +311,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 				if(isInvalidIntValue(msg,intValue,0,5,filename,numOfLine, noParameter)==SP_CONFIG_INVALID_INTEGER){
 					return NULL;
 				}
-				config->spLoggerLevel = intValue-1;
+				config->spLoggerLevel = intValue;
 
 			}
 
@@ -374,9 +374,9 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 
 
 	if(!strcmp(config->spLoggerFilename, "stdout")) {
-		create_logger_msg = spLoggerCreate(NULL, config->spLoggerLevel);
+		create_logger_msg = spLoggerCreate(NULL, config->spLoggerLevel -1);
 	} else {
-		create_logger_msg = spLoggerCreate(config->spLoggerFilename, config->spLoggerLevel);
+		create_logger_msg = spLoggerCreate(config->spLoggerFilename, config->spLoggerLevel -1);
 	}
 
 	if(create_logger_msg  != SP_LOGGER_SUCCESS) {

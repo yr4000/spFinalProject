@@ -6,14 +6,15 @@
  */
 
 
-#include "../KDArray.h"
-#include "unit_test_util.h"
-#include "../SPPoint.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
 #include <stdbool.h>
 #include <math.h>
+#include "../KDArray.h"
+#include "../SPPoint.h"
+#include "../SPLogger.h"
+#include "unit_test_util.h"
 
 
 SPPoint* createSPPointArray(double** data,int size,int dim){
@@ -110,27 +111,26 @@ KDArray buildKDArray2(){
 //------------------------------------------------------------------------
 
 bool testInit(){
-int dim, size,i,j;
-int testArr[] = {4,5,0,3,1,2,6,6,5,0,1,4,3,2};
-ASSERT_TRUE(kdArrayInit(NULL,1)==NULL);
-double** data = createData(&dim,&size);
-SPPoint* PArr = createSPPointArray(data,size,dim);
-ASSERT_TRUE(kdArrayInit(PArr,0)==NULL);
-KDArray arr = kdArrayInit(PArr,size);
-for(i=0;i<size;i++){
-	ASSERT_TRUE(spPointCompare(PArr[size-1-i],arr->PArr[i]));
-}
-ASSERT_TRUE(arr->arrSize==size);
-for(i=0;i<dim;i++){
-	for(j=0;j<size;j++){
-		ASSERT_TRUE(arr->sortedIndexesMatrix[i][j] == testArr[i*size + j]);
+	int dim, size,i,j;
+	int testArr[] = {4,5,0,3,1,2,6,6,5,0,1,4,3,2};
+	ASSERT_TRUE(kdArrayInit(NULL,1)==NULL);
+	double** data = createData(&dim,&size);
+	SPPoint* PArr = createSPPointArray(data,size,dim);
+	ASSERT_TRUE(kdArrayInit(PArr,0)==NULL);
+	KDArray arr = kdArrayInit(PArr,size);
+	for(i=0;i<size;i++){
+		ASSERT_TRUE(spPointCompare(PArr[size-1-i],arr->PArr[i]));
 	}
-}
-destroyData(data);
-destroySPPointArray(PArr,size);
-destroyKDArray(arr);
-free(arr);
-return true;
+	ASSERT_TRUE(arr->arrSize==size);
+	for(i=0;i<dim;i++){
+		for(j=0;j<size;j++){
+			ASSERT_TRUE(arr->sortedIndexesMatrix[i][j] == testArr[i*size + j]);
+		}
+	}
+	destroyKDArray(arr);
+	destroyData(data);
+	destroySPPointArray(PArr,size);
+	return true;
 }
 
 //TODO: doesn't check NULL, better think of all the possible cases...
@@ -282,7 +282,6 @@ bool testInitialiseMap(){
 		free(map);
 	}
 	destroyKDArray(arr);
-//	free(arr);
 	return true;
 }
 
@@ -297,6 +296,9 @@ bool testDestroyKDArray(){
 }
 
 //int main(){
+//	spLoggerCreate("KDArray_logger.log", SP_LOGGER_DEBUG_INFO_WARNING_ERROR_LEVEL);
+//	spLoggerPrintMsg("Starting KDArray test...");
+//
 //	RUN_TEST(testInitialiseSPPointArrayForKDArray);
 //	RUN_TEST(testCreateSorting2DArray);
 //	RUN_TEST(testInitialize2DArrayByCoor);
@@ -306,6 +308,9 @@ bool testDestroyKDArray(){
 //	RUN_TEST(testSplitSPPointArrayAcordingToMap);
 //	RUN_TEST(testSplit);
 //	RUN_TEST(testDestroyKDArray);
+//
+//	spLoggerPrintMsg("KDArray test done!");
+//	spLoggerDestroy();
 //	return 0;
 //}
 

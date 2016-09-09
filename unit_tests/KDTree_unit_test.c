@@ -114,7 +114,7 @@ bool testKNNSearch(){
 	return true;
 }
 
-
+//
 //int main(){
 //	RUN_TEST(testCreateKDTree);
 //	RUN_TEST(testKNNSearch);
