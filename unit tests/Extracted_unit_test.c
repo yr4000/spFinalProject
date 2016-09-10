@@ -6,6 +6,7 @@
  */
 
 #include "../Extracted.h"
+#include "DSBuilders.h"
 #include "unit_test_util.h"
 #include <string.h>
 
@@ -20,7 +21,7 @@ bool testGetFeatsFileName(){
 	ASSERT_FALSE(getFeatsFileName(config,-1));
 	char* filePath = getFeatsFileName(config,404);
 	ASSERT_TRUE(strcmp(filePath,"./images/img404.feats")==0);
-	free(filePath);
+//	free(filePath);
 	spConfigDestroy(config);
 	return true;
 }
@@ -37,7 +38,7 @@ bool testInitExtractionMode(){
 	ASSERT_TRUE(initExtractionMode(arr,1,NULL,NUM_OF_FEATURES==SP_EXTRACT_INVALID_ARGUMENT));
 	ASSERT_TRUE(initExtractionMode(arr,404,config,NUM_OF_FEATURES)==SP_EXTRACT_SUCCESS);
 	destroySPPointArray(arr,size);
-	destroyData(data);
+	destroy2DDoubleArray(data,size);
 	spConfigDestroy(config);
 	return true;
 
@@ -59,7 +60,7 @@ bool testInitNonExtractionMode(){
 		ASSERT_TRUE(arr[i/2]->data[i%2]==data[NUM_OF_FEATURES-1-i/2][i%2]);
 	}
 	destroySPPointArray(arr,size);
-	destroyData(data);
+	destroy2DDoubleArray(data,size);
 	spConfigDestroy(config);
 	return true;
 }
