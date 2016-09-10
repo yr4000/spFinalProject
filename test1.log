@@ -1,8 +1,5 @@
----INFO---
-- message: NonExtractionMode: The extraction of all images features succeed
----INFO---
-- message: Getting started receiving query images from the user.
----INFO---
-- message: Started showing the images results.
----INFO---
-- message: User chose to quit the program.
+---ERROR---
+- file: ..\Extracted.c
+- function: initNonExtractionMode
+- line: 58
+- message: SP_EXTRACT_INVALID_ARGUMENT

@@ -9,6 +9,7 @@
 #include "DSBuilders.h"
 #include "unit_test_util.h"
 #include <string.h>
+#include <stdlib.h>
 
 int NUM_OF_FEATURES = 7;
 char PATH[] = "./myConfig.config";
@@ -65,11 +66,11 @@ bool testInitNonExtractionMode(){
 	return true;
 }
 
-//int main(){
-//	RUN_TEST(testGetFeatsFileName);
-//	RUN_TEST(testInitExtractionMode);
-//	RUN_TEST(testInitNonExtractionMode);
-//	return 0;
-//}
+int main(){
+	RUN_TEST(testGetFeatsFileName);
+	RUN_TEST(testInitExtractionMode);
+	RUN_TEST(testInitNonExtractionMode);
+	return 0;
+}
 
 

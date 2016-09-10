@@ -434,25 +434,25 @@ bool testSignInsideIntParameterValue(){
 
 
 
-int main()
-{
-	RUN_TEST(testMissingFile);
-	RUN_TEST(testDefaultValues);
-	RUN_TEST(testMissingNumImages);
-	RUN_TEST(testMissingDirectory);
-	RUN_TEST(testMissingPrefix);
-	RUN_TEST(testMissingSuffix);
-	RUN_TEST(testBlankLine);
-	RUN_TEST(testLineWithInvalidParameterName);
-	RUN_TEST(testSpaceInsideStringParameterValue);
-	RUN_TEST(testSpaceInsideIntParameterValue);
-	RUN_TEST(testRegularConfigFIle);
-	RUN_TEST(testAnotherRegularConfigFIle);
-	RUN_TEST(testInvalidParameterValueLessThan0);
-	RUN_TEST(testInvalidParameterValueMoreThan28);
-	RUN_TEST(testInvalidParameterValueNotTrueFalse);
-	RUN_TEST(testInvalidParameterValueMoreThan4);
-	RUN_TEST(testSignInsideIntParameterValue);
-	return 0;
-}
+//int main()
+//{
+//	RUN_TEST(testMissingFile);
+//	RUN_TEST(testDefaultValues);
+//	RUN_TEST(testMissingNumImages);
+//	RUN_TEST(testMissingDirectory);
+//	RUN_TEST(testMissingPrefix);
+//	RUN_TEST(testMissingSuffix);
+//	RUN_TEST(testBlankLine);
+//	RUN_TEST(testLineWithInvalidParameterName);
+//	RUN_TEST(testSpaceInsideStringParameterValue);
+//	RUN_TEST(testSpaceInsideIntParameterValue);
+//	RUN_TEST(testRegularConfigFIle);
+//	RUN_TEST(testAnotherRegularConfigFIle);
+//	RUN_TEST(testInvalidParameterValueLessThan0);
+//	RUN_TEST(testInvalidParameterValueMoreThan28);
+//	RUN_TEST(testInvalidParameterValueNotTrueFalse);
+//	RUN_TEST(testInvalidParameterValueMoreThan4);
+//	RUN_TEST(testSignInsideIntParameterValue);
+//	return 0;
+//}
 
