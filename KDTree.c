@@ -51,6 +51,7 @@ KDTreeNode createKDTree(KDArray arr, spKDTreeSplitMethodEnum method,int coor){
 				}
 			}
 			callCreateKDTreeRecursively(res,arr,coor,method);
+			free(coordinateSpread);
 			return res;
 		}
 

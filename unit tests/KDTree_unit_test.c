@@ -6,6 +6,7 @@
  */
 
 #include "../KDTree.h"
+#include "DSBuilders.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
