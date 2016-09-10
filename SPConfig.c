@@ -47,8 +47,12 @@ void extractValuesFromLine(char* source,char* destination, char* value, char* na
 	*destination = 0;
 
 	//cutting the spaces in both sides of name and value.
-	strcpy(name, trim(name));
-	strcpy(value, trim(value));
+	char* tmpName = trim(name);
+	char* tmpVal = trim(value);
+	memmove(name, tmpName, strlen(tmpName) +1);
+	memmove(value, tmpVal, strlen(tmpVal)+1);
+//	strcpy(name, tmpName);
+//	strcpy(value, tmpVal);
 }
 
 SP_CONFIG_MSG isInvalidStringValue(SP_CONFIG_MSG* msg, const char* filename,int numOfLine,char* noParameter, char* value){
@@ -90,7 +94,6 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 	if (file == NULL)
 	{ //cannot open file.
 		*msg = SP_CONFIG_CANNOT_OPEN_FILE;
-		fclose(file);
 		return NULL;
 	}
 	config = (SPConfig) malloc(sizeof(*config));
@@ -98,6 +101,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 	if (config == NULL)
 	{ //Allocation failure
 		*msg = SP_CONFIG_ALLOC_FAIL;
+		fclose(file);
 		return NULL;
 	}
 
@@ -105,6 +109,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 	char line[LENGTH_OF_LINE + 1], *destination, *source;
 	char name[LENGTH_OF_LINE + 1] = { STRING_END } , value[LENGTH_OF_LINE + 1] = { STRING_END };
 	int numOfLine = 0;
+	char* tmpLine;
 	int intValue;
 
 	// initializing the config struct fields to the default ones.
@@ -128,7 +133,8 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 	// looping the lines of the config file.
 	while (fgets(line, LENGTH_OF_LINE + 1, file) != STRING_END)
 	{
-		strcpy(line, trim(line));
+		tmpLine = trim(line);
+		memmove(line, tmpLine, strlen(tmpLine)+1);
 		numOfLine++;
 		//ignore blank line
 		if (line[0] == STRING_END){
@@ -152,7 +158,10 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 
 			if (!strcmp(name, "spImagesDirectory"))
 			{
-				if(isInvalidStringValue(msg,filename,numOfLine,noParameter, value)==SP_CONFIG_INVALID_STRING) return NULL;
+				if(isInvalidStringValue(msg,filename,numOfLine,noParameter, value)==SP_CONFIG_INVALID_STRING){
+					fclose(file);
+					return NULL;
+				}
 
 				strcpy(config->spImagesDirectory, value);
 
@@ -160,7 +169,10 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 
 			else if (!strcmp(name, "spImagesPrefix"))
 			{
-				if(isInvalidStringValue(msg,filename,numOfLine,noParameter, value)==SP_CONFIG_INVALID_STRING) return NULL;
+				if(isInvalidStringValue(msg,filename,numOfLine,noParameter, value)==SP_CONFIG_INVALID_STRING){
+					fclose(file);
+					return NULL;
+				}
 
 				strcpy(config->spImagesPrefix, value);
 
@@ -186,6 +198,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 				exist_spNumOfImages = true;
 				intValue = spAtoi(value);
 				if(isInvalidIntValue(msg,intValue,0,INT_MAX,filename,numOfLine, noParameter)==SP_CONFIG_INVALID_INTEGER){
+					fclose(file);
 					return NULL;
 				}
 
@@ -198,6 +211,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 			{
 				intValue = spAtoi(value);
 				if(isInvalidIntValue(msg,intValue,9,29,filename,numOfLine, noParameter)==SP_CONFIG_INVALID_INTEGER){
+					fclose(file);
 					return NULL;
 				}
 				config->spPCADimension = intValue;
@@ -205,7 +219,10 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 
 			else if (!strcmp(name, "spPCAFilename"))
 			{
-				if(isInvalidStringValue(msg,filename,numOfLine,noParameter, value)==SP_CONFIG_INVALID_STRING) return NULL;
+				if(isInvalidStringValue(msg,filename,numOfLine,noParameter, value)==SP_CONFIG_INVALID_STRING){
+					fclose(file);
+					return NULL;
+				}
 
 				strcpy(config->spPCAFilename, value);
 
@@ -215,6 +232,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 			{
 				intValue = spAtoi(value);
 				if(isInvalidIntValue(msg,intValue,0,INT_MAX,filename,numOfLine, noParameter)==SP_CONFIG_INVALID_INTEGER){
+					fclose(file);
 					return NULL;
 				}
 				config->spNumOfFeatures = intValue;
@@ -237,6 +255,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 				{
 					*msg = SP_CONFIG_INVALID_ARGUMENT;
 					massageCreater(filename, secondTypeOfError, numOfLine, noParameter);
+					fclose(file);
 					return NULL;
 				}
 			}
@@ -245,6 +264,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 			{
 				intValue = spAtoi(value);
 				if(isInvalidIntValue(msg,intValue,0,INT_MAX,filename,numOfLine, noParameter)==SP_CONFIG_INVALID_INTEGER){
+					fclose(file);
 					return NULL;
 				}
 
@@ -271,6 +291,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 				{
 					*msg = SP_CONFIG_INVALID_ARGUMENT;
 					massageCreater(filename, secondTypeOfError, numOfLine, noParameter);
+					fclose(file);
 					return NULL;
 				}
 
@@ -280,6 +301,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 			{
 				intValue = spAtoi(value);
 				if(isInvalidIntValue(msg,intValue,0,INT_MAX,filename,numOfLine, noParameter)==SP_CONFIG_INVALID_INTEGER){
+					fclose(file);
 					return NULL;
 				}
 				config->spKNN = intValue;
@@ -301,6 +323,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 				{
 					*msg = SP_CONFIG_INVALID_ARGUMENT;
 					massageCreater(filename, secondTypeOfError, numOfLine, noParameter);
+					fclose(file);
 					return NULL;
 				}
 			}
@@ -309,6 +332,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 			{
 				intValue = spAtoi(value);
 				if(isInvalidIntValue(msg,intValue,0,5,filename,numOfLine, noParameter)==SP_CONFIG_INVALID_INTEGER){
+					fclose(file);
 					return NULL;
 				}
 				config->spLoggerLevel = intValue;
@@ -317,7 +341,10 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 
 			else if (!strcmp(name, "spLoggerFilename"))
 			{
-				if(isInvalidStringValue(msg,filename,numOfLine,noParameter, value)==SP_CONFIG_INVALID_STRING) return NULL;
+				if(isInvalidStringValue(msg,filename,numOfLine,noParameter, value)==SP_CONFIG_INVALID_STRING){
+					fclose(file);
+					return NULL;
+				}
 
 				strcpy(config->spLoggerFilename, value);
 
@@ -329,6 +356,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 			{
 				massageCreater(filename, firstTypeOfError, numOfLine, noParameter);
 				*msg = SP_CONFIG_INVALID_STRING;
+				fclose(file);
 				return NULL;
 			}
 		}
@@ -345,6 +373,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 		*msg = SP_CONFIG_MISSING_DIR;
 		char spImagesDirectory[LENGTH_OF_LINE+1] = "spImagesDirectory";
 		massageCreater(filename, thirdTypeOfError, numOfLine, spImagesDirectory);
+		fclose(file);
 		return NULL;
 	}
 
@@ -353,6 +382,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 		*msg = SP_CONFIG_MISSING_PREFIX;
 		char spImagesPrefix[LENGTH_OF_LINE+1] = "spImagesPrefix";
 		massageCreater(filename, thirdTypeOfError, numOfLine, spImagesPrefix);
+		fclose(file);
 		return NULL;
 	}
 
@@ -361,6 +391,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 		*msg = SP_CONFIG_MISSING_SUFFIX;
 		char spImagesSuffix[LENGTH_OF_LINE+1] = "spImagesSuffix";
 		massageCreater(filename, thirdTypeOfError, numOfLine, spImagesSuffix);
+		fclose(file);
 		return NULL;
 	}
 
@@ -369,6 +400,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 		*msg = SP_CONFIG_MISSING_NUM_IMAGES;
 		char spNumOfImages[LENGTH_OF_LINE+1] = "spNumOfImages";
 		massageCreater(filename, thirdTypeOfError, numOfLine, spNumOfImages);
+		fclose(file);
 		return NULL;
 	}
 
@@ -382,9 +414,11 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 	if(create_logger_msg  != SP_LOGGER_SUCCESS) {
 		printf("ERROR! There was a problem with initializing the logger.\n");
 		*msg = SP_CONFIG_INVALID_ARGUMENT;
+		fclose(file);
 		return NULL;
 	}
 
+	fclose(file);
 	return config;
 
 }
