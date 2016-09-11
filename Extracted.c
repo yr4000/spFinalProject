@@ -46,6 +46,7 @@ SP_EXTRACTED_MSG initExtractionMode(SPPoint* arr, int index, SPConfig config,int
 		}
 	}
 	fclose(f);
+	free(fileName);
 	return SP_EXTRACT_SUCCESS;
 }
 
@@ -71,15 +72,18 @@ SP_EXTRACTED_MSG initNonExtractionMode(SPPoint** arr,int index, SPConfig config,
 	if(f==NULL){
 		spLoggerPrintError("SP_EXTRACT_FAILED_TO_OPEN_FILE",__FILE__,__func__,__LINE__);
 								spLoggerDestroy();
+		free(filePath);
 		return SP_EXTRACT_FAILED_TO_OPEN_FILE;
 	}
 
 	//writes the number of features into numberOfFeaturs
 	fscanf(f,"%d",numberOfFeatures);
-	*arr = (SPPoint*)malloc(sizeof(SPPoint)*(*numberOfFeatures));//TODO why didn't it worked the usual way? why pointer to pointer?
+	*arr = (SPPoint*)malloc(sizeof(SPPoint)*(*numberOfFeatures));
 	for(i=0;i<*numberOfFeatures;i++){
 		if(ftell(f)==EOF){
 			spLoggerPrintError("SP_EXTRACT_FILE_CONTENT_DOESNT_MATCH_THE_FORMAT",__FILE__,__func__,__LINE__);
+			free(filePath);
+			free(data);
 			return SP_EXTRACT_FILE_CONTENT_DOESNT_MATCH_THE_FORMAT;
 		}
 		fscanf(f,"%d",&dim); //initialise dim
@@ -87,6 +91,8 @@ SP_EXTRACTED_MSG initNonExtractionMode(SPPoint** arr,int index, SPConfig config,
 		for(j=0;j<dim;j++){ //initialise data
 			if(ftell(f)==EOF){
 				spLoggerPrintError("SP_EXTRACT_FILE_CONTENT_DOESNT_MATCH_THE_FORMAT",__FILE__,__func__,__LINE__);
+				free(filePath);
+				free(data);
 				return SP_EXTRACT_FILE_CONTENT_DOESNT_MATCH_THE_FORMAT;
 			}
 			fscanf(f,"%lf",&data[j]);

@@ -1,0 +1,20 @@
+#this is a valid configuration file 
+#The following variables don?t have default values and must be set 
+spImagesDirectory = ./imagess/
+spImagesPrefix=imgg
+spImagesSuffix = .jpg
+spNumOfImages = 12
+#the following variables have default values, if not set the default value is choosen  
+        # spPCADimension = 20 -> notice the default value is chosen since this is a comment
+spPCAFilename = pcaa.yml
+spNumOfFeatures = 82
+spExtractionMode = false
+  #spMinimalGUI = true -> the default value is chosen since this is a comment 
+              spNumOfSimilarImages = 5
+spLoggerFilename = stdoutt
+spPCADimension =   22
+spMinimalGUI = true
+spNumOfSimilarImages = 12
+spKNN = 2
+spKDTreeSplitMethod = INCREMENTAL
+spLoggerLevel = 2

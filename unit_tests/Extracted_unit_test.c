@@ -22,7 +22,7 @@ bool testGetFeatsFileName(){
 	ASSERT_FALSE(getFeatsFileName(config,-1));
 	char* filePath = getFeatsFileName(config,404);
 	ASSERT_TRUE(strcmp(filePath,"./images/img404.feats")==0);
-//	free(filePath);
+	free(filePath);
 	spConfigDestroy(config);
 	return true;
 }
@@ -50,7 +50,7 @@ bool testInitNonExtractionMode(){
 	SP_CONFIG_MSG msg = SP_CONFIG_SUCCESS;
 	SPConfig config = spConfigCreate(PATH,&msg);
 	int dim,size,i,numOfFeatures=0;
-	SPPoint* arr = (SPPoint*)malloc(sizeof(SPPoint)*NUM_OF_FEATURES); //TODO: why when i malloced it in the function it didn't work?
+	SPPoint* arr = NULL;
 	double** data = createData(&dim,&size);
 	ASSERT_TRUE(initNonExtractionMode(NULL,2,config,&numOfFeatures)==SP_EXTRACT_INVALID_ARGUMENT);
 	ASSERT_TRUE(initNonExtractionMode(&arr,-1,config,&numOfFeatures)==SP_EXTRACT_INVALID_ARGUMENT);
@@ -60,7 +60,7 @@ bool testInitNonExtractionMode(){
 	for(i=0;i<14;i++){
 		ASSERT_TRUE(arr[i/2]->data[i%2]==data[NUM_OF_FEATURES-1-i/2][i%2]);
 	}
-	destroySPPointArray(arr,size);
+	destroySPPointArray(arr,numOfFeatures);
 	destroy2DDoubleArray(data,size);
 	spConfigDestroy(config);
 	return true;

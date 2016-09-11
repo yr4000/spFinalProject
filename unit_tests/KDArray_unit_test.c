@@ -7,14 +7,14 @@
 
 
 #include "../KDArray.h"
-#include "unit_test_util.h"
 #include "../SPPoint.h"
-#include "DSBuilders.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
 #include <stdbool.h>
 #include <math.h>
+#include "../unit_tests/DSBuilders.h"
+#include "../unit_tests/unit_test_util.h"
 
 
 

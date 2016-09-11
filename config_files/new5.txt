@@ -1,0 +1,5 @@
+#this is a valid configuration file 
+#The following variables don’t have default values and must be set 
+spImagesDirectory = ./images/ 
+spImagesPrefix=img 
+spNumOfImages = 17 
