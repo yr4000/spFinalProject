@@ -1,5 +1,0 @@
-#this is a valid configuration file 
-#The following variables don’t have default values and must be set 
-spImagesDirectory = ./images/ 
-spImagesSuffix = .png 
-spNumOfImages = 17 

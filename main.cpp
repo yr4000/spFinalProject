@@ -1,7 +1,7 @@
 /*
  * main.cpp
  *
- *  Created on: 22 ן¿½ן¿½ן¿½ן¿½ 2016
+ *  Created on: 22  2016
  *      Author: Yair
  */
 
@@ -154,6 +154,7 @@ int main(int argc, char* argv[]){
 		int queryImageFeaturesNum;
 		SPPoint* queryImageFeatures = proc.getImageFeatures(queryImagePath,0,&queryImageFeaturesNum);
 		if(!queryImageFeatures){
+			printf("The path you entered is not valid. Please try another one.\n");
 			spLoggerPrintWarning("Did not manage to extract the features of the query, check if exists in the directory or choose another one instesd.",__FILE__,__func__,__LINE__);
 			continue;
 		}
