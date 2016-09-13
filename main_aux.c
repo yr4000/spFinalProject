@@ -24,7 +24,7 @@ bool createWholePointsArray(int numberOfImages,int*sumNumOfFeatures,SPPoint** ar
 	//then we realloc arr and stores them there.
 	for(i=0;i<numberOfImages;i++){
 		SPPoint* temp;
-		if(initNonExtractionMode(&temp,i,config,&numberOfFeatures)!=SP_EXTRACT_SUCCESS){
+		if(initNonExtractionMode(&temp,i,config,&numberOfFeatures)!= SP_EXTRACT_SUCCESS){
 			spLoggerPrintError("Extraction failed",__FILE__,__func__,__LINE__);
 			return false;
 		};
@@ -75,8 +75,7 @@ int* getAppreanceOfImagesFeatures(SPConfig config,KDTreeNode tree,SPPoint* query
 	SPBPQueue q;
 	int* appreanceOfImagesFeatures = (int*)calloc(numberOfImages,sizeof(int));
 	if(appreanceOfImagesFeatures==NULL){
-		//TODO
-	}
+			}
 
 	//for each feature we search the big tree.
 	for(i=0;i<queryImageFeaturesNum;i++){

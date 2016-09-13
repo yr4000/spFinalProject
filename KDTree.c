@@ -12,7 +12,6 @@
 #include "SPLogger.h"
 #include "KDTree.h"
 
-//TODO: test on valgrind,
 void destroyKDTree(KDTreeNode tree){
 	if(tree==NULL) return;
 	if(isLeaf(tree)){
@@ -36,9 +35,7 @@ KDTreeNode createKDTree(KDArray arr, spKDTreeSplitMethodEnum method,int coor){
 		}
 
 		if(arr->arrSize==1){
-			//TODO later in the func to check if leaf returned NULL
 			return createLeaf(res, arr->PArr[0]);
-
 		}
 
 		if(method == MAX_SPREAD){
@@ -135,8 +132,7 @@ void callCreateKDTreeRecursively(KDTreeNode res, KDArray arr, int coor, spKDTree
 	res->left = createKDTree(subArray[0],method,coor);
 	res->right = createKDTree(subArray[1],method,coor);
 	destroy2DKDArray(subArray);
-	//TODO is it right to destroy them after the use? it should be,
-	//for i copy everything in this function... except create leaf
+
 }
 
 void KNNSearch(SPBPQueue q, KDTreeNode tree, SPPoint p){
