@@ -30,30 +30,11 @@
 #define TEST_VALUE_MORE_FOUR "./config_files/new15.txt"
 #define TEST_SIGN "./config_files/new16.txt"
 
-//#define TEST_MISSING_FILE "C:\\Users\\gal\\workspace\\spFinalProject\\spFinalProject\\config files\\NoSuchFile"
-//#define TEST_DEFAULT_VAL "C:\\Users\\gal\\workspace\\spFinalProject\\spFinalProject\\config files\\new1.txt"
-//#define TEST_MISSING_NUM_IMG "C:\\Users\\gal\\workspace\\spFinalProject\\spFinalProject\\config files\\new2.txt"
-//#define TEST_MISSING_DIR "C:\\Users\\gal\\workspace\\spFinalProject\\spFinalProject\\config files\\new3.txt"
-//#define TEST_MISSING_PREFIX "C:\\Users\\gal\\workspace\\spFinalProject\\spFinalProject\\config files\\new4.txt"
-//#define TEST_MISSING_SUFFIX "C:\\Users\\gal\\workspace\\spFinalProject\\spFinalProject\\config files\\new5.txt"
-//#define TEST_BLANK_LINE "C:\\Users\\gal\\workspace\\spFinalProject\\spFinalProject\\config files\\new6.txt"
-//#define TEST_INVALID_PARAMETER_NAME "C:\\Users\\gal\\workspace\\spFinalProject\\spFinalProject\\config files\\new7.txt"
-//#define TEST_SPACE_STRING_VALUE "C:\\Users\\gal\\workspace\\spFinalProject\\spFinalProject\\config files\\new8.txt"
-//#define TEST_SPACE_INT_VALUE "C:\\Users\\gal\\workspace\\spFinalProject\\spFinalProject\\config files\\new9.txt"
-//#define TEST_REGULAR "C:\\Users\\gal\\workspace\\spFinalProject\\spFinalProject\\config files\\new10.txt"
-//#define TEST_ANOTHER_REGULAR "C:\\Users\\gal\\workspace\\spFinalProject\\spFinalProject\\config files\\new11.txt"
-//#define TEST_VALUE_LESS_ZERO "C:\\Users\\gal\\workspace\\spFinalProject\\spFinalProject\\config files\\new12.txt"
-//#define TEST_VALUE_MORE_28 "C:\\Users\\gal\\workspace\\spFinalProject\\spFinalProject\\config files\\new13.txt"
-//#define TEST_NOT_TRUE_FALSE "C:\\Users\\gal\\workspace\\spFinalProject\\spFinalProject\\config files\\new14.txt"
-//#define TEST_VALUE_MORE_FOUR "C:\\Users\\gal\\workspace\\spFinalProject\\spFinalProject\\config files\\new15.txt"
-//#define TEST_SIGN "C:\\Users\\gal\\workspace\\spFinalProject\\spFinalProject\\config files\\new16.txt"
-
 bool testMissingFile(){
 
 	char imagePath[1024];
 	char pcaPath[1024];
 	char path[1024] = TEST_MISSING_FILE;
-//	SP_CONFIG_MSG* msg = (SP_CONFIG_MSG*) malloc(sizeof(char)*1024);
 	SP_CONFIG_MSG msg;
 	SPConfig co =spConfigCreate(path, &msg);
 
@@ -82,7 +63,6 @@ bool testMissingFile(){
 
 
 	spConfigDestroy (co);
-//	// free(msg);
 	return true;
 
 }
@@ -111,7 +91,6 @@ bool testDefaultValues()
 	ASSERT_TRUE(msg == SP_CONFIG_SUCCESS);
 
 	spConfigDestroy(co);
-//	// free(msg);
 	return true;
 }
 
@@ -123,7 +102,6 @@ bool testMissingNumImages(){
 	ASSERT_TRUE(msg == SP_CONFIG_MISSING_NUM_IMAGES);
 
 	spConfigDestroy (co);
-	// free(msg);
 	return true;
 }
 
@@ -134,7 +112,6 @@ bool testMissingDirectory(){
 
 	ASSERT_TRUE(msg == SP_CONFIG_MISSING_DIR);
 	spConfigDestroy (co);
-	// free(msg);
 	return true;
 
 }
@@ -146,7 +123,6 @@ bool testMissingPrefix(){
 
 	ASSERT_TRUE(msg == SP_CONFIG_MISSING_PREFIX);
 	spConfigDestroy (co);
-	// free(msg);
 	return true;
 
 }
@@ -158,7 +134,6 @@ bool testMissingSuffix(){
 
 	ASSERT_TRUE(msg == SP_CONFIG_MISSING_SUFFIX);
 	spConfigDestroy (co);
-	// free(msg);
 	return true;
 
 }
@@ -216,7 +191,6 @@ bool testBlankLine(){
 		ASSERT_TRUE(spConfigGetPCAPath(pcaPath, co) == SP_CONFIG_SUCCESS);
 
 	spConfigDestroy (co);
-	// free(msg);
 	return true;
 
 }
@@ -228,7 +202,6 @@ bool testLineWithInvalidParameterName(){
 
 	ASSERT_TRUE(msg == SP_CONFIG_INVALID_STRING);
 	spConfigDestroy (co);
-	// free(msg);
 	return true;
 
 }
@@ -240,7 +213,6 @@ bool testSpaceInsideStringParameterValue(){
 
 	ASSERT_TRUE(msg == SP_CONFIG_INVALID_STRING);
 	spConfigDestroy (co);
-	// free(msg);
 	return true;
 
 }
@@ -252,7 +224,6 @@ bool testSpaceInsideIntParameterValue(){
 
 	ASSERT_TRUE(msg == SP_CONFIG_INVALID_INTEGER);
 	spConfigDestroy (co);
-	// free(msg);
 	return true;
 
 }
@@ -311,7 +282,6 @@ bool testRegularConfigFIle()
 	ASSERT_TRUE(spConfigGetPCAPath(pcaPath, co) == SP_CONFIG_SUCCESS);
 
 	spConfigDestroy(co);
-	// free(msg);
 	return true;
 }
 
@@ -371,7 +341,6 @@ bool testAnotherRegularConfigFIle()
 	ASSERT_TRUE(spConfigGetPCAPath(pcaPath, co) == SP_CONFIG_SUCCESS);
 
 	spConfigDestroy(co);
-	// free(msg);
 	return true;
 }
 
@@ -382,7 +351,6 @@ bool testInvalidParameterValueLessThan0(){
 
 	ASSERT_TRUE(msg == SP_CONFIG_INVALID_INTEGER);
 	spConfigDestroy (co);
-	// free(msg);
 	return true;
 }
 
@@ -393,7 +361,6 @@ bool testInvalidParameterValueMoreThan28(){
 
 	ASSERT_TRUE(msg == SP_CONFIG_INVALID_INTEGER);
 	spConfigDestroy (co);
-	// free(msg);
 	return true;
 }
 
@@ -404,7 +371,6 @@ bool testInvalidParameterValueNotTrueFalse(){
 
 	ASSERT_TRUE(msg == SP_CONFIG_INVALID_ARGUMENT);
 	spConfigDestroy (co);
-	// free(msg);
 	return true;
 }
 
@@ -416,7 +382,6 @@ bool testInvalidParameterValueMoreThan4()
 
 	ASSERT_TRUE(msg == SP_CONFIG_INVALID_INTEGER);
 	spConfigDestroy(co);
-	// free(msg);
 	return true;
 }
 
@@ -427,32 +392,31 @@ bool testSignInsideIntParameterValue(){
 
 	ASSERT_TRUE(msg == SP_CONFIG_INVALID_INTEGER);
 	spConfigDestroy (co);
-	// free(msg);
 	return true;
 
 }
 
 
 
-//int main()
-//{
-//	RUN_TEST(testMissingFile);
-//	RUN_TEST(testDefaultValues);
-//	RUN_TEST(testMissingNumImages);
-//	RUN_TEST(testMissingDirectory);
-//	RUN_TEST(testMissingPrefix);
-//	RUN_TEST(testMissingSuffix);
-//	RUN_TEST(testBlankLine);
-//	RUN_TEST(testLineWithInvalidParameterName);
-//	RUN_TEST(testSpaceInsideStringParameterValue);
-//	RUN_TEST(testSpaceInsideIntParameterValue);
-//	RUN_TEST(testRegularConfigFIle);
-//	RUN_TEST(testAnotherRegularConfigFIle);
-//	RUN_TEST(testInvalidParameterValueLessThan0);
-//	RUN_TEST(testInvalidParameterValueMoreThan28);
-//	RUN_TEST(testInvalidParameterValueNotTrueFalse);
-//	RUN_TEST(testInvalidParameterValueMoreThan4);
-//	RUN_TEST(testSignInsideIntParameterValue);
-//	return 0;
-//}
+int main()
+{
+	RUN_TEST(testMissingFile);
+	RUN_TEST(testDefaultValues);
+	RUN_TEST(testMissingNumImages);
+	RUN_TEST(testMissingDirectory);
+	RUN_TEST(testMissingPrefix);
+	RUN_TEST(testMissingSuffix);
+	RUN_TEST(testBlankLine);
+	RUN_TEST(testLineWithInvalidParameterName);
+	RUN_TEST(testSpaceInsideStringParameterValue);
+	RUN_TEST(testSpaceInsideIntParameterValue);
+	RUN_TEST(testRegularConfigFIle);
+	RUN_TEST(testAnotherRegularConfigFIle);
+	RUN_TEST(testInvalidParameterValueLessThan0);
+	RUN_TEST(testInvalidParameterValueMoreThan28);
+	RUN_TEST(testInvalidParameterValueNotTrueFalse);
+	RUN_TEST(testInvalidParameterValueMoreThan4);
+	RUN_TEST(testSignInsideIntParameterValue);
+	return 0;
+}
 

@@ -63,11 +63,11 @@ bool testInitNonExtractionMode(){
 	return true;
 }
 
-//int main(){
-//	RUN_TEST(testGetFeatsFileName);
-//	RUN_TEST(testInitExtractionMode);
-//	RUN_TEST(testInitNonExtractionMode);
-//	return 0;
-//}
+int main(){
+	RUN_TEST(testGetFeatsFileName);
+	RUN_TEST(testInitExtractionMode);
+	RUN_TEST(testInitNonExtractionMode);
+	return 0;
+}
 
 

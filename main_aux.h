@@ -10,6 +10,8 @@
 #include "SPConfig.h"
 #include "KDTree.h"
 
+SPConfig createConfigFromFilePath(int argc, char* argv[]);
+
 int compareIntBigToSmall(const void *a,const void* b);
 
 KDTreeNode createTreeFromAllFeatures(SPConfig config,int numberOfImages);

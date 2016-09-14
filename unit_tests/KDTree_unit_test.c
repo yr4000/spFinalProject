@@ -117,8 +117,8 @@ bool testKNNSearch(){
 }
 
 
-//int main(){
-//	RUN_TEST(testCreateKDTree);
-//	RUN_TEST(testKNNSearch);
-//	return 0;
-//}
+int main(){
+	RUN_TEST(testCreateKDTree);
+	RUN_TEST(testKNNSearch);
+	return 0;
+}

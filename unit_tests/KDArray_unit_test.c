@@ -202,17 +202,17 @@ bool testDestroyKDArray(){
 	return true;
 }
 
-//int main(){
-//	RUN_TEST(testInitialiseSPPointArrayForKDArray);
-//	RUN_TEST(testCreateSorting2DArray);
-//	RUN_TEST(testInitialize2DArrayByCoor);
-//	RUN_TEST(testCompare2DArray);
-//	RUN_TEST(testInit);
-//	RUN_TEST(testInitialiseMap);
-//	RUN_TEST(testSplitSPPointArrayAcordingToMap);
-//	RUN_TEST(testSplit);
-//	RUN_TEST(testDestroyKDArray);
-//	return 0;
-//}
+int main(){
+	RUN_TEST(testInitialiseSPPointArrayForKDArray);
+	RUN_TEST(testCreateSorting2DArray);
+	RUN_TEST(testInitialize2DArrayByCoor);
+	RUN_TEST(testCompare2DArray);
+	RUN_TEST(testInit);
+	RUN_TEST(testInitialiseMap);
+	RUN_TEST(testSplitSPPointArrayAcordingToMap);
+	RUN_TEST(testSplit);
+	RUN_TEST(testDestroyKDArray);
+	return 0;
+}
 
 

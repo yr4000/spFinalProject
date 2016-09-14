@@ -25,7 +25,7 @@ void destroyKDTree(KDTreeNode tree){
 
 //function which creates a new kd-tree.
 KDTreeNode createKDTree(KDArray arr, spKDTreeSplitMethodEnum method,int coor){
-		int dim = arr->PArr[0]->dim;
+		int dim = spPointGetDimension(arr->PArr[0]);
 		int i;
 		KDTreeNode res = (KDTreeNode)malloc(sizeof(struct sp_kd_treeNode));
 		if(res == NULL){
@@ -38,7 +38,7 @@ KDTreeNode createKDTree(KDArray arr, spKDTreeSplitMethodEnum method,int coor){
 			return createLeaf(res, arr->PArr[0]);
 		}
 
-		//checkiong the type of the kd-tree split method.
+		//checking the type of the kd-tree split method.
 		if(method == MAX_SPREAD){
 			double* coordinateSpread = createSpreadArr(arr);
 			double max = 0;
@@ -91,8 +91,8 @@ double findMax(SPPoint* arr, int arrSize,int coor){
 	int i;
 	double max=0;
 	for(i=0;i<arrSize;i++){
-		if(arr[i]->data[coor] > max){
-			max = arr[i]->data[coor];
+		if(spPointGetAxisCoor(arr[i],coor) > max){
+			max = spPointGetAxisCoor(arr[i],coor);
 		}
 	}
 	return max;
@@ -101,17 +101,17 @@ double findMax(SPPoint* arr, int arrSize,int coor){
 double findMin(SPPoint* arr, int arrSize,int coor){
 	if(arr == NULL || arrSize <= 0 || coor<0) return -1;
 	int i;
-	double min = arr[0]->data[coor];
+	double min = spPointGetAxisCoor(arr[0],coor);
 	for(i=0;i<arrSize;i++){
-		if(arr[i]->data[coor] < min){
-			min = arr[i]->data[coor];
+		if(spPointGetAxisCoor(arr[i],coor) < min){
+			min = spPointGetAxisCoor(arr[i],coor);
 		}
 	}
 	return min;
 }
 
 double* createSpreadArr(KDArray arr){
-	int dim = arr->PArr[0]->dim;
+	int dim = spPointGetDimension(arr->PArr[0]);
 	int i;
 	double* coordinateSpread = (double*)malloc(sizeof(double)*dim);
 	if(coordinateSpread==NULL) return NULL;
