@@ -1,8 +1,6 @@
 /*
  * Extracted.c
  *
- *  Created on: 22 ���� 2016
- *      Author: Yair
  */
 
 #include <stdlib.h>

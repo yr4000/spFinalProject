@@ -1,15 +1,12 @@
 /*
  * main_aux.c
  *
- *  Created on: 25 ���� 2016
- *      Author: Yair
  */
 
 #include <stdlib.h>
 #include <assert.h>
 #include <string.h>
 #include <stdbool.h>
-
 #include "SPLogger.h"
 #include "SPBPriorityQueue.h"
 #include "Extracted.h"

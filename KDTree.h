@@ -1,8 +1,6 @@
 /*
  * KDTree.h
  *
- *  Created on: 9 баев 2016
- *      Author: Yair
  */
 
 #ifndef KDTREE_H_

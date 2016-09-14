@@ -1,8 +1,6 @@
 /*
  * main_aux.h
  *
- *  Created on: 25 ���� 2016
- *      Author: Yair
  */
 
 #ifndef MAIN_AUX_H_

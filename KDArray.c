@@ -1,8 +1,6 @@
 /*
  * KDArray.c
  *
- *  Created on: 17 ���� 2016
- *      Author: Yair
  */
 
 

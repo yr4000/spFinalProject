@@ -12,6 +12,7 @@
 #include "SPLogger.h"
 #include "KDTree.h"
 
+//function which destroys the kd-tree and releases all the memory allocated.
 void destroyKDTree(KDTreeNode tree){
 	if(tree==NULL) return;
 	if(isLeaf(tree)){
@@ -24,6 +25,7 @@ void destroyKDTree(KDTreeNode tree){
 	free(tree);
 }
 
+//function which creates a new kd-tree.
 KDTreeNode createKDTree(KDArray arr, spKDTreeSplitMethodEnum method,int coor){
 		int dim = arr->PArr[0]->dim;
 		int i;
@@ -38,6 +40,7 @@ KDTreeNode createKDTree(KDArray arr, spKDTreeSplitMethodEnum method,int coor){
 			return createLeaf(res, arr->PArr[0]);
 		}
 
+		//checkiong the type of the kd-tree split method.
 		if(method == MAX_SPREAD){
 			double* coordinateSpread = createSpreadArr(arr);
 			double max = 0;
@@ -74,6 +77,7 @@ KDTreeNode createKDTree(KDArray arr, spKDTreeSplitMethodEnum method,int coor){
 		return NULL; //should never reach here
 }
 
+//function which creates a leaf of the tree.
 KDTreeNode createLeaf(KDTreeNode res, SPPoint p){
 	if(p==NULL || res ==NULL) return NULL;
 	res->dim = -1;

@@ -1,8 +1,6 @@
 /*
  * KD-Array.h
  *
- *  Created on: 31 αιεμ 2016
- *      Author: Yair
  */
 
 #ifndef KD_ARRAY_H_

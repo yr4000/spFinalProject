@@ -210,10 +210,13 @@ int spAtoi(char *str);
 // An utility function to check whether x is numeric.
 bool isNumericChar(char x);
 
+//this function extracts values from line of the config file.
 void extractValuesFromLine(char* source,char* destination, char* value, char* name);
 
+//checks if the given string is valid
 SP_CONFIG_MSG isInvalidStringValue(SP_CONFIG_MSG* msg, const char* filename,int numOfLine,char* noParameter, char* value);
 
+//checks if the given int is valid
 SP_CONFIG_MSG isInvalidIntValue(SP_CONFIG_MSG* msg, int intValue, int min, int max, const char* filename,int numOfLine,char* noParameter);
 
 // imagesDirectory getter

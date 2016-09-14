@@ -1,8 +1,6 @@
 /*
  * main.cpp
  *
- *  Created on: 22  2016
- *      Author: Yair
  */
 
 
@@ -113,7 +111,7 @@ int main(int argc, char* argv[]){
 	if(msg!=SP_CONFIG_SUCCESS || config == NULL){
 		spLoggerPrintError("Did not succeed creating the config",__FILE__,__func__,__LINE__);
 		spConfigDestroy(config);
-		printf("Exiting..\n");
+		printf("Exiting...\n");
 		return 1;
 	}
 

@@ -3,7 +3,6 @@
 #include <string.h>
 #include <ctype.h>
 #include <limits.h>
-
 #include "SPLogger.h"
 #include "SPConfig.h"
 
@@ -105,7 +104,6 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 		return NULL;
 	}
 
-
 	char line[LENGTH_OF_LINE + 1], *destination, *source;
 	char name[LENGTH_OF_LINE + 1] = { STRING_END } , value[LENGTH_OF_LINE + 1] = { STRING_END };
 	int numOfLine = 0;
@@ -140,7 +138,6 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 		if (line[0] == STRING_END){
 			continue;
 		}
-
 		// not a comment
 		if (line[0] != '#')
 		{
@@ -162,7 +159,6 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 					fclose(file);
 					return NULL;
 				}
-
 				strcpy(config->spImagesDirectory, value);
 
 			}
@@ -173,7 +169,6 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 					fclose(file);
 					return NULL;
 				}
-
 				strcpy(config->spImagesPrefix, value);
 
 
@@ -187,7 +182,6 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 					*msg = SP_CONFIG_INVALID_STRING;
 					massageCreater(filename, secondTypeOfError, numOfLine, noParameter);
 				}
-
 				strcpy(config->spImagesSuffix, value);
 
 
@@ -294,7 +288,6 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 					fclose(file);
 					return NULL;
 				}
-
 			}
 
 			else if (!strcmp(name, "spKNN"))
@@ -347,11 +340,7 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 				}
 
 				strcpy(config->spLoggerFilename, value);
-
-
 			}
-
-
 			else
 			{
 				massageCreater(filename, firstTypeOfError, numOfLine, noParameter);
@@ -361,11 +350,6 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 			}
 		}
 	}
-
-
-
-
-
 	//checking if one of those parameters without default values had been initialized.
 
 	if (strlen(config->spImagesDirectory) == 0 )
@@ -420,7 +404,6 @@ SPConfig spConfigCreate(const char* filename, SP_CONFIG_MSG* msg)
 
 	fclose(file);
 	return config;
-
 }
 
 
@@ -445,7 +428,6 @@ char* trim(char *str)
 	*(end+1) = 0;
 
 	return str;
-
 }
 
 // An utility function to check whether x is numeric.
@@ -483,7 +465,6 @@ int spAtoi(char *str)
 void massageCreater(const char* filename, int typeOfError, const int lineNum, const char* parameterName){
 
 	char noParameter[LENGTH_OF_LINE+1] = "x";
-
 	printf("File: %s\n", filename);
 	printf("Line: %d\n", lineNum);
 	if (typeOfError == 1){
@@ -600,7 +581,6 @@ void spConfigDestroy(SPConfig config){
 		free(config);//free allocation;
 		config = NULL;
 	}
-
 }
 
 SP_CONFIG_MSG getSpImagesDirectory(char* spImagesDirectory, const SPConfig config){
@@ -646,7 +626,6 @@ spKDTreeSplitMethodEnum getSpKDTreeSplitMethod(const SPConfig config, SP_CONFIG_
 
 }
 
-
 int getSpKNN (const SPConfig config,  SP_CONFIG_MSG* msg){
 	if ( config == NULL){
 			*msg = SP_CONFIG_INVALID_ARGUMENT;
@@ -656,9 +635,3 @@ int getSpKNN (const SPConfig config,  SP_CONFIG_MSG* msg){
 		*msg = SP_CONFIG_SUCCESS;
 		return config->spKNN;
 }
-
-
-
-
-
-
