@@ -152,7 +152,7 @@ bool testSplitSPPointArrayAcordingToMap(){
 		KDArray* arr = (KDArray*)malloc(sizeof(KDArray)*2);
 		arr[0] = (KDArray)malloc(sizeof(struct sp_kd_array));
 		arr[1] = (KDArray)malloc(sizeof(struct sp_kd_array));
-		initialise2KDArraysReturnData(&arr,sizeL,sizeR,mother);
+		initialise2KDArrays(&arr,sizeL,sizeR,mother);
 		int* map = initialiseMap(mother,coor);
 		splitSPPointArrayAcordingToMap(mother,map,arr);
 		for(i=0;i<sizeL;i++){

@@ -40,9 +40,10 @@ SP_EXTRACTED_MSG initExtractionMode(SPPoint* arr, int index, SPConfig config,int
 	fprintf(f,"%d ", numOfFeatues);
 	//for each feature, we save its dimention and then its data in order.
 	for(i=0;i<numOfFeatues;i++){
-		fprintf(f,"%d ",arr[i]->dim);
-		for(j=0;j<arr[i]->dim;j++){
-			fprintf(f,"%f ",arr[i]->data[j]);//TODO getter
+		int dim = spPointGetDimension(arr[i]);
+		fprintf(f,"%d ",dim);
+		for(j=0;j<dim;j++){
+			fprintf(f,"%f ",spPointGetAxisCoor(arr[i],j));
 		}
 	}
 	fclose(f);
@@ -50,8 +51,6 @@ SP_EXTRACTED_MSG initExtractionMode(SPPoint* arr, int index, SPConfig config,int
 	return SP_EXTRACT_SUCCESS;
 }
 
-//TODO: check what happened if fscanf reach to EOF.
-// generally i am not sure i used it right...
 //this function extract the data from a feat file of the relevant image to the index,
 // into the unintialised SPPoint* arr.
 SP_EXTRACTED_MSG initNonExtractionMode(SPPoint** arr,int index, SPConfig config,int* numberOfFeatures){

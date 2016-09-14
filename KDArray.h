@@ -107,7 +107,7 @@ KDArray* split(KDArray arr, int coor);
 //this function initialise the left and right sub-KDArrays of arr,
 //and also returns two data arrays for their matrixes, uninitialised.
 //this is a sub function for split.
-void initialise2KDArraysReturnData(KDArray** arr, int sizeL, int sizeR,
+bool initialise2KDArrays(KDArray** arr, int sizeL, int sizeR,
 		KDArray mother);
 
 // initialise the map needed for the function split
