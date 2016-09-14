@@ -14,7 +14,6 @@
 int NUM_OF_FEATURES = 7;
 char PATH[] = "./myConfig.config";
 
-//TODO did not check any nulls
 bool testGetFeatsFileName(){
 	SP_CONFIG_MSG msg;
 	SPConfig config = spConfigCreate(PATH,&msg);
@@ -27,7 +26,6 @@ bool testGetFeatsFileName(){
 	return true;
 }
 
-//TODO won't work anymore for there is no config file, need to be created.
 bool testInitExtractionMode(){
 	SP_CONFIG_MSG msg = SP_CONFIG_SUCCESS;
 	SPConfig config = spConfigCreate(PATH,&msg);
@@ -45,7 +43,6 @@ bool testInitExtractionMode(){
 
 }
 
-//TODO not correct anymore... maybe
 bool testInitNonExtractionMode(){
 	SP_CONFIG_MSG msg = SP_CONFIG_SUCCESS;
 	SPConfig config = spConfigCreate(PATH,&msg);

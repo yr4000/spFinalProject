@@ -70,7 +70,6 @@ static bool basicLoggerDebugTest() {
 	return true;
 }
 
-//----------------------------------------------------------------TODO
 
 //Only Errors, Warnings and Info should be printed
 static bool basicLoggerInfoTest() {

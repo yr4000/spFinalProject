@@ -44,7 +44,6 @@ free(arr);
 return true;
 }
 
-//TODO: doesn't check NULL, better think of all the possible cases...
 bool testInitialiseSPPointArrayForKDArray(){
 	int i,j,dim,size;
 	double** data = createData(&dim,&size);
