@@ -1,8 +1,6 @@
 /*
  * KDTree.c
  *
- *  Created on: 17 ���� 2016
- *      Author: Yair
  */
 
 #include <stdlib.h>

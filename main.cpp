@@ -97,18 +97,36 @@ bool showResults(ImageProc proc, SPConfig config, int* appreanceOfImagesFeatures
 
 int main(int argc, char* argv[]){
 	setbuf(stdout, NULL);
-	char configFileName[LENGTH_OF_LINE];
+	bool isDefaultFile;
+	char configFileName[LENGTH_OF_LINE + 1];
 	SP_CONFIG_MSG msg;
 
 	//here we receive the config file name
-	if(argc >= 3 && !strcmp(argv[1], "-c"))
+
+	if(argc >= 3 && !strcmp(argv[1], "-c")){  //todo in my computer the input " ./SPCBIR -c myconfig.config" dont go here, it goes to the else i dont know why
 		strcpy(configFileName,argv[2]);
-	else
+		isDefaultFile = false;
+	}
+	else if (argc == 0){
 		strcpy(configFileName, "spcbir.config");
+		isDefaultFile = true;
+	}
+	else{
+		printf("Invalid command line : use -c <config_filename>\n");
+		return 0;
+	}
+
 
 	//the data in config will define the function future behaver
 	SPConfig config = spConfigCreate(configFileName,&msg);
 	if(msg!=SP_CONFIG_SUCCESS || config == NULL){
+		if(msg == SP_CONFIG_CANNOT_OPEN_FILE && isDefaultFile == true){
+			printf("The default configuration file spcbir.config couldn’t be open\n");
+		}
+		if(msg == SP_CONFIG_CANNOT_OPEN_FILE && isDefaultFile == false){
+			printf("The The configuration file %s couldn’t be open\n", configFileName);
+		}
+
 		spLoggerPrintError("Did not succeed creating the config",__FILE__,__func__,__LINE__);
 		spConfigDestroy(config);
 		printf("Exiting...\n");
