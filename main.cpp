@@ -113,7 +113,7 @@ int main(int argc, char* argv[]){
 	}
 	else{
 		printf("Invalid command line : use -c <config_filename>\n");
-		return 0;
+		return 1;
 	}
 
 
